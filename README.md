@@ -6,6 +6,12 @@ This project requires Python 3.10 or newer and has no runtime dependencies beyon
 
 Every result is a recommendation for the calling application. These workflows do not execute tools, select and invoke a model, publish content, or apply a decision. The initial thresholds are workflow-specific, provider-specific starting values and have not been calibrated. Review and calibrate them on a representative development set before relying on them in production.
 
+## Verified results
+
+Live acceptance on 2026-10-08 (Singapore) marks all six Jev/OpenRouter and Sage workflows **Working**. OpenAI Decisions has four **Working** workflows; input guardrails and output evaluation are **Partial**. The [generated compatibility table and per-case evidence](reports/COMPATIBILITY.md) record the resolved models, fixture revision, usage, latency, and repeated-run stability. Reranking evidence covers the requested `top_k=1` and `top_k=2` profiles; it does not certify every full-list configuration.
+
+Clean wheel installs pass 89 tests and 18 copied-skill demos on both Python 3.10 and 3.12. All retained live iterations and smoke calls total approximately **US$0.088 in provider-reported and token-estimated costs**, with US$1.859 conservatively reserved against the US$5 limit. See [cost reconciliation](reports/costs.json) and [evaluation history](docs/evaluation-history.md). Estimates are not provider invoices.
+
 ## Install the CLI
 
 From any directory, install the package directly from the repository's `main` branch:

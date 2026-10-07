@@ -4,7 +4,7 @@ This table records the exact endpoint, default model, and environment key used b
 
 | CLI provider | Endpoint | Default model | Environment key | Provider documentation |
 | --- | --- | --- | --- | --- |
-| `jev-openrouter` | `https://openrouter.ai/api/alpha/decisions` | `typesafe/jev-1.13` | `OPENROUTER_API_KEY` | [OpenRouter Decisions API overview](https://openrouter.ai/skills/) |
+| `jev-openrouter` | `https://openrouter.ai/api/alpha/decisions` | `typesafe/jev-1.13` | `OPENROUTER_API_KEY` | [OpenRouter Decisions API overview](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request) |
 | `openai-decisions` | `https://api.openai.com/v1/decisions` | `gpt-6-luna` | `OPENAI_API_KEY` | [OpenAI Decisions guide](https://developers.openai.com/api/docs/guides/decisions); [create reference](https://developers.openai.com/api/reference/resources/decisions/methods/create) |
 | `sage` | `https://sage.levanto.ai/v1/systemone` | `levanto-sage-v1.3` | `SAGE_API_KEY` | [Sage SystemOne and pricing](https://docs.levanto.ai/systemone#pricing) |
 
@@ -14,6 +14,6 @@ The shared question types are `predicate`, `choice`, and `score`. OpenRouter and
 
 ## Evidence and scope
 
-The generated [compatibility report](../reports/COMPATIBILITY.md) is the source of current implementation results and their statuses. Read its specific receipts and limitations; this contract table alone does not claim that any endpoint or model is currently reachable or that all six workflows have passed live checks. A primitive mapping smoke check exercises only predicate, choice, and score conversion. It does not establish workflow quality, calibrated thresholds, or production readiness.
+The latest completed [compatibility receipt](../reports/V3.md) records implementation results and their statuses. V4 remains in progress; see [Evaluation history](evaluation-history.md) for its scope and the diagnostic limitations. Read the specific receipts and limitations; this contract table alone does not claim that any endpoint or model is currently reachable or that all six workflows have passed live checks. A primitive mapping smoke check exercises only predicate, choice, and score conversion. It does not establish workflow quality, calibrated thresholds, or production readiness.
 
 Pricing varies by provider, model, and plan. The rates snapshot in [`../reports/rates.json`](../reports/rates.json) was checked on 2026-10-08 and carries its source URLs. Check the provider pages directly before budgeting a live run: [OpenRouter Jev model pricing](https://openrouter.ai/typesafe/jev-1.13), [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions), and [Levanto Sage SystemOne pricing](https://docs.levanto.ai/systemone#pricing).

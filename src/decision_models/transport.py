@@ -1,5 +1,6 @@
 """Environment-only authentication and bounded standard-library HTTP transport."""
 import json
+import http.client
 import urllib.error
 import urllib.request
 import socket
@@ -37,4 +38,5 @@ def http_transport(endpoint, payload, api_key, timeout=20):
     except urllib.error.URLError as exc:
         code = "timeout" if isinstance(exc.reason, (TimeoutError, socket.timeout)) else "network"
         raise DecisionError(code, "provider connection failed; charge status may be unknown") from exc
-
+    except (OSError, http.client.HTTPException) as exc:
+        raise DecisionError("network", "provider connection failed; charge status may be unknown") from exc

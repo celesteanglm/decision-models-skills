@@ -246,7 +246,10 @@ def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, 
                                 row["raw_response"] = ledger.latest_raw
                         if exc.code in ("budget_exhausted","budget_estimate_exceeded"):
                             stopped=True
-                        if exc.code in ("authentication","permission","endpoint_unavailable","missing_credentials","insufficient_credits"):
+                        # A later repetition is also a retry of the same paid payload.
+                        # Without verified idempotency, stop this backend on unknown-charge failures.
+                        if exc.code in ("authentication","permission","endpoint_unavailable","missing_credentials","insufficient_credits",
+                                        "timeout","network","upstream_failure"):
                             blocked_providers.add(provider)
                     row["attempts"] = ledger.attempts-started_attempts if ledger else 0
                     rows.append(row)

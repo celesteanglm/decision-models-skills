@@ -1,4 +1,5 @@
 import json
+import http.client
 import socket
 import unittest
 import urllib.error
@@ -79,6 +80,32 @@ class TransportTests(unittest.TestCase):
         self.assertEqual(caught.exception.code, "timeout")
         self.assertFalse(caught.exception.retryable)
         self.assertIn("charge status is unknown", str(caught.exception))
+
+    def test_incomplete_or_reset_connections_are_sanitized_unknown_charge_network_errors(self):
+        failures = [
+            http.client.RemoteDisconnected("connection dropped; sensitive-token"),
+            http.client.IncompleteRead(b"partial", 128),
+            ConnectionResetError("reset; sensitive-token"),
+        ]
+        for failure in failures:
+            class Opener:
+                def open(self, *args, **kwargs):
+                    if isinstance(failure, http.client.IncompleteRead):
+                        class BrokenResponse(FakeResponse):
+                            def read(self, size=-1):
+                                raise failure
+                        return BrokenResponse(b"")
+                    raise failure
+
+            with patch("decision_models.transport.urllib.request.build_opener", return_value=Opener()):
+                with self.subTest(failure=type(failure).__name__), self.assertRaises(DecisionError) as caught:
+                    http_transport("https://provider.invalid", {}, "secret")
+            self.assertEqual(caught.exception.code, "network")
+            self.assertFalse(caught.exception.retryable)
+            self.assertIn("charge", str(caught.exception).lower())
+            self.assertIn("unknown", str(caught.exception).lower())
+            self.assertNotIn("sensitive-token", str(caught.exception))
+            self.assertNotIn(str(failure), str(caught.exception))
 
 
 if __name__ == "__main__":

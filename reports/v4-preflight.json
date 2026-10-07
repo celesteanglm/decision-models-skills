@@ -1,0 +1,37 @@
+{
+  "checked_at": "2026-10-07T17:37:49.065166+00:00",
+  "revision": "v4",
+  "source_hash": "74f2fca095e9ed26de554600bf27ad24ec688c4c838d0be89f9b5f88e21db41a",
+  "prior_commits": [
+    "52e0cc8",
+    "dd06818",
+    "15e2a00"
+  ],
+  "planned_requests": {
+    "jev-openrouter": 195,
+    "openai-decisions": 195,
+    "sage": 195
+  },
+  "conservative_budget": {
+    "limit_usd": 3.4,
+    "reserved_usd": 0.46545427,
+    "provider_reported_usd": 0.0,
+    "token_price_estimated_usd": 0.0,
+    "attempts": 585,
+    "unreconciled_allowance_usd": 0.46545427
+  },
+  "prior_reserved_usd": 1.39236015,
+  "smoke_allowance_usd": 0.001,
+  "total_limit_usd": 5,
+  "change": "Sanitize abrupt disconnects and stop a backend after unknown-charge failures. Fixtures, workflow prompts and thresholds unchanged from v3.",
+  "clean_wheel": {
+    "sha256": "cc0d78ebcb5f36790e718c96d53795b867d737b13fd47a6de5653b7281e1a664",
+    "python_versions": [
+      "3.10.13",
+      "3.12.10"
+    ],
+    "tests_per_version": 89,
+    "copied_skill_demos_per_version": 18,
+    "passed": true
+  }
+}

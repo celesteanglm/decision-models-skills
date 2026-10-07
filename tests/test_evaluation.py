@@ -269,6 +269,108 @@ class EvaluationTests(unittest.TestCase):
             self.assertEqual(caught.exception.code, "offline_verification_required")
             self.assertEqual(calls, [])
 
+    def test_ambiguous_paid_failure_stops_that_provider_but_allows_another_provider(self):
+        rates = {
+            "sage": {"source": "test-reviewed", "checked_at": "2026-10-08",
+                     "input_per_million": 1.0, "output_per_million": 1.0},
+            "jev-openrouter": {"source": "test-reviewed", "checked_at": "2026-10-08",
+                               "input_per_million": 1.0, "output_per_million": 1.0},
+        }
+        for failure_code in ("timeout", "network", "upstream_failure"):
+            with self.subTest(failure_code=failure_code):
+                real_execute = execute
+                provider_calls = Counter()
+
+                def mocked_execute(skill, provider, data, **kwargs):
+                    provider_calls[provider] += 1
+                    prepared = workflow_for(skill).build(dict(data, _provider=provider))
+                    if prepared["early_result"] is None:
+                        payload = adapter_for(provider).build_payload(
+                            prepared["state"], prepared["questions"], adapter_for(provider).default_model)
+                        kwargs["before_attempt"](provider, payload)
+                    if provider == "sage":
+                        raise DecisionError(failure_code, "charge status unknown")
+                    if prepared["early_result"] is None:
+                        kwargs["after_attempt"](provider, {"usage": {"input_tokens": 0, "output_tokens": 0}})
+                    output = real_execute(skill, provider, data, mode="demo", demo_answers=kwargs["demo_answers"])
+                    if output["source"] != "deterministic":
+                        output.update(mode="live", source="live", attempts=1)
+                    return output
+
+                with tempfile.TemporaryDirectory(prefix="ambiguous-live-failure-") as temp:
+                    repo = Path(temp) / "repo"
+                    repo.mkdir()
+                    (repo / "skills").symlink_to(REPO / "skills", target_is_directory=True)
+                    (repo / "src").symlink_to(REPO / "src", target_is_directory=True)
+                    reports = repo / "reports"
+                    reports.mkdir()
+                    (reports / "offline.json").write_text('{"passed": true, "source_hash": "fresh"}')
+                    receipt_path = Path(temp) / "receipt.json"
+                    with patch.object(evaluation, "source_hash", return_value="fresh"), \
+                         patch.object(evaluation, "execute", mocked_execute):
+                        receipt = evaluate_fixtures(repo, ["sage", "jev-openrouter"], "live", 3, 5.0,
+                                                    receipt_path, rates, ["input-guardrails"])
+
+                sage_rows = [row for row in receipt["rows"] if row["provider"] == "sage"]
+                openrouter_rows = [row for row in receipt["rows"] if row["provider"] == "jev-openrouter"]
+                self.assertEqual(provider_calls["sage"], 1)
+                self.assertEqual(len(sage_rows), 1)
+                self.assertEqual(sage_rows[0]["repetition"], 1)
+                self.assertEqual(sage_rows[0]["error"]["code"], failure_code)
+                self.assertEqual(sage_rows[0]["attempts"], 1)
+                self.assertEqual(provider_calls["jev-openrouter"], 36)
+                self.assertEqual(len(openrouter_rows), 36)
+                self.assertGreater(receipt["budget"]["reserved_usd"], 0)
+                # Three deterministic cases per fixture make no paid attempt.
+                self.assertEqual(receipt["budget"]["attempts"], 34)
+
+    def test_parse_failure_retains_raw_attempt_then_missing_credentials_has_no_stale_charge(self):
+        rates = {"sage": {"source": "test-reviewed", "checked_at": "2026-10-08",
+                          "input_per_million": 1.0, "output_per_million": 1.0}}
+        real_execute = execute
+        calls = 0
+        raw = {"model": "unparseable-model-response", "usage": {"cost": 0.000001},
+               "answers": "malformed"}
+
+        def mocked_execute(skill, provider, data, **kwargs):
+            nonlocal calls
+            calls += 1
+            if calls == 1:
+                prepared = workflow_for(skill).build(dict(data, _provider=provider))
+                payload = adapter_for(provider).build_payload(
+                    prepared["state"], prepared["questions"], adapter_for(provider).default_model)
+                kwargs["before_attempt"](provider, payload)
+                kwargs["after_attempt"](provider, raw)
+                raise DecisionError("invalid_response", "malformed native answer")
+            # Model the credential check failing before a new attempt is reserved.
+            raise DecisionError("missing_credentials", "provider key missing")
+
+        with tempfile.TemporaryDirectory(prefix="parse-failure-receipt-") as temp:
+            repo = Path(temp) / "repo"
+            repo.mkdir()
+            (repo / "skills").symlink_to(REPO / "skills", target_is_directory=True)
+            (repo / "src").symlink_to(REPO / "src", target_is_directory=True)
+            reports = repo / "reports"
+            reports.mkdir()
+            (reports / "offline.json").write_text('{"passed": true, "source_hash": "fresh"}')
+            receipt_path = Path(temp) / "receipt.json"
+            with patch.object(evaluation, "source_hash", return_value="fresh"), \
+                 patch.object(evaluation, "execute", mocked_execute):
+                receipt = evaluate_fixtures(repo, ["sage"], "live", 3, 5.0,
+                                            receipt_path, rates, ["input-guardrails"])
+
+        self.assertEqual(calls, 2)
+        self.assertEqual(len(receipt["rows"]), 2)
+        first, second = receipt["rows"]
+        self.assertEqual(first["error"]["code"], "invalid_response")
+        self.assertEqual(first["attempts"], 1)
+        self.assertEqual(first["raw_response"], raw)
+        self.assertEqual(first["charge"], {"kind": "provider_reported", "usd": 0.000001})
+        self.assertEqual(second["error"]["code"], "missing_credentials")
+        self.assertEqual(second["attempts"], 0)
+        self.assertIsNone(second["charge"])
+        self.assertNotIn("raw_response", second)
+
 
 if __name__ == "__main__":
     unittest.main()

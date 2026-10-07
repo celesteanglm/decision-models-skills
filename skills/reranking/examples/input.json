@@ -13,5 +13,6 @@
       "id": "deploy",
       "text": "Deployments occur on Tuesdays after the staging health check."
     }
-  ]
+  ],
+  "top_k": 1
 }

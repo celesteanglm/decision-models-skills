@@ -1,10 +1,10 @@
 {
-  "draft": "The experiment reduced the measured outcome by 18%.",
+  "draft": "In the experiment, endpoint latency measured 41 ms, 18% below the 50 ms baseline.",
   "evidence": [
-    "The experiment log records an 18% reduction."
+    "Experiment log L-18 for endpoint latency: baseline 50 ms; treatment-period mean 41 ms; recorded change −18%."
   ],
   "rubric": [
-    "State the reported outcome and magnitude without adding unsupported claims."
+    "Report the measured baseline, measured latency, and calculated percentage change without claiming the experiment caused the change."
   ],
   "risk_level": "routine"
 }

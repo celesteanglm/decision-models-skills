@@ -18,14 +18,15 @@
           "id": "deploy",
           "text": "Deployments occur on Tuesdays after the staging health check."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank"
       ],
       "top_id": "owner",
-      "rationale": "The runbook passage states the service owner explicitly; others cover adjacent incident facts."
+      "rationale": "The runbook passage states the service owner explicitly; others cover adjacent incident facts. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately."
     },
     "demo_answers": {
       "passage_0": {
@@ -88,14 +89,15 @@
           "id": "support",
           "text": "Contact support for help with account access."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank"
       ],
       "top_id": "window",
-      "rationale": "The policy gives the exact refund window requested."
+      "rationale": "The policy gives the exact refund window requested. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately."
     },
     "demo_answers": {
       "passage_0": {
@@ -158,14 +160,15 @@
           "id": "license",
           "text": "The project is distributed under the MIT License."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank"
       ],
       "top_id": "python",
-      "rationale": "The compatibility note directly names the minimum Python version."
+      "rationale": "The compatibility note directly names the minimum Python version. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately."
     },
     "demo_answers": {
       "passage_0": {
@@ -228,14 +231,15 @@
           "id": "weekday",
           "text": "From Monday to Friday the clinic is open from 8:00 a.m. to 5:00 p.m."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank"
       ],
       "top_id": "hours",
-      "rationale": "The clinic hours paragraph answers the opening-time query."
+      "rationale": "The clinic hours paragraph answers the opening-time query. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately."
     },
     "demo_answers": {
       "passage_0": {
@@ -298,14 +302,15 @@
           "id": "export",
           "text": "Administrators can export audit logs as CSV."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank"
       ],
       "top_id": "retention",
-      "rationale": "The privacy documentation states the requested retention period."
+      "rationale": "The privacy documentation states the requested retention period. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately."
     },
     "demo_answers": {
       "passage_0": {
@@ -368,14 +373,15 @@
           "id": "fare",
           "text": "A single ride costs $2.50."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank"
       ],
       "top_id": "frequency",
-      "rationale": "The timetable explicitly states weekday train frequency."
+      "rationale": "The timetable explicitly states weekday train frequency. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately."
     },
     "demo_answers": {
       "passage_0": {
@@ -438,14 +444,15 @@
           "id": "owner",
           "text": "Mina will update the customer announcement."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank"
       ],
       "top_id": "decision",
-      "rationale": "The minutes record the decision requested, while other passages record the reason and owner."
+      "rationale": "The minutes record the decision requested, while other passages record the reason and owner. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately."
     },
     "demo_answers": {
       "passage_0": {
@@ -508,14 +515,15 @@
           "id": "display",
           "text": "The display measures 11 inches diagonally."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank"
       ],
       "top_id": "capacity",
-      "rationale": "The specification provides exact battery capacity."
+      "rationale": "The specification provides exact battery capacity. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately."
     },
     "demo_answers": {
       "passage_0": {
@@ -578,14 +586,15 @@
           "id": "billing",
           "text": "Invoices are issued 15 days before the next billing cycle."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank",
         "review"
       ],
-      "rationale": "The retrieved policy is related but omits whether the notice is calendar or business days; another passage gives a conflicting general rule. A provisional ranking or review can be reasonable.",
+      "rationale": "The retrieved policy is related but omits whether the notice is calendar or business days; another passage gives a conflicting general rule. A provisional ranking or review can be reasonable. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately.",
       "when_action": {
         "rank": {
           "top_id": "renewal"
@@ -653,14 +662,15 @@
           "id": "method",
           "text": "The farms used drip irrigation and soil moisture sensors."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank",
         "review"
       ],
-      "rationale": "The article describes improved yields without giving a number; related data may be ranked provisionally or reviewed.",
+      "rationale": "The article describes improved yields without giving a number; related data may be ranked provisionally or reviewed. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately.",
       "when_action": {
         "rank": {
           "top_id": "pilot"
@@ -728,14 +738,15 @@
           "id": "hours",
           "text": "The front desk is staffed from 8 a.m. to 6 p.m."
         }
-      ]
+      ],
+      "top_k": 1
     },
     "expected": {
       "actions": [
         "rank",
         "review"
       ],
-      "rationale": "The instruction-like text in one retrieved passage is not relevant evidence; the factual passage answers the query.",
+      "rationale": "The instruction-like text in one retrieved passage is not relevant evidence; the factual passage answers the query. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately.",
       "when_action": {
         "rank": {
           "top_id": "actual"
@@ -792,7 +803,7 @@
     "category": "adversarial",
     "rationale": "Two passages have exactly identical factual text and equal scores, so original order is a deterministic tie break.",
     "input": {
-      "query": "Which document states the office mailing address?",
+      "query": "What is the office mailing address?",
       "passages": [
         {
           "id": "doc-first",
@@ -806,19 +817,24 @@
           "id": "doc-third",
           "text": "The office reception desk is open on weekdays."
         }
-      ]
+      ],
+      "top_k": 2
     },
     "expected": {
       "actions": [
-        "rank"
+        "rank",
+        "review"
       ],
-      "top_id": "doc-first",
-      "ranked_ids": [
-        "doc-first",
-        "doc-second",
-        "doc-third"
-      ],
-      "rationale": "Two passages have exactly identical factual text and equal scores, so original order is a deterministic tie break."
+      "rationale": "Two passages have exactly identical factual text and equal scores, so original order is a deterministic tie break. The request releases only the selected top_k passages; uncertainty in unreleased items is reported separately.",
+      "when_action": {
+        "rank": {
+          "top_id": "doc-first",
+          "ranked_ids": [
+            "doc-first",
+            "doc-second"
+          ]
+        }
+      }
     },
     "demo_answers": {
       "passage_0": {

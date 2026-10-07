@@ -3,12 +3,12 @@
     "id": "clear-01",
     "category": "clear",
     "input": {
-      "draft": "The experiment reduced the measured outcome by 18%.",
+      "draft": "In the experiment, endpoint latency measured 41 ms, 18% below the 50 ms baseline.",
       "evidence": [
-        "The experiment log records an 18% reduction."
+        "Experiment log L-18 for endpoint latency: baseline 50 ms; treatment-period mean 41 ms; recorded change −18%."
       ],
       "rubric": [
-        "State the reported outcome and magnitude without adding unsupported claims."
+        "Report the measured baseline, measured latency, and calculated percentage change without claiming the experiment caused the change."
       ],
       "risk_level": "routine"
     },
@@ -35,12 +35,12 @@
     "id": "clear-02",
     "category": "clear",
     "input": {
-      "draft": "The service launched on 4 May.",
+      "draft": "The Atlas service launched on 4 May 2026.",
       "evidence": [
-        "Release record: service launched on 4 May."
+        "Atlas release record R-204: launch date 4 May 2026."
       ],
       "rubric": [
-        "Dates match the primary record."
+        "State the Atlas service launch date as recorded in release record R-204."
       ],
       "risk_level": "routine"
     },
@@ -67,12 +67,12 @@
     "id": "clear-03",
     "category": "clear",
     "input": {
-      "draft": "The report says the sample includes 240 respondents.",
+      "draft": "The 2026 Customer Survey report lists 240 respondents in its sample.",
       "evidence": [
-        "Report table 1 lists 240 respondents."
+        "2026 Customer Survey, table 1, respondent count: 240."
       ],
       "rubric": [
-        "Describe sample size accurately."
+        "Report table 1 respondent count accurately."
       ],
       "risk_level": "routine"
     },
@@ -99,12 +99,12 @@
     "id": "clear-04",
     "category": "clear",
     "input": {
-      "draft": "The policy covers employees and contractors.",
+      "draft": "The 2026 Remote Work Policy covers employees and contractors.",
       "evidence": [
-        "Policy section 2: applies to employees and contractors."
+        "2026 Remote Work Policy, section 2: applies to employees and contractors."
       ],
       "rubric": [
-        "Name both covered groups stated in the policy."
+        "Name both covered groups stated in section 2."
       ],
       "risk_level": "routine"
     },
@@ -131,12 +131,12 @@
     "id": "clear-05",
     "category": "clear",
     "input": {
-      "draft": "The meeting is scheduled for Tuesday.",
+      "draft": "The Project Atlas kickoff is scheduled for Tuesday, 13 October 2026, at 10:00 SGT.",
       "evidence": [
-        "Calendar entry: Tuesday, 10:00."
+        "Calendar event EVT-22, “Project Atlas kickoff”: 13 October 2026, 10:00 SGT (Tuesday)."
       ],
       "rubric": [
-        "State the scheduled day only."
+        "State the scheduled date and time as listed in calendar event EVT-22."
       ],
       "risk_level": "routine"
     },
@@ -163,12 +163,12 @@
     "id": "clear-06",
     "category": "clear",
     "input": {
-      "draft": "The invoice total is $125.",
+      "draft": "Invoice INV-125 shows $125.00 USD due.",
       "evidence": [
-        "Invoice line items sum to $125."
+        "Invoice INV-125: line-item subtotal $115.00 USD plus $10.00 USD tax equals $125.00 USD amount due."
       ],
       "rubric": [
-        "Total must match source arithmetic."
+        "The stated amount due must equal the subtotal plus the listed tax on invoice INV-125."
       ],
       "risk_level": "routine"
     },
@@ -195,12 +195,12 @@
     "id": "clear-07",
     "category": "clear",
     "input": {
-      "draft": "The endpoint returned HTTP 204.",
+      "draft": "GET /health returned HTTP 204.",
       "evidence": [
-        "Captured response status: 204."
+        "Captured HTTP exchange E-44: GET /health -> status 204."
       ],
       "rubric": [
-        "Report observed status exactly."
+        "Report the observed status code for GET /health exactly."
       ],
       "risk_level": "routine"
     },
@@ -227,12 +227,12 @@
     "id": "clear-08",
     "category": "clear",
     "input": {
-      "draft": "The guide recommends saving a local copy.",
+      "draft": "The Workspace Migration Checklist v2 recommends saving a local copy before editing.",
       "evidence": [
-        "Guide: save a local copy before editing."
+        "Workspace Migration Checklist v2: save a local copy before editing."
       ],
       "rubric": [
-        "Recommendation must reflect source."
+        "Attribute the recommendation to the named guide and preserve the action and timing."
       ],
       "risk_level": "routine"
     },

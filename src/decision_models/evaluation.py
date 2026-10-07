@@ -34,6 +34,7 @@ class Budget:
         self.attempts = 0
         self.latest_charge = None
         self.latest_questions = 0
+        self.latest_raw = None
 
     def reserve(self, provider, payload):
         rate = self.rates.get(provider)
@@ -60,8 +61,10 @@ class Budget:
         self.attempts += 1
         self.latest_charge = None
         self.latest_questions = len(questions)
+        self.latest_raw = None
 
     def record(self, provider, raw):
+        self.latest_raw = raw
         usage = raw.get("usage") if isinstance(raw,dict) else None
         if not isinstance(usage,dict):
             return
@@ -155,7 +158,7 @@ def summarize(rows, providers, skills, repetitions, mode, offline_passed):
                 "stable_cases":sum(len(set(c["recommendations"]))==1 for c in cases.values()),
                 "resolved_models":sorted({r["output"]["response"]["model"] for r in group
                                           if r.get("output",{}).get("response")}),
-                "live_requests":sum(r.get("output",{}).get("attempts",0) for r in group),
+                "live_requests":sum(r.get("attempts",r.get("output",{}).get("attempts",0)) for r in group),
                 "latency_p50_ms":statistics.median(latencies) if latencies else None,
             }
     return summary
@@ -192,6 +195,8 @@ def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, 
     receipt={"schema_version":1,"mode":mode,"started_at":datetime.now(timezone.utc).isoformat(),
              "source_hash":revision,"repetitions":repetitions,"fixtures":{
                  s: hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest() for s,c in fixture_sets.items()},
+             "profiles":{"reranking_top_k":sorted({str(c["input"].get("top_k","all"))
+                 for c in fixture_sets.get("reranking",[])})},
              "rates":rates if mode=="live" else None,"rows":rows}
     output.parent.mkdir(parents=True,exist_ok=True)
     blocked_providers=set()
@@ -214,6 +219,10 @@ def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, 
                     row={"provider":provider,"skill":skill,"case_id":case["id"],"category":case["category"],
                          "repetition":repetition+1,"expected":case["expected"]}
                     started = time.perf_counter()
+                    started_attempts = ledger.attempts if ledger else 0
+                    if ledger:
+                        ledger.latest_charge = None
+                        ledger.latest_raw = None
                     try:
                         out=execute(skill,provider,case["input"],mode=mode,demo_answers=case.get("demo_answers"),
                                     before_attempt=ledger.reserve if ledger else None,
@@ -233,10 +242,13 @@ def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, 
                                    latency_ms=round((time.perf_counter()-started)*1000,3))
                         if ledger:
                             row["charge"] = ledger.latest_charge
+                            if ledger.latest_raw is not None:
+                                row["raw_response"] = ledger.latest_raw
                         if exc.code in ("budget_exhausted","budget_estimate_exceeded"):
                             stopped=True
                         if exc.code in ("authentication","permission","endpoint_unavailable","missing_credentials","insufficient_credits"):
                             blocked_providers.add(provider)
+                    row["attempts"] = ledger.attempts-started_attempts if ledger else 0
                     rows.append(row)
                     save()
                     if stopped or provider in blocked_providers:
@@ -275,14 +287,27 @@ def write_report(receipt, path):
             cells.append(entry["status"])
         lines.append("| "+skill+" | "+" | ".join(cells)+" |")
     lines.extend(["", "Working requires current offline verification, complete live coverage, every clear case passing at least 2/3 runs, all ambiguous/adversarial expectations passing, no errors, and no deterministic safety violations.",
-                  "", "Demo results never qualify as live Working. Repetitions measure stability and are not independent samples.","",
+                  "", "Demo results never qualify as live Working. Stability compares actions and released model/ranking recommendations; repetitions are not independent samples.","",
+                  "Reranking tested top_k values: " + ", ".join(receipt.get("profiles",{}).get("reranking_top_k",["see frozen fixture revision"])) + ". Working applies to this tested profile; other configurations are not certified by this table.", "",
+                  "Full sanitized raw answers, distributions, reported usage, error details, latency and per-attempt charges are in the JSON receipt alongside this report.", "",
                   f"Budget: `{json.dumps(receipt.get('budget'))}`.", "", "## Per-workflow evidence", ""])
     for key,entry in summary.items():
         lines.extend([f"### {key}","",f"Status: **{entry['status']}**; clear cases: {entry['clear_cases_passed']}/8; stable cases: {entry['stable_cases']}/12; offline passed: {entry['offline_passed']}.",
                       f"Resolved models: {', '.join(entry['resolved_models']) or 'none'}. Errors: `{json.dumps(entry['errors'])}`.",
-                      "", "| Case | Kind | Passes / runs | Outcomes |", "|---|---|---|---|"])
+                      f"Live attempts: {entry['live_requests']}; live median latency: {entry['latency_p50_ms']} ms.",
+                      "", "| Case | Kind | Passes / runs | Outcomes | p50 ms | Reported tokens in/out | Cost US$ |", "|---|---|---|---|---|---|---|"])
         for case,value in entry["cases"].items():
-            lines.append(f"| {case} | {value['category']} | {value['passes']}/{value['runs']} | {', '.join(value['outcomes'])} |")
+            provider,skill=key.split("/",1)
+            runs=[r for r in receipt["rows"] if r["provider"]==provider and r["skill"]==skill and r["case_id"]==case]
+            times=[r.get("output",{}).get("latency_ms",r.get("latency_ms",0)) for r in runs]
+            usages=[r.get("output",{}).get("response",{}).get("usage",{}) for r in runs if r.get("output",{}).get("response")]
+            token_in=sum(u.get("input_tokens",0) for u in usages if isinstance(u,dict))
+            token_out=sum(u.get("output_tokens",0) for u in usages if isinstance(u,dict))
+            charges=[r["charge"] for r in runs if r.get("charge")]
+            cost=f"{sum(c['usd'] for c in charges):.8f}" if charges else ("unreported" if any(r.get("attempts",r.get("output",{}).get("attempts",0)) for r in runs) else "0")
+            if any(c["kind"]=="token_price_estimate" for c in charges):
+                cost+=" estimated"
+            lines.append(f"| {case} | {value['category']} | {value['passes']}/{value['runs']} | {', '.join(value['outcomes'])} | {statistics.median(times) if times else 0} | {token_in}/{token_out} | {cost} |")
         lines.append("")
     path.parent.mkdir(parents=True,exist_ok=True)
     path.write_text("\n".join(lines)+"\n")

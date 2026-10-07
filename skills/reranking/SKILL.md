@@ -16,3 +16,5 @@ Each `passages[index].text` is scored independently against `query` on an ordere
 For live mode, install the `decision-models-skills` CLI separately and configure its provider key as documented in the repository README. `examples/demo.json` contains hand-authored synthetic answers. Expected labels are kept in acceptance fixtures, outside model input.
 
 This workflow is inspired by the six-workflow post by [Akshay Pachaar](https://x.com/akshay_pachaar/status/2107469584773300545) and TypeSafe's [official skills](https://github.com/typesafe-ai/skills). See the repository `ATTRIBUTION.md` for source and adaptation details.
+
+Exact duplicate passage text is evaluated once and reuses the same native score for each ID; stable ties preserve the original order. A review outcome releases no ranked IDs.

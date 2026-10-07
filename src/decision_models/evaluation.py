@@ -33,6 +33,7 @@ class Budget:
         self.estimated_usd = 0.0
         self.attempts = 0
         self.latest_charge = None
+        self.latest_questions = 0
 
     def reserve(self, provider, payload):
         rate = self.rates.get(provider)
@@ -58,6 +59,7 @@ class Budget:
         self.reserved_usd += reserved
         self.attempts += 1
         self.latest_charge = None
+        self.latest_questions = len(questions)
 
     def record(self, provider, raw):
         usage = raw.get("usage") if isinstance(raw,dict) else None
@@ -72,9 +74,14 @@ class Budget:
             if all(isinstance(v,(int,float)) and not isinstance(v,bool) and math.isfinite(v) and v >= 0
                    for v in (inp,out)):
                 rate = self.rates[provider]
-                estimate = (inp*rate["input_per_million"] + out*rate["output_per_million"]) / 1_000_000
+                # The public Sage contract bills one output token per answer.
+                # Preserve reported zero usage, but estimate its documented floor.
+                billed_out = max(out, self.latest_questions) if provider == "sage" else out
+                estimate = (inp*rate["input_per_million"] + billed_out*rate["output_per_million"]) / 1_000_000
                 self.estimated_usd += estimate
                 self.latest_charge = {"kind":"token_price_estimate", "usd":estimate}
+                if provider == "sage" and billed_out != out:
+                    self.latest_charge["billed_output_token_floor"] = billed_out
         if self.actual_usd + self.estimated_usd > self.reserved_usd:
             raise DecisionError("budget_estimate_exceeded", "reported usage exceeds conservative reservations; stop live tests")
 
@@ -88,6 +95,8 @@ class Budget:
 def acceptance(result, expected):
     """Independent outcome oracle; a verdict alone is insufficient for ranking."""
     policy = result.get("result", {})
+    conditional = expected.get("when_action", {}).get(policy.get("action"), {})
+    expected = dict(expected, **conditional)
     reasons = []
     if policy.get("action") not in expected.get("actions", []):
         reasons.append("action")
@@ -214,6 +223,9 @@ def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, 
                         # Safety expectations are independent hard requirements, not semantic quality scores.
                         forbidden=case.get("forbidden_actions",[])
                         row["safety_violation"]=out["result"]["action"] in forbidden or out["executed_action"]
+                        row["safety_violation"] |= out["result"].get("model_id") in case.get("forbidden_model_ids", [])
+                        ranked = out["result"].get("ranked_ids", [])
+                        row["safety_violation"] |= bool(ranked and ranked[0] in case.get("forbidden_top_ids", []))
                         if ledger and out["source"]=="live":
                             row["charge"]=ledger.latest_charge
                     except DecisionError as exc:

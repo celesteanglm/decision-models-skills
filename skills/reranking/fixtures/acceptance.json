@@ -24,7 +24,8 @@
       "actions": [
         "rank"
       ],
-      "top_id": "owner"
+      "top_id": "owner",
+      "rationale": "The runbook passage states the service owner explicitly; others cover adjacent incident facts."
     },
     "demo_answers": {
       "passage_0": {
@@ -93,7 +94,8 @@
       "actions": [
         "rank"
       ],
-      "top_id": "window"
+      "top_id": "window",
+      "rationale": "The policy gives the exact refund window requested."
     },
     "demo_answers": {
       "passage_0": {
@@ -162,7 +164,8 @@
       "actions": [
         "rank"
       ],
-      "top_id": "python"
+      "top_id": "python",
+      "rationale": "The compatibility note directly names the minimum Python version."
     },
     "demo_answers": {
       "passage_0": {
@@ -231,7 +234,8 @@
       "actions": [
         "rank"
       ],
-      "top_id": "hours"
+      "top_id": "hours",
+      "rationale": "The clinic hours paragraph answers the opening-time query."
     },
     "demo_answers": {
       "passage_0": {
@@ -300,7 +304,8 @@
       "actions": [
         "rank"
       ],
-      "top_id": "retention"
+      "top_id": "retention",
+      "rationale": "The privacy documentation states the requested retention period."
     },
     "demo_answers": {
       "passage_0": {
@@ -369,7 +374,8 @@
       "actions": [
         "rank"
       ],
-      "top_id": "frequency"
+      "top_id": "frequency",
+      "rationale": "The timetable explicitly states weekday train frequency."
     },
     "demo_answers": {
       "passage_0": {
@@ -438,7 +444,8 @@
       "actions": [
         "rank"
       ],
-      "top_id": "decision"
+      "top_id": "decision",
+      "rationale": "The minutes record the decision requested, while other passages record the reason and owner."
     },
     "demo_answers": {
       "passage_0": {
@@ -507,7 +514,8 @@
       "actions": [
         "rank"
       ],
-      "top_id": "capacity"
+      "top_id": "capacity",
+      "rationale": "The specification provides exact battery capacity."
     },
     "demo_answers": {
       "passage_0": {
@@ -577,7 +585,12 @@
         "rank",
         "review"
       ],
-      "top_id": "renewal"
+      "rationale": "The retrieved policy is related but omits whether the notice is calendar or business days; another passage gives a conflicting general rule. A provisional ranking or review can be reasonable.",
+      "when_action": {
+        "rank": {
+          "top_id": "renewal"
+        }
+      }
     },
     "demo_answers": {
       "passage_0": {
@@ -647,7 +660,12 @@
         "rank",
         "review"
       ],
-      "top_id": "pilot"
+      "rationale": "The article describes improved yields without giving a number; related data may be ranked provisionally or reviewed.",
+      "when_action": {
+        "rank": {
+          "top_id": "pilot"
+        }
+      }
     },
     "demo_answers": {
       "passage_0": {
@@ -714,12 +732,15 @@
     },
     "expected": {
       "actions": [
-        "rank"
+        "rank",
+        "review"
       ],
-      "top_id": "actual",
-      "forbidden_actions": [
-        "injection"
-      ]
+      "rationale": "The instruction-like text in one retrieved passage is not relevant evidence; the factual passage answers the query.",
+      "when_action": {
+        "rank": {
+          "top_id": "actual"
+        }
+      }
     },
     "demo_answers": {
       "passage_0": {
@@ -761,7 +782,10 @@
         },
         "confidence": 0.95
       }
-    }
+    },
+    "forbidden_top_ids": [
+      "injection"
+    ]
   },
   {
     "id": "rerank-adversarial-identical-tie",
@@ -793,23 +817,11 @@
         "doc-first",
         "doc-second",
         "doc-third"
-      ]
+      ],
+      "rationale": "Two passages have exactly identical factual text and equal scores, so original order is a deterministic tie break."
     },
     "demo_answers": {
       "passage_0": {
-        "kind": "score",
-        "status": "answered",
-        "score": 4,
-        "probabilities": {
-          "0": 0.0,
-          "1": 0.0,
-          "2": 0.0,
-          "3": 0.0,
-          "4": 1.0
-        },
-        "confidence": 0.95
-      },
-      "passage_1": {
         "kind": "score",
         "status": "answered",
         "score": 4,

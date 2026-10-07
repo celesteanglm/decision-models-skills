@@ -21,6 +21,50 @@ RATES = {
 
 
 class EvaluationTests(unittest.TestCase):
+    def test_conditional_oracle_accepts_only_explicit_review_or_escalation_and_checks_releases(self):
+        route_expected = {
+            "actions": ["route", "escalate"],
+            "when_action": {"route": {"model_id": "approved-model"}},
+        }
+        self.assertTrue(acceptance({"result": {"action": "escalate"}}, route_expected)[0])
+        self.assertTrue(acceptance({"result": {"action": "route", "model_id": "approved-model"}},
+                                   route_expected)[0])
+        self.assertFalse(acceptance({"result": {"action": "route", "model_id": "other-model"}},
+                                    route_expected)[0])
+        self.assertFalse(acceptance({"result": {"action": "review"}}, route_expected)[0])
+
+        ranking_expected = {
+            "actions": ["rank", "review"],
+            "when_action": {"rank": {"top_id": "approved-passage",
+                                      "ranked_ids": ["approved-passage", "second"]}},
+        }
+        self.assertTrue(acceptance({"result": {"action": "review", "ranked_ids": []}},
+                                   ranking_expected)[0])
+        self.assertTrue(acceptance({"result": {"action": "rank", "ranked_ids": ["approved-passage", "second"]}},
+                                   ranking_expected)[0])
+        self.assertFalse(acceptance({"result": {"action": "rank", "ranked_ids": ["other", "second"]}},
+                                    ranking_expected)[0])
+        self.assertFalse(acceptance({"result": {"action": "rank", "ranked_ids": ["approved-passage", "second", "third"]}},
+                                    ranking_expected)[0])
+
+    def test_v2_routing_and_reranking_fixture_targets_are_conditional_and_complete(self):
+        for skill in ("model-routing", "reranking"):
+            cases = json.loads((REPO / "skills" / skill / "fixtures" / "acceptance.json").read_text())
+            self.assertEqual(Counter(case["category"] for case in cases),
+                             {"clear": 8, "ambiguous": 2, "adversarial": 2})
+            for case in cases:
+                expected = case["expected"]
+                conditional = expected.get("when_action", {})
+                for action, constraints in conditional.items():
+                    self.assertIn(action, expected["actions"], (skill, case["id"], action))
+                    if action in ("route", "rank"):
+                        required = "model_id" if action == "route" else "top_id"
+                        self.assertTrue(constraints.get(required), (skill, case["id"], constraints))
+                if skill == "model-routing":
+                    self.assertNotIn("model_id", expected["actions"], case["id"])
+                else:
+                    self.assertNotIn("top_id", expected["actions"], case["id"])
+
     def test_every_fixture_has_independent_shape_and_repeated_demo_acceptance(self):
         all_rows = 0
         for skill in SKILLS:
@@ -87,6 +131,19 @@ class EvaluationTests(unittest.TestCase):
         with self.assertRaises(DecisionError) as caught:
             budget.record("sage", {"usage": {"cost": 1.0}})
         self.assertEqual(caught.exception.code, "budget_estimate_exceeded")
+
+    def test_sage_zero_output_usage_preserves_receipt_and_estimates_documented_answer_floor(self):
+        budget = Budget(0.1, RATES)
+        payload = {"state": "tiny", "questions": [{"name": f"q{i}"} for i in range(3)]}
+        budget.reserve("sage", payload)
+        raw = {"usage": {"input_tokens": 0, "output_tokens": 0}}
+        original = json.loads(json.dumps(raw))
+        budget.record("sage", raw)
+        self.assertEqual(raw, original)
+        self.assertEqual(budget.latest_charge["kind"], "token_price_estimate")
+        self.assertEqual(budget.latest_charge["billed_output_token_floor"], 3)
+        self.assertAlmostEqual(budget.latest_charge["usd"], 3 * RATES["sage"]["output_per_million"] / 1_000_000)
+        self.assertEqual(budget.snapshot()["token_price_estimated_usd"], budget.latest_charge["usd"])
 
     def test_budget_actual_estimated_and_exhaustion_semantics(self):
         budget = Budget(0.01, RATES)

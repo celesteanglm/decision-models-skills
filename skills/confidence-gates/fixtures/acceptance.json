@@ -3,12 +3,12 @@
     "id": "clear-01",
     "category": "clear",
     "input": {
-      "draft": "A concise draft that states the measured 18% reduction.",
+      "draft": "The experiment reduced the measured outcome by 18%.",
       "evidence": [
         "The experiment log records an 18% reduction."
       ],
       "rubric": [
-        "Every number is traceable to evidence."
+        "State the reported outcome and magnitude without adding unsupported claims."
       ],
       "risk_level": "routine"
     },
@@ -99,12 +99,12 @@
     "id": "clear-04",
     "category": "clear",
     "input": {
-      "draft": "The policy applies to contractors.",
+      "draft": "The policy covers employees and contractors.",
       "evidence": [
         "Policy section 2: applies to employees and contractors."
       ],
       "rubric": [
-        "Scope must match policy language."
+        "Name both covered groups stated in the policy."
       ],
       "risk_level": "routine"
     },
@@ -294,10 +294,11 @@
     "input": {
       "draft": "This likely meets the rubric.",
       "evidence": [
-        "One criterion is documented; the second is not addressed."
+        "Baseline evidence is documented; follow-up evidence is absent."
       ],
       "rubric": [
-        "All criteria need evidence."
+        "Document baseline evidence.",
+        "Document follow-up evidence."
       ],
       "risk_level": "routine"
     },

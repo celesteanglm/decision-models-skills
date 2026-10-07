@@ -1,5 +1,6 @@
 """Integration seam between independently implemented providers and workflows."""
 import importlib
+import json
 import os
 import time
 from .contracts import DecisionError, validate_questions, validate_response
@@ -37,6 +38,10 @@ def execute(skill, provider, data, *, mode="demo", demo_answers=None, model=None
     questions = prepared["questions"]
     validate_questions(questions)
     payload = adapter.build_payload(prepared["state"], questions, model or adapter.default_model)
+    try:
+        json.dumps(payload, allow_nan=False)
+    except (ValueError, TypeError) as exc:
+        raise DecisionError("invalid_request", "input must contain finite JSON values") from exc
     start = time.perf_counter()
     attempts = 0
     if mode == "demo":
@@ -69,4 +74,3 @@ def execute(skill, provider, data, *, mode="demo", demo_answers=None, model=None
         raise DecisionError("invalid_response", "workflow did not return a policy action")
     return dict(out, result=result, source="demo" if mode == "demo" else "live",
                 response=response, latency_ms=round((time.perf_counter()-start)*1000, 3), attempts=attempts)
-

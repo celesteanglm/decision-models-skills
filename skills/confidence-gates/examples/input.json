@@ -1,10 +1,10 @@
 {
-  "draft": "A concise draft that states the measured 18% reduction.",
+  "draft": "The experiment reduced the measured outcome by 18%.",
   "evidence": [
     "The experiment log records an 18% reduction."
   ],
   "rubric": [
-    "Every number is traceable to evidence."
+    "State the reported outcome and magnitude without adding unsupported claims."
   ],
   "risk_level": "routine"
 }

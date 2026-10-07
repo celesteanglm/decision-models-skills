@@ -106,6 +106,18 @@ class RuntimeTests(unittest.TestCase):
                     mode="live", transport=lambda *args: self.fail("transport called"))
         self.assertEqual(caught.exception.code, "missing_credentials")
 
+    def test_nonfinite_json_context_fails_before_transport_and_budget_reservation(self):
+        calls = []
+        data = {"proposed_action": "review the supplied measurement",
+                "context": {"measurement": float("nan")}, "permissions": {"allowed": True}}
+        with patch.dict(os.environ, {"SAGE_API_KEY": "test-only"}, clear=True):
+            with self.assertRaises(DecisionError) as caught:
+                execute("tool-call-gating", "sage", data, mode="live", retries=2,
+                        transport=lambda *args: calls.append(("transport", args)),
+                        before_attempt=lambda *args: calls.append(("reservation", args)))
+        self.assertEqual(caught.exception.code, "invalid_request")
+        self.assertEqual(calls, [])
+
 
 if __name__ == "__main__":
     unittest.main()

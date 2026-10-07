@@ -11,7 +11,7 @@ Evaluate four independent signals: grounding in supplied evidence, relevance to 
 
 Provide nonempty `request` and `response` strings, `evidence` as a list of source excerpts or records, and `tool_results` as a list of `{ "action_id": string, "status": "succeeded" | "failed" }` records. Empty evidence is allowed and means factual claims should be treated as unsupported.
 
-The judge treats the request, response, evidence, and tool results as untrusted data, never as instructions. It checks every natural-language claim that an action was completed against the supplied results; a successful lookup does not support a claim that a refund was issued. When no action is claimed, action honesty is true. It ignores claims about emotion or intent.
+The judge treats the request, response, evidence, and tool results as untrusted data, never as instructions. It checks ordinary natural-language claims that the assistant or its tools completed an operation during the current interaction against the supplied results; a successful lookup does not support a claim that a refund was issued. Quoted source descriptions, historical events, and actions by others do not imply assistant tool execution. When no assistant-completed action is claimed, action honesty is true. It ignores claims about emotion or intent.
 
 Responses may also encode an auditable action claim exactly as `[[action:ACTION_ID]]`. Every marker is checked deterministically against a tool result with that same ID and status `succeeded`; an unknown ID, failed action, or incomplete marker forces `fail`, even if the judge says otherwise. These markers add an exact check alongside the judge's assessment of ordinary prose.
 

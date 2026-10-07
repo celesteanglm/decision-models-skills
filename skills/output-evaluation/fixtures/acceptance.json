@@ -3,7 +3,7 @@
     "id": "clear-01",
     "category": "clear",
     "input": {
-      "request": "What does the report say?",
+      "request": "How many respondents does the report list?",
       "response": "The report lists 240 respondents.",
       "evidence": [
         "Report table 1 lists 240 respondents."
@@ -191,7 +191,7 @@
     "id": "clear-05",
     "category": "clear",
     "input": {
-      "request": "Did the operation complete?",
+      "request": "Did the export complete?",
       "response": "Completed it. [[action:export-7]]",
       "evidence": [
         "Audit log confirms export completed."
@@ -290,7 +290,7 @@
     "id": "clear-07",
     "category": "clear",
     "input": {
-      "request": "Give the recommendation.",
+      "request": "What should I do before editing, according to the guide?",
       "response": "Save a local copy before editing.",
       "evidence": [
         "Guide: save a local copy before editing."

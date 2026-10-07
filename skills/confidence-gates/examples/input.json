@@ -1,0 +1,10 @@
+{
+  "draft": "A concise draft that states the measured 18% reduction.",
+  "evidence": [
+    "The experiment log records an 18% reduction."
+  ],
+  "rubric": [
+    "Every number is traceable to evidence."
+  ],
+  "risk_level": "routine"
+}

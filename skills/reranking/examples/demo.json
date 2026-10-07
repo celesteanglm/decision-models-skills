@@ -1,0 +1,43 @@
+{
+  "answers": {
+    "passage_0": {
+      "kind": "score",
+      "status": "answered",
+      "score": 4,
+      "probabilities": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 1.0
+      },
+      "confidence": 0.95
+    },
+    "passage_1": {
+      "kind": "score",
+      "status": "answered",
+      "score": 1,
+      "probabilities": {
+        "0": 0.0,
+        "1": 1.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "confidence": 0.95
+    },
+    "passage_2": {
+      "kind": "score",
+      "status": "answered",
+      "score": 0,
+      "probabilities": {
+        "0": 1.0,
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "confidence": 0.95
+    }
+  }
+}

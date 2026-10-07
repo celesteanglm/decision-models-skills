@@ -1,0 +1,14 @@
+{
+  "answers": {
+    "evidence_support": {
+      "kind": "predicate",
+      "status": "answered",
+      "probability_true": 0.98
+    },
+    "rubric_satisfied": {
+      "kind": "predicate",
+      "status": "answered",
+      "probability_true": 0.98
+    }
+  }
+}

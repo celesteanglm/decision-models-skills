@@ -1,0 +1,102 @@
+{
+  "passed": true,
+  "source_hash": "1f4c6c98bcffc16db25145c297a9b6dad10808bae714f246e48cf7108ca0f8f9",
+  "checked_at": "2026-10-07T17:05:31.649457+00:00",
+  "python": "3.12.10",
+  "checks": [
+    "unittest suite",
+    "18 credential-free copied-skill demos from another cwd"
+  ],
+  "demos": [
+    {
+      "skill": "input-guardrails",
+      "provider": "jev-openrouter",
+      "action": "allow"
+    },
+    {
+      "skill": "input-guardrails",
+      "provider": "openai-decisions",
+      "action": "allow"
+    },
+    {
+      "skill": "input-guardrails",
+      "provider": "sage",
+      "action": "allow"
+    },
+    {
+      "skill": "model-routing",
+      "provider": "jev-openrouter",
+      "action": "route"
+    },
+    {
+      "skill": "model-routing",
+      "provider": "openai-decisions",
+      "action": "route"
+    },
+    {
+      "skill": "model-routing",
+      "provider": "sage",
+      "action": "route"
+    },
+    {
+      "skill": "reranking",
+      "provider": "jev-openrouter",
+      "action": "rank"
+    },
+    {
+      "skill": "reranking",
+      "provider": "openai-decisions",
+      "action": "rank"
+    },
+    {
+      "skill": "reranking",
+      "provider": "sage",
+      "action": "rank"
+    },
+    {
+      "skill": "tool-call-gating",
+      "provider": "jev-openrouter",
+      "action": "approve"
+    },
+    {
+      "skill": "tool-call-gating",
+      "provider": "openai-decisions",
+      "action": "approve"
+    },
+    {
+      "skill": "tool-call-gating",
+      "provider": "sage",
+      "action": "approve"
+    },
+    {
+      "skill": "confidence-gates",
+      "provider": "jev-openrouter",
+      "action": "send"
+    },
+    {
+      "skill": "confidence-gates",
+      "provider": "openai-decisions",
+      "action": "send"
+    },
+    {
+      "skill": "confidence-gates",
+      "provider": "sage",
+      "action": "send"
+    },
+    {
+      "skill": "output-evaluation",
+      "provider": "jev-openrouter",
+      "action": "pass"
+    },
+    {
+      "skill": "output-evaluation",
+      "provider": "openai-decisions",
+      "action": "pass"
+    },
+    {
+      "skill": "output-evaluation",
+      "provider": "sage",
+      "action": "pass"
+    }
+  ]
+}

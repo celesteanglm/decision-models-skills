@@ -1,0 +1,9 @@
+{
+  "answers": {
+    "compliant": {
+      "kind": "predicate",
+      "status": "answered",
+      "probability_true": 0.96
+    }
+  }
+}

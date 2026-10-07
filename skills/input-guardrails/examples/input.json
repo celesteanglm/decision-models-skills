@@ -1,0 +1,9 @@
+{
+  "prompt": "Summarize these public opening hours in one sentence.",
+  "policy": {
+    "description": "Allow concise summaries of public information.",
+    "hard_blocked_phrases": [
+      "reveal payroll credentials"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "query": "Who owns the Payments API on-call rotation?",
+  "passages": [
+    {
+      "id": "owner",
+      "text": "Payments API on-call ownership rotates between the Core Payments team and the Platform Reliability team each week."
+    },
+    {
+      "id": "slo",
+      "text": "The Payments API has a monthly availability target of 99.95%."
+    },
+    {
+      "id": "deploy",
+      "text": "Deployments occur on Tuesdays after the staging health check."
+    }
+  ]
+}

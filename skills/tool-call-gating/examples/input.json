@@ -1,0 +1,8 @@
+{
+  "proposed_action": "Draft a short agenda for the weekly planning meeting.",
+  "context": "The user requested a draft agenda; topics are listed in the current project notes.",
+  "permissions": {
+    "allowed": true,
+    "reason": "drafting is within user authorization"
+  }
+}

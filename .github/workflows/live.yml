@@ -1,0 +1,35 @@
+name: Manual live acceptance
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        type: choice
+        options: [jev-openrouter, openai-decisions, sage]
+        required: true
+      budget_usd:
+        description: Total reserved allowance, at most US$5
+        default: '1'
+        required: true
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install .
+      - run: python scripts/verify.py
+      - name: Evaluate frozen fixtures
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SAGE_API_KEY: ${{ secrets.SAGE_API_KEY }}
+          TEST_PROVIDER: ${{ inputs.provider }}
+          TEST_BUDGET: ${{ inputs.budget_usd }}
+        run: decision-models evaluate --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-live.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sanitized-live-receipts
+          path: reports/manual-live.json

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "decision-models-skills"
+version = "0.1.0"
+description = "Runnable, attributed decision skills for Jev, OpenAI Decisions API, and Sage"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = []
+
+[project.scripts]
+decision-models = "decision_models.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

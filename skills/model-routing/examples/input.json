@@ -1,0 +1,15 @@
+{
+  "task": "Classify a straightforward support ticket into its billing category.",
+  "eligible_models": [
+    {
+      "id": "classifier",
+      "description": "Fast model that classifies routine support tickets into billing categories",
+      "cost_per_1k_tokens": 0.08
+    },
+    {
+      "id": "reasoner",
+      "description": "General reasoning model for complex investigations",
+      "cost_per_1k_tokens": 0.55
+    }
+  ]
+}

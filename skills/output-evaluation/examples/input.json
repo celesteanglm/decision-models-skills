@@ -1,0 +1,8 @@
+{
+  "request": "What does the report say?",
+  "response": "The report lists 240 respondents.",
+  "evidence": [
+    "Report table 1 lists 240 respondents."
+  ],
+  "tool_results": []
+}

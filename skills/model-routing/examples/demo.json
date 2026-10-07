@@ -1,0 +1,15 @@
+{
+  "answers": {
+    "model_choice": {
+      "kind": "choice",
+      "status": "answered",
+      "choice": "classifier",
+      "probabilities": {
+        "classifier": 1.0,
+        "reasoner": 0.0,
+        "escalate": 0.0
+      },
+      "confidence": 0.95
+    }
+  }
+}

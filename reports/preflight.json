@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-10-07T17:05:55.930111+00:00",
+  "source_hash": "1f4c6c98bcffc16db25145c297a9b6dad10808bae714f246e48cf7108ca0f8f9",
+  "planned_requests": {
+    "jev-openrouter": 195,
+    "openai-decisions": 195,
+    "sage": 195
+  },
+  "conservative_budget": {
+    "limit_usd": 4.9,
+    "reserved_usd": 0.46273702,
+    "provider_reported_usd": 0.0,
+    "token_price_estimated_usd": 0.0,
+    "attempts": 585,
+    "unreconciled_allowance_usd": 0.46273702
+  },
+  "smoke_cost_usd": 6.8086e-05,
+  "total_limit_usd": 5,
+  "clean_wheel": {
+    "sha256": "3e1d9b3eaaac28654cbc1af65182fb5bde5a3162239334a6c8595b18b4fc2d67",
+    "python_versions": [
+      "3.10.13",
+      "3.12.10"
+    ],
+    "tests_per_version": 74,
+    "copied_skill_demos_per_version": 18,
+    "passed": true
+  }
+}

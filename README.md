@@ -24,7 +24,9 @@ The repository README explains setup for people; each `SKILL.md` contains instru
 
 Live acceptance on 2026-10-08 marks all six Jev/OpenRouter and Sage workflows **Working**. OpenAI Decisions has four **Working** workflows; input guardrails and output evaluation are **Partial**. The [generated compatibility table and per-case evidence](reports/COMPATIBILITY.md) record the resolved models, fixture revision, usage, latency, and repeated-run stability. Reranking evidence covers the requested `top_k=1` and `top_k=2` profiles; it does not certify every full-list configuration.
 
-Clean wheel installs pass 89 tests and 18 copied-skill demos on both Python 3.10 and 3.12. All retained live iterations and smoke calls total approximately **US$0.110 in provider-reported and token-estimated costs**, with US$2.324 conservatively reserved against the US$5 limit. See [cost reconciliation](reports/costs.json) and [evaluation history](docs/evaluation-history.md). Estimates are not provider invoices.
+Clean wheel installs pass 89 tests and 18 copied-skill demos on both Python 3.10 and 3.12. All retained live iterations and smoke calls total approximately **US$0.123 in provider-reported and token-estimated costs**, with US$2.652 conservatively reserved against the US$5 limit. See [cost reconciliation](reports/costs.json) and [evaluation history](docs/evaluation-history.md). Estimates are not provider invoices.
+
+The [fresh Jev/OpenRouter and Sage live rerun](reports/JEV_SAGE_RETEST.md) made 390 API requests across all six workflows, with both backends meeting the Working criteria. Its receipts record the individual pass counts and stability.
 
 ## Install the CLI
 

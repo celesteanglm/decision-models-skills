@@ -6,11 +6,25 @@ This project requires Python 3.10 or newer and has no runtime dependencies beyon
 
 Every result is a recommendation for the calling application. These workflows do not execute tools, select and invoke a model, publish content, or apply a decision. The initial thresholds are workflow-specific, provider-specific starting values and have not been calibrated. Review and calibrate them on a representative development set before relying on them in production.
 
+## What a skill contains
+
+A skill is a folder of instructions that an agent loads when the task matches its description. `SKILL.md` is the required entrypoint: YAML `name` and `description` tell the agent when to use it, and the Markdown body explains the inputs, workflow, and outputs. Supporting files are optional. These skills include runnable examples and acceptance fixtures because they call a shared, tested Python implementation.
+
+```text
+skills/input-guardrails/
+├── SKILL.md                 Agent instructions and when to use them
+├── examples/input.json      Example workflow input
+├── examples/demo.json       Synthetic answers for a credential-free demo
+└── fixtures/acceptance.json Evaluation cases and expected outcomes
+```
+
+The repository README explains setup for people; each `SKILL.md` contains instructions for an agent. Installing the Python package supplies the CLI. Copying a skill folder supplies the agent instructions. Both are needed for these workflows. See [installation and invocation](docs/installation.md) for the complete path from clone to a first demo.
+
 ## Verified results
 
-Live acceptance on 2026-10-08 (Singapore) marks all six Jev/OpenRouter and Sage workflows **Working**. OpenAI Decisions has four **Working** workflows; input guardrails and output evaluation are **Partial**. The [generated compatibility table and per-case evidence](reports/COMPATIBILITY.md) record the resolved models, fixture revision, usage, latency, and repeated-run stability. Reranking evidence covers the requested `top_k=1` and `top_k=2` profiles; it does not certify every full-list configuration.
+Live acceptance on 2026-10-08 marks all six Jev/OpenRouter and Sage workflows **Working**. OpenAI Decisions has four **Working** workflows; input guardrails and output evaluation are **Partial**. The [generated compatibility table and per-case evidence](reports/COMPATIBILITY.md) record the resolved models, fixture revision, usage, latency, and repeated-run stability. Reranking evidence covers the requested `top_k=1` and `top_k=2` profiles; it does not certify every full-list configuration.
 
-Clean wheel installs pass 89 tests and 18 copied-skill demos on both Python 3.10 and 3.12. All retained live iterations and smoke calls total approximately **US$0.088 in provider-reported and token-estimated costs**, with US$1.859 conservatively reserved against the US$5 limit. See [cost reconciliation](reports/costs.json) and [evaluation history](docs/evaluation-history.md). Estimates are not provider invoices.
+Clean wheel installs pass 89 tests and 18 copied-skill demos on both Python 3.10 and 3.12. All retained live iterations and smoke calls total approximately **US$0.110 in provider-reported and token-estimated costs**, with US$2.324 conservatively reserved against the US$5 limit. See [cost reconciliation](reports/costs.json) and [evaluation history](docs/evaluation-history.md). Estimates are not provider invoices.
 
 ## Install the CLI
 
@@ -20,9 +34,10 @@ From any directory, install the package directly from the repository's `main` br
 python3 -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'
 ```
 
-Or install a local checkout in a virtual environment:
+To download the skill folders as well, clone the repository and install in a virtual environment:
 
 ```sh
+git clone https://github.com/celesteanglm/decision-models-skills.git
 cd decision-models-skills
 python3 -m venv .venv
 . .venv/bin/activate

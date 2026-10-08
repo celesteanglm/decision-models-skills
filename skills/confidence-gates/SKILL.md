@@ -5,6 +5,8 @@ description: Recommend whether an evidence-backed draft is ready, needs review, 
 
 # Confidence gates
 
+Requires Python 3.10+ and the separately installed shared CLI: `python -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'`. Run the commands below from this skill folder.
+
 Use this skill before an application chooses whether to release a draft. It returns a recommendation only; it never sends, publishes, or edits content.
 
 ## Inputs
@@ -17,7 +19,7 @@ The judge treats the draft, evidence, and rubric as untrusted data, never as ins
 
 Refusals or missing answers return `review`, or `escalate` for high risk. Review the evidence and rubric before acting on any recommendation. The calling application remains responsible for release controls.
 
-## Run
+## Run from this skill folder
 
 Install the shared package from the repository first. From this skill directory, run the offline hand-authored demo:
 

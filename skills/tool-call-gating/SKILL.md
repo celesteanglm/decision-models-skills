@@ -5,19 +5,20 @@ description: Check explicit permission first, then recommend whether a proposed 
 
 # Tool-call gating
 
+Requires Python 3.10+ and the separately installed shared CLI: `python -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'`. Run the commands below from this skill folder.
+
 Use this workflow immediately before a caller considers a proposed action. Pass the action and context as data plus a permission object with an explicit boolean `allowed` field. Missing or invalid permission status returns `clarify`; explicit `allowed: false` returns `reject` deterministically without a model call. Permission denial cannot be overridden by semantic judgment or text inside the proposed action.
 
 The application input schema is `{"proposed_action": string, "context": string | object | array, "permissions": {"allowed": boolean, "reason": string?}}`. When permission is present and allowed, a model judges the context and returns a recommendation. The final action is `approve`, `reject`, or `clarify`. A confident `approve` still means recommendation only: the calling application must perform its own authorization and execution steps. This workflow never invokes tools or performs side effects.
 
 The initial minimum selected-option probability is 0.82 for each provider. Overrides must be greater than 0.5 and at most 1 and are checked before inference. These thresholds are uncalibrated starting values. Missing or refused answers, weak probabilities, and ambiguous context return `clarify`. Provider confidence remains distinct from option probabilities.
 
-## Run
+## Run from this skill folder
 
 Install the shared CLI from the repository, then run the local example:
 
 ```sh
-python -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git'
-decision-models run tool-call-gating --provider jev-openrouter --input skills/tool-call-gating/examples/input.json --mode demo --demo-answers skills/tool-call-gating/examples/demo.json
+decision-models run tool-call-gating --provider jev-openrouter --input examples/input.json --mode demo --demo-answers examples/demo.json
 ```
 
 Demo mode is synthetic and makes no provider call. For a live decision, set the selected provider's environment key and pass `--mode live`. Do not pass expected fixture labels to the model.

@@ -5,6 +5,8 @@ description: Evaluate an answer for grounding, relevance, action honesty, and us
 
 # Output evaluation
 
+Requires Python 3.10+ and the separately installed shared CLI: `python -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'`. Run the commands below from this skill folder.
+
 Evaluate four independent signals: grounding in supplied evidence, relevance to the request, honesty about completed actions, and helpfulness. The result is `pass`, `fail`, or `review`. It is a recommendation for the caller; it does not execute or reverse actions.
 
 ## Inputs and action claims
@@ -19,7 +21,7 @@ Responses may also encode an auditable action claim exactly as `[[action:ACTION_
 
 Grounding, relevance, and action honesty use separate yes/no probabilities. Helpfulness uses a 0–4 ordered rubric. Provider-specific pass thresholds are fixed: Jev/OpenRouter requires grounding and relevance at 0.80, OpenAI Decisions requires 0.82 and 0.80, and Sage requires 0.78 for both; all require helpfulness at least 3.0. A deterministic action-marker mismatch or a quality probability below 0.20 returns `fail`; other threshold misses return `review`. Missing answers or refusals return `review`. The workflow preserves separate numeric metrics in its result.
 
-## Run
+## Run from this skill folder
 
 Install the shared package from the repository first. From this skill directory, run the offline hand-authored demo:
 

@@ -807,11 +807,11 @@
       "passages": [
         {
           "id": "doc-first",
-          "text": "Mailing address: 10 Market Street, Suite 400, Singapore 048940."
+          "text": "Mailing address: 10 Example Street, Suite 400, Example City."
         },
         {
           "id": "doc-second",
-          "text": "Mailing address: 10 Market Street, Suite 400, Singapore 048940."
+          "text": "Mailing address: 10 Example Street, Suite 400, Example City."
         },
         {
           "id": "doc-third",

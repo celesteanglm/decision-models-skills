@@ -17,3 +17,9 @@ V3 added scoped reranking profiles for requested `top_k` values 1 and 2, with cl
 ## V4
 
 V4 changes transport handling: sanitize abrupt disconnect errors and stop a backend after a failure with unknown charge status. Its preflight records that fixtures, prompts, and thresholds are identical to V3. The completed final run again marks all six Jev workflows Working, four OpenAI workflows Working, and all six Sage workflows Working. There were zero service errors and zero deterministic safety-boundary violations. OpenAI input guardrails and output evaluation remain Partial. See the [final report](../reports/COMPATIBILITY.md) and [live receipt](../reports/live.json). See the [`V4 preflight`](../reports/v4-preflight.json) and [`V4 fixture snapshot`](../reports/v4-fixtures.json).
+
+## Neutral fixture revision
+
+A later documentation cleanup replaced synthetic place and timezone identifiers with neutral examples, including UTC meeting times. The same text substitutions were applied to historical fixture snapshots. Historical receipts retain their original source and fixture digests, so those digests do not describe the edited snapshots. Their model outputs remain unchanged. The current fixtures are frozen separately and receive fresh acceptance evidence; thresholds, expected outcomes, and workflow code are unchanged.
+
+The refreshed neutral-fixture run marks all six Jev and Sage workflows Working and four OpenAI workflows Working. OpenAI input guardrails and output evaluation remain Partial. There were zero service errors and zero deterministic safety-boundary violations. See the [current live receipt](../reports/live.json) and [neutral preflight](../reports/neutral-preflight.json). The previous final run remains in [V4.json](../reports/v4.json).

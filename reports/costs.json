@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-10-07T17:42:31.720570+00:00",
+  "checked_at": "2026-10-08T02:05:24.541752+00:00",
   "limit_usd": 5,
-  "reserved_usd": 1.85881442,
-  "provider_reported_usd": 0.018566183999999993,
-  "token_price_estimated_usd": 0.06942849999999993,
-  "attempts": 2343,
+  "reserved_usd": 2.32423464,
+  "provider_reported_usd": 0.023258801999999988,
+  "token_price_estimated_usd": 0.08693334999999992,
+  "attempts": 2928,
   "unknown_charge_attempts": 0,
-  "combined_reported_and_estimated_usd": 0.08799468,
+  "combined_reported_and_estimated_usd": 0.11019215,
   "runs": [
     {
       "receipt": "baseline.json",
@@ -42,12 +42,23 @@
       "sage_output_floor_tokens": 396
     },
     {
-      "receipt": "live.json",
+      "receipt": "v4.json",
       "source_hash": "74f2fca095e9ed26de554600bf27ad24ec688c4c838d0be89f9b5f88e21db41a",
       "fixture_evaluations": 648,
       "reserved_usd": 0.46545427,
       "provider_reported_usd": 0.004694885999999995,
       "token_price_estimated_usd": 0.017509949999999986,
+      "attempts": 585,
+      "unknown_charge_attempts": 0,
+      "sage_output_floor_tokens": 396
+    },
+    {
+      "receipt": "live.json",
+      "source_hash": "7d2e35dc7b5474a9a0a2bd01adee1c4a2c2e1f64deb33d7ebcc7c869ca540c20",
+      "fixture_evaluations": 648,
+      "reserved_usd": 0.46542022,
+      "provider_reported_usd": 0.004692617999999996,
+      "token_price_estimated_usd": 0.01750484999999999,
       "attempts": 585,
       "unknown_charge_attempts": 0,
       "sage_output_floor_tokens": 396

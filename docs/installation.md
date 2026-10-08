@@ -2,15 +2,18 @@
 
 ## Install the shared CLI
 
+Requires Python 3.10+ and Git. Provider credentials are needed only for live mode. An agent host is optional when running the CLI directly.
+
 The CLI is a Python package separate from the portable skill folders. Install it from the repository's actual `main` branch:
 
 ```sh
 python3 -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'
 ```
 
-For development from a local checkout:
+To obtain the skill folders and install the CLI in a virtual environment:
 
 ```sh
+git clone https://github.com/celesteanglm/decision-models-skills.git
 cd decision-models-skills
 python3 -m venv .venv
 . .venv/bin/activate
@@ -30,6 +33,33 @@ decision-models run reranking \
   --mode demo \
   --demo-answers examples/demo.json
 ```
+
+## Install a skill for Codex
+
+The repository's `skills/` directory is a distribution collection. Cloning it or installing the Python package does not automatically activate those folders in an agent. Codex discovers project skills under `.agents/skills/` and user-wide skills under `~/.agents/skills/`. See [OpenAI's skill authoring and discovery documentation](https://learn.chatgpt.com/docs/build-skills#where-codex-loads-local-skills).
+
+For example, from this repository's root, with the CLI installed and its virtual environment activated, copy one skill into an existing project:
+
+```sh
+mkdir -p ../my-project/.agents/skills
+cp -R skills/input-guardrails ../my-project/.agents/skills/
+cd ../my-project
+decision-models run input-guardrails \
+  --provider jev-openrouter \
+  --input .agents/skills/input-guardrails/examples/input.json \
+  --mode demo \
+  --demo-answers .agents/skills/input-guardrails/examples/demo.json
+```
+
+Replace `../my-project` with the destination project. Copy the whole skill folder, including its examples and fixtures. Repeat the copy for other skills as needed. Run Codex in that project and mention `$input-guardrails`, or ask it to perform a task matching the skill description. For example: `Use $input-guardrails to run its supplied example in demo mode with jev-openrouter.` Codex loads `SKILL.md`; the installed CLI performs the workflow. Keep the virtual environment active so the CLI is on `PATH`.
+
+To make the skill available across projects, copy it to `~/.agents/skills/input-guardrails` instead. Other agent hosts have their own discovery paths; consult their documentation before copying folders.
+
+## Repository structure and distribution
+
+A folder with a valid `SKILL.md` is sufficient for an instruction-only skill. Add scripts, references, examples, or assets when the workflow needs them. Keep detailed human setup instructions here rather than repeating a tutorial inside every skill. In this collection, the shared CLI is an explicit dependency, and copied skills use local example paths so they work without repository-root imports.
+
+The current repository supports manual folder installation and a separate Python CLI. [OpenAI recommends plugins](https://learn.chatgpt.com/docs/build-skills#distribute-skills-with-plugins) for packaged distribution of reusable skill bundles. Plugin packaging is a separate distribution option; this repository does not currently provide a plugin manifest or one-click plugin installation.
 
 ## Run a live request
 

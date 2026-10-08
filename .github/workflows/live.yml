@@ -15,6 +15,9 @@ on:
         description: Total reserved allowance, at most US$5
         default: '1'
         required: true
+      rates_json:
+        description: Reviewed rates JSON for the selected provider (source, checked_at, input_per_million, output_per_million)
+        required: true
 jobs:
   live:
     runs-on: ubuntu-latest
@@ -25,6 +28,17 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install .
       - run: python scripts/verify.py
+      - name: Prepare reviewed rates
+        env:
+          REVIEWED_RATES_JSON: ${{ inputs.rates_json }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          rates = json.loads(os.environ["REVIEWED_RATES_JSON"])
+          Path("reports/rates.json").write_text(json.dumps(rates) + "\n")
+          PY
       - name: Evaluate frozen core fixtures
         if: inputs.suite == 'core'
         env:

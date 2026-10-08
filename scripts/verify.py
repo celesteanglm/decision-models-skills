@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 
 from decision_models.evaluation import source_hash
 from decision_models.runtime import SKILLS, PROVIDERS
+from verified_catalog import verify_catalog
 
 
 def main():
@@ -18,8 +19,7 @@ def main():
     marker.parent.mkdir(exist_ok=True)
     marker.unlink(missing_ok=True)
     env = dict(os.environ)
-    catalog_path = repo / "reports" / "catalog.json"
-    catalog = json.loads(catalog_path.read_text()) if catalog_path.exists() else None
+    catalog = verify_catalog(repo)
     for name in ("OPENROUTER_API_KEY", "OPENAI_API_KEY", "SAGE_API_KEY", "PYTHONPATH"):
         env.pop(name, None)
     subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", str(repo / "tests"), "-v"],

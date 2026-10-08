@@ -1,55 +1,80 @@
 # Decision Models Skills
 
-Portable skills and community recipes for small-model decisions, routing, and evaluation.
+Agent skills for small-model decisions: six reusable workflows and 18 ready-to-run use cases, backed by a shared Python CLI.
 
-Six small Python workflows turn a defined decision into a structured provider request, validate the response, and apply a documented policy. The supported workflows are input guardrails, model routing, passage reranking, tool-call gating, confidence gates, and output evaluation.
+Every skill recommends a bounded decision from supplied evidence. The calling application applies that recommendation. Python 3.10+ is required; the runtime uses only the standard library.
 
-This project requires Python 3.10 or newer and has no runtime dependencies beyond the Python standard library. It includes native adapters for Jev through OpenRouter, OpenAI Decisions, and Levanto Sage SystemOne. Use each skill’s Working labels to select a verified backend. The shared CLI is installed separately from the portable `skills/<name>/` folders. You can copy a skill folder into another project and use it there once the CLI is installed and available on `PATH`.
+## Install and try a skill
 
-Every result is a recommendation for the calling application. These workflows do not execute tools, select and invoke a model, publish content, or apply a decision. The initial thresholds are workflow-specific, provider-specific starting values and have not been calibrated. Review and calibrate them on a representative development set before relying on them in production.
+Clone the repository and install the shared CLI:
 
-## What a skill contains
+```sh
+git clone https://github.com/celesteanglm/decision-models-skills.git
+cd decision-models-skills
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install .
 
-A skill is a folder of instructions that an agent loads when the task matches its description. `SKILL.md` is the required entrypoint: YAML `name` and `description` tell the agent when to use it, and the Markdown body explains the inputs, workflow, and outputs. Supporting files are optional. These skills include runnable examples and acceptance fixtures because they call a shared, tested Python implementation.
-
-```text
-skills/input-guardrails/
-├── SKILL.md                 Agent instructions and when to use them
-├── examples/input.json      Example workflow input
-├── examples/demo.json       Synthetic answers for a credential-free demo
-└── fixtures/acceptance.json Evaluation cases and expected outcomes
+decision-models run input-guardrails \
+  --provider jev-openrouter --mode demo \
+  --input skills/input-guardrails/examples/input.json \
+  --demo-answers skills/input-guardrails/examples/demo.json
 ```
 
-The repository README explains setup for people; each `SKILL.md` contains instructions for an agent. Installing the Python package supplies the CLI. Copying a skill folder supplies the agent instructions. Both are needed for these workflows. See [installation and invocation](docs/installation.md) for the complete path from clone to a first demo.
+Demo mode uses hand-authored synthetic answers and makes no API requests. It demonstrates the interface; it provides no model-quality evidence.
 
-## Community use cases
+To use a copied skill folder in another project, install the CLI separately:
 
-[18 published decision recipes](research/README.md) cover browser actions, routing, email triage, field matching, page changes, research filtering, and other text workflows. Every included recipe qualified as **Working on at least one backend**. Eleven candidates that qualified on none were removed. Positive labels below identify only passing backends; every other backend is unqualified for that recipe.
+```sh
+python -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'
+```
 
-The research inspected 36 posts dated 8 September–8 October 2026. The published recipes credit 17 original posts selected using usefulness, reproducibility, source evidence, and timestamped engagement. Games and posts below 100 likes or 10,000 views were excluded. X search required login, so this is a ranked discovered sample.
+Copy the whole skill folder into your agent's skill directory, for example `.agents/skills/<name>/`. The agent reads its `SKILL.md`; the installed package supplies the `decision-models` command. Run from the copied folder or pass absolute paths to its examples and configuration. No repository-root imports or editable install are required.
 
-| Recipe | Working with |
-|---|---|
-| [ad-funnel-classification](recipes/ad-funnel-classification/SKILL.md) | ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen) |
-| [agent-workflow-routing](recipes/agent-workflow-routing/SKILL.md) | ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen) ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [brand-news-matching](recipes/brand-news-matching/SKILL.md) | ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [browser-action-selection](recipes/browser-action-selection/SKILL.md) | ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [content-revision-gate](recipes/content-revision-gate/SKILL.md) | ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [draft-quality-triage](recipes/draft-quality-triage/SKILL.md) | ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [email-queue-routing](recipes/email-queue-routing/SKILL.md) | ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen) ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [invoice-file-triage](recipes/invoice-file-triage/SKILL.md) | ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [model-tier-routing](recipes/model-tier-routing/SKILL.md) | ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [outfit-option-selection](recipes/outfit-option-selection/SKILL.md) | ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [page-change-triage](recipes/page-change-triage/SKILL.md) | ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [research-source-filter](recipes/research-source-filter/SKILL.md) | ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen) |
-| [retrieved-instruction-screening](recipes/retrieved-instruction-screening/SKILL.md) | ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen) |
-| [secondhand-listing-fit](recipes/secondhand-listing-fit/SKILL.md) | ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen) ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [spoken-slide-selection](recipes/spoken-slide-selection/SKILL.md) | ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen) |
-| [spreadsheet-urgency](recipes/spreadsheet-urgency/SKILL.md) | ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
-| [suspicious-email-escalation](recipes/suspicious-email-escalation/SKILL.md) | ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen) |
-| [template-field-matching](recipes/template-field-matching/SKILL.md) | ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen) |
+## Choose a skill
 
-Each copied folder includes `SKILL.md`, local `COMPATIBILITY.md`, trusted `recipe.json`, examples, frozen fixtures, and original source links. The compatibility page names the exact tested models and non-qualifying backends. These are independently authored text recommendations inspired by credited authors.
+Both categories use the same agent skill format:
+
+- **Core skills** in `skills/` provide reusable workflows with dedicated input contracts. Run them with `decision-models run <name>`.
+- **Use-case skills (recipes)** in `recipes/` specialize a decision using local `recipe.json` configuration. Run them with `decision-models recipe --recipe <path>`.
+
+Open a skill's instructions to see its Working backend labels. Its compatibility page lists every tested backend, exact models, pass counts, failures, and test date.
+
+### Core skills
+
+| Skill | Use it to | Compatibility |
+|---|---|---|
+| [input-guardrails](skills/input-guardrails/SKILL.md) | Screen input before a downstream workflow. | [Results](skills/input-guardrails/COMPATIBILITY.md) |
+| [model-routing](skills/model-routing/SKILL.md) | Recommend an eligible model for a task. | [Results](skills/model-routing/COMPATIBILITY.md) |
+| [reranking](skills/reranking/SKILL.md) | Rank supplied passages by relevance. | [Results](skills/reranking/COMPATIBILITY.md) |
+| [tool-call-gating](skills/tool-call-gating/SKILL.md) | Recommend whether a proposed tool call may proceed. | [Results](skills/tool-call-gating/COMPATIBILITY.md) |
+| [confidence-gates](skills/confidence-gates/SKILL.md) | Escalate decisions when confidence is insufficient. | [Results](skills/confidence-gates/COMPATIBILITY.md) |
+| [output-evaluation](skills/output-evaluation/SKILL.md) | Evaluate supplied output against defined criteria. | [Results](skills/output-evaluation/COMPATIBILITY.md) |
+
+### Use-case skills (recipes)
+
+| Skill | Use it to | Compatibility |
+|---|---|---|
+| [ad-funnel-classification](recipes/ad-funnel-classification/SKILL.md) | Classify ad copy by the customer-journey stage suggested by its text. | [Results](recipes/ad-funnel-classification/COMPATIBILITY.md) |
+| [agent-workflow-routing](recipes/agent-workflow-routing/SKILL.md) | Recommend a configured workflow from an incoming customer request. | [Results](recipes/agent-workflow-routing/COMPATIBILITY.md) |
+| [brand-news-matching](recipes/brand-news-matching/SKILL.md) | Classify whether a news item is relevant to a supplied brand brief. | [Results](recipes/brand-news-matching/COMPATIBILITY.md) |
+| [browser-action-selection](recipes/browser-action-selection/SKILL.md) | Choose a bounded browser step from the current page and task evidence. | [Results](recipes/browser-action-selection/COMPATIBILITY.md) |
+| [content-revision-gate](recipes/content-revision-gate/SKILL.md) | Assess a draft’s clarity and specificity and recommend whether it needs focused revision. | [Results](recipes/content-revision-gate/COMPATIBILITY.md) |
+| [draft-quality-triage](recipes/draft-quality-triage/SKILL.md) | Classify a draft against its stated goal and available feedback. | [Results](recipes/draft-quality-triage/COMPATIBILITY.md) |
+| [email-queue-routing](recipes/email-queue-routing/SKILL.md) | Recommend a handling queue for one email using its request and context. | [Results](recipes/email-queue-routing/COMPATIBILITY.md) |
+| [invoice-file-triage](recipes/invoice-file-triage/SKILL.md) | Recommend whether a file appears to be an invoice and has enough metadata for a safe filing review. | [Results](recipes/invoice-file-triage/COMPATIBILITY.md) |
+| [model-tier-routing](recipes/model-tier-routing/SKILL.md) | Choose among supplied model tiers using task complexity and explicit constraints. | [Results](recipes/model-tier-routing/COMPATIBILITY.md) |
+| [outfit-option-selection](recipes/outfit-option-selection/SKILL.md) | Select a supplied outfit description using explicit weather and occasion constraints. | [Results](recipes/outfit-option-selection/COMPATIBILITY.md) |
+| [page-change-triage](recipes/page-change-triage/SKILL.md) | Compare two supplied page excerpts for a change that matters to the stated monitoring goal. | [Results](recipes/page-change-triage/COMPATIBILITY.md) |
+| [research-source-filter](recipes/research-source-filter/SKILL.md) | Assess whether a source excerpt is useful for a stated research brief before synthesis. | [Results](recipes/research-source-filter/COMPATIBILITY.md) |
+| [retrieved-instruction-screening](recipes/retrieved-instruction-screening/SKILL.md) | Recommend whether retrieved material should be isolated before use as evidence. | [Results](recipes/retrieved-instruction-screening/COMPATIBILITY.md) |
+| [secondhand-listing-fit](recipes/secondhand-listing-fit/SKILL.md) | Compare a used-item listing with explicit purchase criteria and recommend whether it merits attention. | [Results](recipes/secondhand-listing-fit/COMPATIBILITY.md) |
+| [spoken-slide-selection](recipes/spoken-slide-selection/SKILL.md) | Recommend which described slide best matches a short spoken passage. | [Results](recipes/spoken-slide-selection/COMPATIBILITY.md) |
+| [spreadsheet-urgency](recipes/spreadsheet-urgency/SKILL.md) | Classify a row from its stated deadline, status, and impact. | [Results](recipes/spreadsheet-urgency/COMPATIBILITY.md) |
+| [suspicious-email-escalation](recipes/suspicious-email-escalation/SKILL.md) | Classify email text for fraud or phishing indicators and identify when security review is warranted. | [Results](recipes/suspicious-email-escalation/COMPATIBILITY.md) |
+| [template-field-matching](recipes/template-field-matching/SKILL.md) | Recommend source fields that can populate requested template fields based on names and supplied definitions. | [Results](recipes/template-field-matching/COMPATIBILITY.md) |
+
+For example:
 
 ```sh
 decision-models recipe \
@@ -59,89 +84,48 @@ decision-models recipe \
   --demo-answers recipes/email-queue-routing/examples/demo.json
 ```
 
-For live mode, select a backend labeled Working for that recipe, omit `--demo-answers`, set its environment credential, and pass `--mode live`. Copy the whole folder and use absolute paths from another directory. See [installation](docs/installation.md), [full Working-label catalog](reports/VERIFIED_CATALOG.md), [per-case evidence](reports/community-recipes.md), and [other model adapters](docs/model-adapters.md).
-
-## Verification
-
-The retained recipes have **7 Jev/OpenRouter**, **8 Decisions API**, and **13 Sage** Working labels. Workflow routing, email queue routing, and listing fit qualify on all three. Partial results receive no Working label. The [qualification registry](reports/catalog.json) enforces that every published recipe has a passing backend and that labels match the live receipts.
-
-The six core workflows also carry per-folder labels: Jev/OpenRouter and Sage qualify on all six; Decisions qualifies on model routing, reranking, tool-call gating, and confidence gates. Its input guardrails and output evaluation did not qualify. See [core evidence](reports/COMPATIBILITY.md).
-
-Qualification uses the original frozen 12-case × 3-run evaluation on unchanged artifacts. The original candidate run made 2,871 real API calls; excluded candidates remain in historical audit receipts. Catalog pruning and label corrections made no additional paid calls. Synthetic acceptance and repeated-run stability do not establish production accuracy or calibration.
-
-Clean installations pass 112 tests and 44 demos of labeled skill/backend pairs on Python 3.10 and 3.12. [Offline evidence](reports/catalog-offline.json) covers copied-folder portability, inclusion rules, backend labels, and unchanged evaluated artifacts. All retained live iterations total approximately **US$0.206 reported/estimated**, with **US$4.537 conservatively reserved** under US$5. See [cost reconciliation](reports/costs.json) and [evaluation history](docs/evaluation-history.md).
-
-## Install the CLI
-
-From any directory, install the package directly from the repository's `main` branch:
-
-```sh
-python3 -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'
-```
-
-To download the skill folders as well, clone the repository and install in a virtual environment:
-
-```sh
-git clone https://github.com/celesteanglm/decision-models-skills.git
-cd decision-models-skills
-python3 -m venv .venv
-. .venv/bin/activate
-python -m pip install .
-```
-
-The install creates the `decision-models` command. You do not need to run from the repository root, set `PYTHONPATH`, or use an editable install. A copied skill folder contains instructions and JSON examples, but not the shared Python package or CLI; install the CLI separately as above.
-
-## Run an offline demo
-
-From the repository root, for example:
-
-```sh
-decision-models run input-guardrails \
-  --provider jev-openrouter \
-  --input skills/input-guardrails/examples/input.json \
-  --mode demo \
-  --demo-answers skills/input-guardrails/examples/demo.json
-```
-
-The demo answer files are hand-authored synthetic examples. Demo mode makes no provider call and the CLI labels the result as synthetic. They illustrate the workflow shape; they are not model outputs, evaluation evidence, or an accuracy claim. From a copied skill directory, the relative paths can instead be `examples/input.json` and `examples/demo.json`.
-
 ## Make a live request
 
-Set only the key for the selected provider in the environment, then omit `--demo-answers` and explicitly choose `--mode live`:
+Choose a backend labeled Working for the specific skill. Set its credential in the process environment, use `--mode live`, and omit `--demo-answers`:
 
 ```sh
 export OPENROUTER_API_KEY='…'
 decision-models run input-guardrails \
-  --provider jev-openrouter \
-  --input skills/input-guardrails/examples/input.json \
-  --mode live
+  --provider jev-openrouter --mode live \
+  --input skills/input-guardrails/examples/input.json
 ```
 
-The other keys are `OPENAI_API_KEY` for `openai-decisions` and `SAGE_API_KEY` for `sage`. See [`.env.example`](.env.example) for the names. The program reads keys from process environment variables; it does not load `.env` files. Do not commit secrets. Live requests can incur provider charges.
+| Provider flag | Credential variable | Native protocol |
+|---|---|---|
+| `jev-openrouter` | `OPENROUTER_API_KEY` | [OpenRouter Decisions](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request) |
+| `openai-decisions` | `OPENAI_API_KEY` | [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions) |
+| `sage` | `SAGE_API_KEY` | [Sage SystemOne](https://docs.levanto.ai/systemone) |
 
-The exact endpoint, default model, and response mapping contract are listed in [Compatibility](docs/compatibility.md). Provider endpoints, model access, and response behavior can change; consult the generated [compatibility report](reports/COMPATIBILITY.md) for the evidence actually collected in this checkout. Its statuses describe only the checks recorded there.
+The program does not load `.env` files. Live requests can incur provider charges. `--model` selects a model implementing the chosen adapter's protocol; other models require their own adapter and evaluation. The [implementation contract](IMPLEMENTATION_CONTRACT.md) describes the adapter interface.
 
-## Evaluate fixtures
+## What each skill contains
 
-Each skill has 12 frozen acceptance cases: eight clear, two ambiguous, and two adversarial. The expected outcomes are evaluation metadata and are not sent as model input. Evaluation defaults to demo mode, three repetitions, and a $5 budget for live mode:
+```text
+<skill>/
+├── SKILL.md                 Instructions, inputs, usage, Working backends
+├── COMPATIBILITY.md         Human-readable results and failures
+├── compatibility.json       Test summaries, models, revisions, evidence link
+├── examples/                Sample input and synthetic demo answers
+├── fixtures/acceptance.json Frozen evaluation cases
+└── recipe.json              Use-case configuration (recipes only)
+```
+
+Compatibility is specific to the tested runtime, configuration, fixtures, and resolved model. Working means the backend met the documented synthetic acceptance gate; Partial, Blocked, and Not tested do not qualify. These results establish neither production accuracy nor calibrated confidence thresholds.
+
+## Verify or contribute
 
 ```sh
-decision-models evaluate \
-  --repo . \
-  --providers jev-openrouter openai-decisions sage \
-  --mode demo \
-  --repetitions 3 \
-  --output reports/evaluation.json
+python scripts/verify.py
+python scripts/check_release.py
 ```
 
-The 12 cases and their three repetitions are workflow checks, not 36 independent statistical samples. For live evaluation, review the current provider rates and provide a rates JSON file with `--rates reports/rates.json`; the configured total budget is a guardrail, not a prediction of final cost. No paid requests are needed for the documented demos.
+Offline verification checks tests, copied-folder demos, local compatibility summaries, backend labels, and the hashes of evaluated artifacts. It makes no provider requests and requires no archived test runs. To audit summaries against retained raw evidence, download the linked run and pass `--receipt /path/to/run.json` to `scripts/verified_catalog.py`.
 
-Demo evaluation intentionally reports providers as `Not tested` and exits with status 1 because demo answers are synthetic, not live compatibility evidence. Run `python3 scripts/verify.py` before any live evaluation; it creates the offline/packaging receipt required by the live evaluator.
+[Contributing](CONTRIBUTING.md) covers live evaluation, reviewed rates, and publishing skill-local summaries. [Recipe contract](RECIPE_CONTRACT.md) defines use-case configuration and acceptance criteria. [Attribution](ATTRIBUTION.md) credits original sources.
 
-To render a report from an evaluation receipt:
-
-```sh
-decision-models report --input reports/evaluation.json --output reports/evaluation.md
-```
-
-See [`docs/installation.md`](docs/installation.md) for copy-and-install details, [`docs/compatibility.md`](docs/compatibility.md) for wire contracts and evidence boundaries, and [`ATTRIBUTION.md`](ATTRIBUTION.md) for source and license notes.
+Working docs and research stay local and ignored. Raw test outputs are generated under ignored `reports/` and uploaded by CI as artifacts; the public source tree retains the compact compatibility files beside each skill. Historical evidence links use immutable commits. Retain future release evidence as versioned release assets when it must outlive CI artifact retention.

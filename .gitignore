@@ -7,4 +7,7 @@ dist/
 .env
 .env.*
 !.env.example
-reports/private/
+# Local working material and generated test runs; publish per-skill summaries only.
+/docs/
+/research/
+/reports/

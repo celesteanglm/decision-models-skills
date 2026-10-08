@@ -1,18 +1,27 @@
-# Verified backend compatibility
+# Backend compatibility
 
 **Working with:** ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen)
 
-Only Working results receive positive backend labels. Partial means the backend did not meet the frozen acceptance criteria and is not verified for this skill.
+| Backend | Result | Tested model | Passed checks |
+|---|---|---|---|
+| Jev / OpenRouter | Working | typesafe/jev-1.13-20260917 | 36/36 |
+| Decisions API | Not qualified (Partial) | gpt-6-luna | 33/36 |
+| Sage | Working | levanto-sage-v1.3 | 36/36 |
 
-| Backend | Qualification | Tested model |
-|---|---|---|
-| Jev / OpenRouter | Working | typesafe/jev-1.13-20260917 |
-| Decisions API | Not qualified (Partial) | gpt-6-luna |
-| Sage | Working | levanto-sage-v1.3 |
+Tested: 2026-10-08T11:24:50.801230+00:00. Twelve frozen cases (eight clear, two ambiguous, two adversarial), three repetitions per backend. Counts include deterministic permission/evidence checks; they are not all API calls.
 
-Tested: 2026-10-08. Fixtures: `8bb01d88c242f1c8b0e0021884f3199f6fda6ba4bc338bff67c0a22e011045e5`.
-Historical evaluated source: `e6115d0899d71d4c653e88d391ecf5d7f60ce7c94a2657de0dbc0e80abf08674`.
+Working requires complete coverage, a majority pass on every clear case, all ambiguous/adversarial checks passing, no service errors or permission violations, offline verification, and live model outputs. Partial did not meet that gate; Blocked could not obtain live outputs; Not tested has no results. These synthetic cases do not establish production accuracy or calibrated thresholds.
 
-[Immutable live receipt](https://github.com/celesteanglm/decision-models-skills/blob/115b4881a7ea3f7194bc838cd3395d74e94c2c82/reports/community-recipes.json) contains all 12 cases × 3 runs per backend, raw outputs, failures, latency, usage, and costs.
+## Failures and unsupported backends
 
-Working describes these frozen synthetic text cases, not production accuracy or calibration. The published catalog retains unchanged decision code, recipe configuration, examples, and fixtures; only inclusion and documentation changed.
+- **Decisions API (Partial):** clear-01: 0/3 passed (action, choice)
+
+## Evidence
+
+[Machine-readable summary](compatibility.json) records case counts, failure reasons, exact models, and hashes of the tested runtime, local configuration, examples, and fixtures.
+
+[Raw live test run](https://github.com/celesteanglm/decision-models-skills/blob/115b4881a7ea3f7194bc838cd3395d74e94c2c82/reports/community-recipes.json) is retained outside the current source tree. Historical runs remain available at an immutable commit; new runs should use a CI artifact or versioned release asset.
+
+Receipt SHA-256: d06ec4e5406bd0d41be45941bda0105e19088a8189aace936f32f68761793af1.
+Fixture revision: 8bb01d88c242f1c8b0e0021884f3199f6fda6ba4bc338bff67c0a22e011045e5.
+Runtime revision: 65c5f5661fc5be6f5984dc757ea57fe34f600b65c32277fc2cc6ffef6f80aa3b.

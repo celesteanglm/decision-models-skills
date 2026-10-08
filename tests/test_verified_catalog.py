@@ -1,174 +1,146 @@
-"""Publication labels must remain tied to frozen live receipts and artifacts."""
-import hashlib
+"""A fresh checkout verifies local compatibility without archived raw runs."""
 import json
-import re
+from pathlib import Path
 import shutil
 import tempfile
 import unittest
-from pathlib import Path
 
-from scripts.verified_catalog import PROVIDERS, SLUGS, verify_catalog
-
+from scripts.publish_compatibility import build_manifest
+from scripts.verified_catalog import (
+    compatibility_markdown, PROVIDERS, qualification, sha256, verify_catalog,
+)
 
 REPO = Path(__file__).resolve().parents[1]
-RECEIPTS = ("reports/community-recipes.json", "reports/community-core-regression.json")
+RECIPE = "model-tier-routing"
 
 
-def copy_verification_inputs(root):
-    """Copy only the inputs consumed by verify_catalog into a disposable tree."""
-    target = Path(root) / "repo"
-    target.mkdir()
+def copy_inputs(root):
+    repo = Path(root) / "repo"
+    repo.mkdir()
     for directory in ("src", "skills", "recipes"):
-        shutil.copytree(REPO / directory, target / directory)
-    reports = target / "reports"
-    reports.mkdir()
-    for relative in (*RECEIPTS, "reports/catalog.json", "reports/VERIFIED_CATALOG.md"):
-        shutil.copy2(REPO / relative, target / relative)
-    shutil.copy2(REPO / "README.md", target / "README.md")
-    return target
+        shutil.copytree(REPO / directory, repo / directory)
+    shutil.copy2(REPO / "README.md", repo / "README.md")
+    return repo
 
 
-def badge_slugs(path):
-    return set(re.findall(
-        r"https://img\.shields\.io/badge/([^\s)]+)-Working-brightgreen",
-        path.read_text(encoding="utf-8"),
-    ))
+def change_manifest(repo, edit):
+    folder = repo / "recipes" / RECIPE
+    path = folder / "compatibility.json"
+    manifest = json.loads(path.read_text())
+    edit(manifest)
+    path.write_text(json.dumps(manifest))
+    (folder / "COMPATIBILITY.md").write_text(compatibility_markdown(manifest))
+    return manifest
 
 
 class VerifiedCatalogTests(unittest.TestCase):
-    def test_catalog_labels_match_receipts_folders_artifacts_and_local_evidence(self):
+    def test_fresh_tree_has_no_reports_docs_or_research_dependency(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            registry = verify_catalog(repo)
+            self.assertEqual(len(registry["skills"]), 6)
+            self.assertEqual(len(registry["recipes"]), 18)
+            self.assertFalse(any((repo / name).exists() for name in ("docs", "research", "reports")))
+            self.assertEqual(registry["recipes"][RECIPE]["working_backends"], ["sage"])
+
+    def test_every_status_is_derived_from_recorded_acceptance_counts(self):
         registry = verify_catalog(REPO)
-        recipe_receipt = json.loads((REPO / RECEIPTS[0]).read_text(encoding="utf-8"))
-        skill_receipt = json.loads((REPO / RECEIPTS[1]).read_text(encoding="utf-8"))
+        for kind, entries in registry.items():
+            for item_id, entry in entries.items():
+                fixtures = json.loads((REPO / kind / item_id / "fixtures/acceptance.json").read_text())
+                self.assertTrue(entry["working_backends"])
+                for provider in PROVIDERS:
+                    backend = entry["manifest"]["backends"][provider]
+                    self.assertEqual(backend["status"], qualification(backend, fixtures))
 
-        self.assertEqual(registry["schema_version"], 1)
-        self.assertEqual(registry["original_source_hash"], recipe_receipt["source_hash"])
-        self.assertEqual(registry["original_source_hash"], skill_receipt["source_hash"])
-        self.assertEqual(set(registry["recipes"]), {
-            path.parent.name for path in (REPO / "recipes").glob("*/recipe.json")
-        })
-        self.assertEqual(set(registry["skills"]), {
-            path.parent.parent.name for path in (REPO / "skills").glob("*/fixtures/acceptance.json")
-        })
-
-        for relative, expected_hash in registry["evidence_receipts"].items():
-            actual_hash = hashlib.sha256((REPO / relative).read_bytes()).hexdigest()
-            self.assertEqual(actual_hash, expected_hash, relative)
-
-        for relative, expected_hash in registry["verified_artifacts"].items():
-            actual_hash = hashlib.sha256((REPO / relative).read_bytes()).hexdigest()
-            self.assertEqual(actual_hash, expected_hash, relative)
-
-        for kind, receipt in (("recipes", recipe_receipt), ("skills", skill_receipt)):
-            for item_id, entry in registry[kind].items():
-                with self.subTest(kind=kind, item=item_id):
-                    statuses = {
-                        provider: receipt["summary"][f"{provider}/{item_id}"]["status"]
-                        for provider in PROVIDERS
-                    }
-                    working = [provider for provider in PROVIDERS
-                               if statuses[provider] == "Working"]
-                    self.assertTrue(working)
-                    self.assertEqual(entry["statuses"], statuses)
-                    self.assertEqual(entry["working_backends"], working)
-
-                    folder = REPO / kind / item_id
-                    fixtures = json.loads(
-                        (folder / "fixtures/acceptance.json").read_text(encoding="utf-8")
-                    )
-                    fixture_hash = hashlib.sha256(
-                        json.dumps(fixtures, sort_keys=True).encode()
-                    ).hexdigest()
-                    self.assertEqual(entry["fixture_revision"], fixture_hash)
-                    self.assertEqual(entry["fixture_revision"], receipt["fixtures"][item_id])
-
-                    skill_doc = folder / "SKILL.md"
-                    compatibility = folder / "COMPATIBILITY.md"
-                    skill_text = skill_doc.read_text(encoding="utf-8")
-                    self.assertIn("[compatibility evidence](COMPATIBILITY.md)", skill_text)
-                    self.assertTrue(compatibility.is_file())
-                    self.assertEqual(badge_slugs(skill_doc), {SLUGS[p] for p in working})
-                    self.assertEqual(badge_slugs(compatibility), {SLUGS[p] for p in working})
-
-    def test_catalog_rejects_an_included_recipe_without_a_working_backend(self):
-        with tempfile.TemporaryDirectory(prefix="catalog-no-working-") as temp:
-            repo = copy_verification_inputs(temp)
-            catalog_path = repo / "reports/catalog.json"
-            registry = json.loads(catalog_path.read_text(encoding="utf-8"))
-            recipe_id = next(iter(registry["recipes"]))
-            registry["recipes"][recipe_id]["working_backends"] = []
-            catalog_path.write_text(json.dumps(registry), encoding="utf-8")
-            with self.assertRaises(AssertionError):
+    def test_rejects_promoting_partial_backend_without_passing_counts(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            change_manifest(repo, lambda m: m["backends"]["jev-openrouter"].update(status="Working"))
+            with self.assertRaisesRegex(AssertionError, "unsupported status"):
                 verify_catalog(repo)
 
-    def test_catalog_rejects_a_working_badge_for_a_partial_backend(self):
-        with tempfile.TemporaryDirectory(prefix="catalog-invalid-badge-") as temp:
-            repo = copy_verification_inputs(temp)
-            registry = json.loads((repo / "reports/catalog.json").read_text(encoding="utf-8"))
-            recipe_id = next(
-                item_id for item_id, entry in registry["recipes"].items()
-                if any(status != "Working" for status in entry["statuses"].values())
-            )
-            entry = registry["recipes"][recipe_id]
-            partial_provider = next(
-                provider for provider, status in entry["statuses"].items()
-                if status != "Working"
-            )
-            doc_path = repo / "recipes" / recipe_id / "SKILL.md"
-            doc_path.write_text(
-                doc_path.read_text(encoding="utf-8")
-                + f"\n![Unsupported Working badge](https://img.shields.io/badge/{SLUGS[partial_provider]}-Working-brightgreen)\n",
-                encoding="utf-8",
-            )
-            with self.assertRaises(AssertionError):
+    def test_rejects_working_badge_for_partial_backend(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            skill = repo / "recipes" / RECIPE / "SKILL.md"
+            skill.write_text(skill.read_text() + "\n![Unsupported](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen)\n")
+            with self.assertRaisesRegex(AssertionError, "unsupported badge"):
                 verify_catalog(repo)
 
-    def test_catalog_rejects_a_partial_backend_badge_in_the_public_readme(self):
-        with tempfile.TemporaryDirectory(prefix="catalog-readme-badge-") as temp:
-            repo = copy_verification_inputs(temp)
-            registry = json.loads((repo / "reports/catalog.json").read_text(encoding="utf-8"))
-            recipe_id = next(
-                item_id for item_id, entry in registry["recipes"].items()
-                if any(status != "Working" for status in entry["statuses"].values())
-            )
-            partial_provider = next(
-                provider for provider, status in registry["recipes"][recipe_id]["statuses"].items()
-                if status != "Working"
-            )
-            readme = repo / "README.md"
-            lines = readme.read_text(encoding="utf-8").splitlines()
-            row_index = next(i for i, line in enumerate(lines)
-                             if line.startswith(f"| [{recipe_id}]("))
-            row = lines[row_index]
-            self.assertTrue(row.endswith("|"), row)
-            lines[row_index] = (
-                row[:-1].rstrip()
-                + f" ![Unqualified Working badge](https://img.shields.io/badge/{SLUGS[partial_provider]}-Working-brightgreen) |"
-            )
-            readme.write_text("\n".join(lines) + "\n", encoding="utf-8")
-            with self.assertRaises(AssertionError):
+    def test_rejects_stale_human_readable_results(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            page = repo / "recipes" / RECIPE / "COMPATIBILITY.md"
+            page.write_text(page.read_text().replace("Not qualified (Partial)", "Working"))
+            with self.assertRaisesRegex(AssertionError, "stale compatibility"):
                 verify_catalog(repo)
 
-    def test_catalog_rejects_fixture_changes_and_recipe_folder_drift(self):
-        with tempfile.TemporaryDirectory(prefix="catalog-fixture-drift-") as temp:
-            repo = copy_verification_inputs(temp)
-            recipe_id = next(iter(json.loads(
-                (repo / "reports/catalog.json").read_text(encoding="utf-8")
-            )["recipes"]))
-            fixture_path = repo / "recipes" / recipe_id / "fixtures/acceptance.json"
-            fixture_path.write_text(fixture_path.read_text(encoding="utf-8") + "\n ",
-                                    encoding="utf-8")
-            with self.assertRaises(AssertionError):
+    def test_rejects_configuration_example_and_fixture_drift(self):
+        for relative in ("recipe.json", "examples/input.json", "fixtures/acceptance.json"):
+            with self.subTest(path=relative), tempfile.TemporaryDirectory() as root:
+                repo = copy_inputs(root)
+                path = repo / "recipes" / RECIPE / relative
+                path.write_text(path.read_text() + " \n")
+                with self.assertRaisesRegex(AssertionError, "unverified artifacts"):
+                    verify_catalog(repo)
+
+    def test_rejects_runtime_changes(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            path = repo / "src/decision_models/recipes.py"
+            path.write_text(path.read_text() + "\n")
+            with self.assertRaisesRegex(AssertionError, "runtime changed"):
                 verify_catalog(repo)
 
-        with tempfile.TemporaryDirectory(prefix="catalog-folder-drift-") as temp:
-            repo = copy_verification_inputs(temp)
-            recipe_id = next(iter(json.loads(
-                (repo / "reports/catalog.json").read_text(encoding="utf-8")
-            )["recipes"]))
-            shutil.rmtree(repo / "recipes" / recipe_id)
-            with self.assertRaises(AssertionError):
-                verify_catalog(repo)
+    def test_rejects_missing_summary_and_dangling_catalog_entry(self):
+        for remove_folder in (False, True):
+            with self.subTest(folder=remove_folder), tempfile.TemporaryDirectory() as root:
+                repo = copy_inputs(root)
+                folder = repo / "recipes" / RECIPE
+                if remove_folder:
+                    shutil.rmtree(folder)
+                else:
+                    (folder / "compatibility.json").unlink()
+                with self.assertRaises(AssertionError):
+                    verify_catalog(repo)
+
+    def test_rejects_demo_evidence_and_negative_counts(self):
+        for edit in (lambda m: m.update(mode="demo"),
+                     lambda m: next(iter(m["backends"]["sage"]["cases"].values())).update(passes=-1)):
+            with tempfile.TemporaryDirectory() as root:
+                repo = copy_inputs(root)
+                change_manifest(repo, edit)
+                with self.assertRaises(AssertionError):
+                    verify_catalog(repo)
+
+    def test_optional_raw_audit_rejects_summary_mismatch(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            manifest = json.loads((repo / "recipes" / RECIPE / "compatibility.json").read_text())
+            receipt = {
+                "mode": "live", "repetitions": 3, "rows": [], "summary": {},
+                "source_hash": manifest["evidence"]["source_hash"],
+                "fixtures": {RECIPE: manifest["fixture_revision"]},
+            }
+            path = Path(root) / "raw.json"
+            path.write_text(json.dumps(receipt))
+            change_manifest(repo, lambda m: m["evidence"].update(sha256=sha256(path)))
+            with self.assertRaisesRegex(AssertionError, "summary differs"):
+                verify_catalog(repo, [path])
+
+    def test_optional_raw_audit_rejects_unreferenced_or_tampered_receipt(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            path = Path(root) / "unrelated.json"
+            path.write_text("{}")
+            with self.assertRaisesRegex(AssertionError, "not referenced"):
+                verify_catalog(repo, [path])
+
+    def test_publisher_refuses_synthetic_evidence(self):
+        with self.assertRaisesRegex(AssertionError, "live evidence"):
+            build_manifest(REPO, REPO / "recipes" / RECIPE,
+                           {"mode": "demo", "repetitions": 3}, "a" * 64, "https://example.com/run")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,14 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "no_follow_up",
+    "probabilities": {
+      "no_follow_up": 0.97,
+      "soon": 0.01,
+      "urgent": 0.01,
+      "review": 0.01
+    },
+    "confidence": 0.95
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "routine_review",
+    "probabilities": {
+      "routine_review": 0.97,
+      "specialist_review": 0.01,
+      "block_pending_fixes": 0.01,
+      "review": 0.01
+    },
+    "confidence": 0.95
+  }
+}

@@ -2,6 +2,11 @@ name: Manual live acceptance
 on:
   workflow_dispatch:
     inputs:
+      suite:
+        type: choice
+        options: [core, recipes]
+        default: core
+        required: true
       provider:
         type: choice
         options: [jev-openrouter, openai-decisions, sage]
@@ -20,7 +25,8 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install .
       - run: python scripts/verify.py
-      - name: Evaluate frozen fixtures
+      - name: Evaluate frozen core fixtures
+        if: inputs.suite == 'core'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -28,8 +34,21 @@ jobs:
           TEST_PROVIDER: ${{ inputs.provider }}
           TEST_BUDGET: ${{ inputs.budget_usd }}
         run: decision-models evaluate --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-live.json
+      - name: Evaluate frozen community recipes
+        if: inputs.suite == 'recipes'
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SAGE_API_KEY: ${{ secrets.SAGE_API_KEY }}
+          TEST_PROVIDER: ${{ inputs.provider }}
+          TEST_BUDGET: ${{ inputs.budget_usd }}
+        run: decision-models evaluate-recipes --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-recipes.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: sanitized-live-receipts
-          path: reports/manual-live.json
+          path: |
+            reports/manual-live.json
+            reports/manual-recipes.json
+            reports/manual-recipes.jsonl
+            reports/manual-recipes.md

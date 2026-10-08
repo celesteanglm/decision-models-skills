@@ -1,0 +1,6 @@
+{
+  "state": {
+    "content": "Task: extract the invoice date and total from a clean one-page text record. Candidates: fast handles structured extraction; reasoning handles multi-document synthesis; specialist handles image OCR."
+  },
+  "permission_granted": true
+}

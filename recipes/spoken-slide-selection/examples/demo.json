@@ -1,0 +1,15 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "opening_context",
+    "probabilities": {
+      "opening_context": 0.97,
+      "system_design": 0.0075,
+      "evidence_results": 0.0075,
+      "next_steps": 0.0075,
+      "review": 0.0075
+    },
+    "confidence": 0.95
+  }
+}

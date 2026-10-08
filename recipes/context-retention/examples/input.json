@@ -1,0 +1,6 @@
+{
+  "state": {
+    "content": "Task: reconcile two vendor records. Earlier result: vendor IDs 443 and 771 share the same tax identifier, but have different payment terms. No reconciliation decision has been recorded."
+  },
+  "permission_granted": true
+}

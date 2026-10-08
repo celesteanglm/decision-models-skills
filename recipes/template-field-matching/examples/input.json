@@ -1,0 +1,6 @@
+{
+  "state": {
+    "content": "Template field: contact_name (the person’s full name). Source fields: full_name (contact’s first and last name), organization (employer), email (address)."
+  },
+  "permission_granted": true
+}

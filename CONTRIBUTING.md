@@ -1,15 +1,16 @@
-# Contributing
+# Contributing a decision use case
 
-Contributions should keep the six standalone skill folders usable when copied into another project and should preserve the provider-neutral response contract.
+Start with a concrete text decision, a small option menu, and evidence that a calling application could actually provide. Keep the recipe independent of the provider and its executor. A recipe returns a recommendation; it must not connect accounts or execute actions.
 
-Before proposing a change:
+Changes to the original six workflows should also follow [IMPLEMENTATION_CONTRACT.md](IMPLEMENTATION_CONTRACT.md) and the affected skill's instructions. Preserve Python 3.10+ support, the standard-library-only runtime, separate probability/confidence signals, and copied-folder portability. Credentials remain environment-only. Every compatibility claim needs a dated receipt for the exact endpoint, resolved model, and exercised scope; a smoke check does not establish workflow acceptance.
 
-1. Read `IMPLEMENTATION_CONTRACT.md` and the affected skill's `SKILL.md`.
-2. Keep expected labels and policy outcomes out of model input.
-3. Document policy changes, thresholds, provider wire changes, and attribution in the relevant docs.
-4. Include source and license notices when material is copied or adapted; do not imply that inspiration alone is code reuse.
-5. Use offline hand-authored demo answers for examples. Label them synthetic and do not present them as provider results.
+1. Add `recipes/<id>/SKILL.md`, `recipe.json`, `examples/input.json`, `examples/demo.json`, and `fixtures/acceptance.json`. Follow the [recipe contract](RECIPE_CONTRACT.md). Copy the entire folder into a fresh project when checking installation.
+2. Credit original authors and link the exact source in the skill and recipe. State whether it inspired the idea or supplied adapted material. Preserve required license notices for any adapted code or prose; a public post alone is not a reuse license. The existing catalog uses independently authored code and synthetic fixtures.
+3. Define 12 cases: eight clear, two ambiguous, two adversarial. Include an explicit permission denial and an embedded instruction attempt. Set expected labels from the evidence before calling providers. Ask a separate reviewer to assess fixtures without seeing expected labels, then freeze the oracle and thresholds.
+4. Install the CLI normally and run `python scripts/verify.py`. The Python 3.10 and 3.12 offline CI checks require no credentials. Demo answers are hand-authored examples and must not be presented as model evaluation.
+5. For live acceptance, check current rates, reserve complete coverage, and use a new receipt path. Run three repetitions per case and backend. Keep failed outcomes, raw answers, resolved model, latency, usage, and reported or estimated cost. Stop on unknown-charge timeouts; do not retry without verified idempotency.
+6. Generate compatibility labels from receipts. A popular source or a valid JSON response does not establish correctness. Preserve Partial or Blocked results, and report consistency separately from acceptance. These synthetic cases do not establish production calibration or reproduce the original application's benchmark.
 
-The package targets Python 3.10+ and uses only the standard library at runtime. Provider credentials must remain in environment variables and must never be committed. Live evaluations can make paid requests; document the provider, model, budget, rates source, and evidence when reporting them. The default evaluation budget is US$5 total, and three repetitions of 12 cases per skill are not independent statistical samples.
+New native providers need independent golden request/response contracts and fresh live evidence. See [the adapter interface](docs/model-adapters.md). Arbitrary chat models, classifiers, and rerankers may have different output capabilities; do not invent probabilities or confidence to satisfy this contract.
 
-Changes to compatibility claims should point to the exact endpoint and model used, the timestamped receipt or other evidence, and the scope of what was exercised. A successful API smoke check does not establish that every workflow is compatible or that a threshold is calibrated.
+For research updates, keep publication dates, observation times, named metric fields, discovery limitations, eligibility decisions, and original authors in the source record. Regenerate rankings with `python scripts/rank_sources.py`. Do not silently refresh the metrics of an already published snapshot.

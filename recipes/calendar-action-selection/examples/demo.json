@@ -1,0 +1,13 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "draft_ready",
+    "probabilities": {
+      "draft_ready": 0.97,
+      "clarify": 0.015,
+      "review": 0.015
+    },
+    "confidence": 0.95
+  }
+}

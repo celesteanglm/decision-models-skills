@@ -1,0 +1,14 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "ready",
+    "probabilities": {
+      "ready": 0.97,
+      "targeted_revision": 0.01,
+      "substantial_revision": 0.01,
+      "review": 0.01
+    },
+    "confidence": 0.95
+  }
+}

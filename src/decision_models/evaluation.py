@@ -105,6 +105,10 @@ def acceptance(result, expected):
         reasons.append("action")
     if "model_id" in expected and policy.get("model_id") != expected["model_id"]:
         reasons.append("model_id")
+    if "choice" in expected and policy.get("choice") != expected["choice"]:
+        reasons.append("choice")
+    if "choices" in expected and policy.get("choice") not in expected["choices"]:
+        reasons.append("choice")
     if "top_id" in expected:
         ids = policy.get("ranked_ids", [])
         if not ids or ids[0] != expected["top_id"]:
@@ -133,7 +137,7 @@ def summarize(rows, providers, skills, repetitions, mode, offline_passed):
                 policy = row.get("output",{}).get("result",{})
                 case["outcomes"].append(policy.get("action", "error"))
                 case.setdefault("recommendations", []).append(json.dumps({
-                    k: policy[k] for k in ("action", "model_id", "ranked_ids") if k in policy
+                    k: policy[k] for k in ("action", "choice", "model_id", "ranked_ids") if k in policy
                 }, sort_keys=True))
             complete = len(cases)==12 and all(c["runs"]==repetitions for c in cases.values())
             clear_ok = sum(c["passes"] >= (repetitions//2+1) for c in cases.values() if c["category"]=="clear")
@@ -166,7 +170,7 @@ def summarize(rows, providers, skills, repetitions, mode, offline_passed):
 
 def source_hash(repo):
     digest = hashlib.sha256()
-    for path in sorted(list((repo/"src").rglob("*.py")) + list((repo/"skills").rglob("*.json"))):
+    for path in sorted(list((repo/"src").rglob("*.py")) + list((repo/"skills").rglob("*.json")) + list((repo/"recipes").rglob("*.json"))):
         digest.update(str(path.relative_to(repo)).encode())
         digest.update(path.read_bytes())
     return digest.hexdigest()

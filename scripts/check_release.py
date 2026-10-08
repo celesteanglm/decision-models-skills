@@ -1,11 +1,15 @@
 """Enforce the approved Jev publication gate against current live receipts."""
 import json
+import argparse
 from pathlib import Path
 from decision_models.evaluation import source_hash, summarize
 from decision_models.runtime import SKILLS, PROVIDERS
 
 repo = Path(__file__).resolve().parents[1]
-receipt = json.loads((repo / "reports/live.json").read_text())
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--receipt", default="reports/live.json", help="live core acceptance receipt")
+args = parser.parse_args()
+receipt = json.loads((repo / args.receipt).read_text())
 offline = json.loads((repo / "reports/offline.json").read_text())
 revision = source_hash(repo)
 assert receipt["mode"] == "live", "demo receipts cannot qualify"

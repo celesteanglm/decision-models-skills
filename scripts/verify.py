@@ -42,9 +42,25 @@ def main():
                 assert receipt["executed_action"] is False
                 demonstrations.append({"skill": skill, "provider": provider,
                                        "action": receipt["result"]["action"]})
+        for folder in sorted((repo / "recipes").iterdir()):
+            if not (folder / "recipe.json").is_file():
+                continue
+            copied = project / ".agents" / "skills" / folder.name
+            shutil.copytree(folder, copied)
+            for provider in PROVIDERS:
+                command = [sys.executable, "-m", "decision_models", "recipe",
+                           "--recipe", str(copied / "recipe.json"), "--provider", provider,
+                           "--mode", "demo", "--input", str(copied / "examples" / "input.json"),
+                           "--demo-answers", str(copied / "examples" / "demo.json")]
+                result = subprocess.run(command, cwd=elsewhere, env=env, check=True,
+                                        text=True, capture_output=True)
+                receipt = json.loads(result.stdout)
+                assert receipt["source"] == "demo" and receipt["executed_action"] is False
+                demonstrations.append({"recipe": folder.name, "provider": provider,
+                                       "action": receipt["result"]["action"]})
     marker.write_text(json.dumps({"passed": True, "source_hash": source_hash(repo),
         "checked_at": datetime.now(timezone.utc).isoformat(), "python": sys.version.split()[0],
-        "checks": ["unittest suite", "18 credential-free copied-skill demos from another cwd"],
+        "checks": ["unittest suite", f"{len(demonstrations)} credential-free copied-skill/recipe demos from another cwd"],
         "demos": demonstrations}, indent=2) + "\n")
     print(f"Offline verification passed: {marker}")
 

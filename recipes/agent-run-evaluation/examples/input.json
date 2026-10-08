@@ -1,0 +1,6 @@
+{
+  "state": {
+    "content": "Request: list the three open tickets tagged “billing”. Trace shows a query for that exact tag and returns T-12, T-18, T-29, all open. Final response lists those three IDs and says no others were returned."
+  },
+  "permission_granted": true
+}

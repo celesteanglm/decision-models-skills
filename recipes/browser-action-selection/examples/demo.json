@@ -1,0 +1,13 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "click",
+    "probabilities": {
+      "click": 0.97,
+      "type": 0.015,
+      "review": 0.015
+    },
+    "confidence": 0.95
+  }
+}

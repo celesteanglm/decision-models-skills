@@ -5,6 +5,10 @@ description: Recommend whether an evidence-backed draft is ready, needs review, 
 
 # Confidence gates
 
+**Working with:** ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen) ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen)
+
+Only these labels indicate verified compatibility. Other backends did not qualify. See [compatibility evidence](COMPATIBILITY.md).
+
 Requires Python 3.10+ and the separately installed shared CLI: `python -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'`. Run the commands below from this skill folder.
 
 Use this skill before an application chooses whether to release a draft. It returns a recommendation only; it never sends, publishes, or edits content.
@@ -24,7 +28,7 @@ Refusals or missing answers return `review`, or `escalate` for high risk. Review
 Install the shared package from the repository first. From this skill directory, run the offline hand-authored demo:
 
 ```sh
-decision-models run confidence-gates --provider jev-openrouter --input examples/input.json --mode demo --demo-answers examples/demo.json
+decision-models run confidence-gates --provider sage --input examples/input.json --mode demo --demo-answers examples/demo.json
 ```
 
 The demo answers are synthetic and labeled by the CLI. To make a live request, omit `--demo-answers`, pass `--mode live`, and set the selected provider's API key in the environment.

@@ -1,6 +1,0 @@
-{
-  "state": {
-    "content": "Diff summary: updates button spacing in one settings view. No logic, API, permissions, or data files changed. UI snapshot check passes."
-  },
-  "permission_granted": true
-}

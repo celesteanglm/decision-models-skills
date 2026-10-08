@@ -11,5 +11,6 @@
   "copied_folder_demos_per_version": 105,
   "credentials_present": false,
   "unrelated_working_directory": true,
-  "frontmatter_and_reference_validation": "recipe metadata and relative links checked independently"
+  "frontmatter_and_reference_validation": "recipe metadata and relative links checked independently",
+  "scope": "Historical clean-install verification of the original 29 candidate recipes. Current published-catalog checks are in catalog-offline.json."
 }

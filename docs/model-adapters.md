@@ -22,7 +22,7 @@ result = execute_recipe(
 
 An adapter supplies `endpoint`, `key_env`, `default_model`, `build_payload(state, questions, model)`, and `parse_response(raw, questions)`. Authentication and HTTP transport stay in the shared runner. `transport=` remains injectable for independent contract tests. Adapters must preserve the resolved model, native usage, full raw response, distributions, refusals, and native confidence without recomputing confidence. See [contracts.py](../src/decision_models/contracts.py) and the [three native adapters](../src/decision_models/providers/).
 
-This hook is for trusted application code; the CLI does not import executable modules from untrusted recipe files. The built-in evaluation CLI certifies only its three named adapters. A custom adapter needs independent golden contract tests and live fixture receipts; the existing compatibility labels do not transfer to it.
+This hook is for trusted application code; the CLI does not import executable modules from untrusted recipe files. The built-in evaluation CLI can evaluate its three named adapters. Only a Working result for a specific skill receives a positive compatibility label. A custom adapter needs independent golden contract tests and live fixture receipts; the existing compatibility labels do not transfer to it.
 
 ## Different output capabilities
 

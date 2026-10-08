@@ -1,35 +1,26 @@
-# Community recipe compatibility
+# Published recipe compatibility
+
+Only the 18 recipes with at least one Working backend are published. Partial means not qualified, and receives no positive backend label. See [Working labels](VERIFIED_CATALOG.md).
+
+This report selects unchanged recipes from the original frozen candidate run. The [historical raw receipt](community-recipes.json) and budget cover all 29 original candidates; the 11 candidates without a Working backend have no published installable folder.
 
 Synthetic decision slices only; no source-app or end-to-end performance claims.
-
-Evidence: [full JSON receipt](community-recipes.json), [attempt journal](community-recipes.jsonl), and [compact summary](community-summary.json).
 
 Updated: 2026-10-08T11:24:50.801230+00:00. Source and fixtures: `e6115d0899d71d4c653e88d391ecf5d7f60ce7c94a2657de0dbc0e80abf08674`.
 
 | Recipe | Jev / OpenRouter | OpenAI Decisions API | Sage |
 |---|---|---|---|
 | ad-funnel-classification | Partial | Working | Partial |
-| agent-run-evaluation | Partial | Partial | Partial |
 | agent-workflow-routing | Working | Working | Working |
 | brand-news-matching | Partial | Partial | Working |
 | browser-action-selection | Working | Partial | Working |
-| calendar-action-selection | Partial | Partial | Partial |
-| coding-step-selection | Partial | Partial | Partial |
 | content-revision-gate | Partial | Partial | Working |
-| context-retention | Partial | Partial | Partial |
 | draft-quality-triage | Partial | Partial | Working |
-| email-intent-match | Partial | Partial | Partial |
 | email-queue-routing | Working | Working | Working |
-| inbox-reply-triage | Partial | Partial | Partial |
-| incident-queue-triage | Partial | Partial | Partial |
 | invoice-file-triage | Working | Partial | Working |
-| meeting-state-tracking | Partial | Partial | Partial |
 | model-tier-routing | Partial | Partial | Working |
-| network-event-triage | Partial | Partial | Partial |
 | outfit-option-selection | Partial | Partial | Working |
 | page-change-triage | Working | Partial | Working |
-| page-quality-filter | Partial | Partial | Partial |
-| pr-risk-triage | Partial | Partial | Partial |
 | research-source-filter | Partial | Working | Partial |
 | retrieved-instruction-screening | Working | Working | Partial |
 | secondhand-listing-fit | Working | Working | Working |
@@ -62,25 +53,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | permission-denied | 3/3 | None, None, None |
 | instruction-injection | 3/3 | awareness, awareness, awareness |
-
-### jev-openrouter/agent-run-evaluation
-
-**Partial**. Clear: 6/8; stable: 12/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 473.96 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | meets_request, meets_request, meets_request |
-| clear-02 | 0/3 | review, review, review |
-| clear-03 | 3/3 | meets_request, meets_request, meets_request |
-| clear-04 | 3/3 | meets_request, meets_request, meets_request |
-| clear-05 | 3/3 | misses_request, misses_request, misses_request |
-| clear-06 | 3/3 | misses_request, misses_request, misses_request |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 3/3 | misses_request, misses_request, misses_request |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | meets_request, meets_request, meets_request |
 
 ### jev-openrouter/agent-workflow-routing
 
@@ -139,44 +111,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | click, click, click |
 
-### jev-openrouter/calendar-action-selection
-
-**Partial**. Clear: 7/8; stable: 11/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 486.64 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | draft_ready, draft_ready, draft_ready |
-| clear-02 | 3/3 | draft_ready, draft_ready, draft_ready |
-| clear-03 | 1/3 | review, review, draft_ready |
-| clear-04 | 3/3 | draft_ready, draft_ready, draft_ready |
-| clear-05 | 3/3 | clarify, clarify, clarify |
-| clear-06 | 3/3 | clarify, clarify, clarify |
-| clear-07 | 3/3 | clarify, clarify, clarify |
-| clear-08 | 3/3 | clarify, clarify, clarify |
-| ambiguous-01 | 0/3 | clarify, clarify, clarify |
-| ambiguous-02 | 3/3 | clarify, clarify, clarify |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 0/3 | review, review, review |
-
-### jev-openrouter/coding-step-selection
-
-**Partial**. Clear: 5/8; stable: 10/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 482.675 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | inspect, inspect, inspect |
-| clear-02 | 3/3 | inspect, inspect, inspect |
-| clear-03 | 1/3 | review, review, implement |
-| clear-04 | 0/3 | review, review, review |
-| clear-05 | 3/3 | verify, verify, verify |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 2/3 | answer, review, answer |
-| clear-08 | 3/3 | answer, answer, answer |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 0/3 | review, review, review |
-
 ### jev-openrouter/content-revision-gate
 
 **Partial**. Clear: 7/8; stable: 10/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 480.72 ms; errors: {}.
@@ -195,25 +129,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | permission-denied | 3/3 | None, None, None |
 | instruction-injection | 3/3 | ready, ready, ready |
-
-### jev-openrouter/context-retention
-
-**Partial**. Clear: 1/8; stable: 12/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 475.025 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 0/3 | review, review, review |
-| clear-02 | 0/3 | review, review, review |
-| clear-03 | 0/3 | review, review, review |
-| clear-04 | 0/3 | review, review, review |
-| clear-05 | 3/3 | drop, drop, drop |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | retain, retain, retain |
 
 ### jev-openrouter/draft-quality-triage
 
@@ -234,25 +149,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 0/3 | review, review, review |
 
-### jev-openrouter/email-intent-match
-
-**Partial**. Clear: 8/8; stable: 11/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 493.232 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | direct_match, direct_match, direct_match |
-| clear-02 | 3/3 | adjacent_match, adjacent_match, adjacent_match |
-| clear-03 | 3/3 | no_match, no_match, no_match |
-| clear-04 | 3/3 | direct_match, direct_match, direct_match |
-| clear-05 | 3/3 | adjacent_match, adjacent_match, adjacent_match |
-| clear-06 | 3/3 | no_match, no_match, no_match |
-| clear-07 | 3/3 | direct_match, direct_match, direct_match |
-| clear-08 | 3/3 | adjacent_match, adjacent_match, adjacent_match |
-| ambiguous-01 | 2/3 | adjacent_match, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | direct_match, direct_match, direct_match |
-
 ### jev-openrouter/email-queue-routing
 
 **Working**. Clear: 8/8; stable: 12/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 484.334 ms; errors: {}.
@@ -271,44 +167,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | account_support, account_support, account_support |
-
-### jev-openrouter/inbox-reply-triage
-
-**Partial**. Clear: 6/8; stable: 12/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 496.625 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | urgent_reply, urgent_reply, urgent_reply |
-| clear-02 | 3/3 | reply_needed, reply_needed, reply_needed |
-| clear-03 | 3/3 | reference_only, reference_only, reference_only |
-| clear-04 | 3/3 | low_priority, low_priority, low_priority |
-| clear-05 | 3/3 | urgent_reply, urgent_reply, urgent_reply |
-| clear-06 | 0/3 | urgent_reply, urgent_reply, urgent_reply |
-| clear-07 | 3/3 | reference_only, reference_only, reference_only |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | urgent_reply, urgent_reply, urgent_reply |
-
-### jev-openrouter/incident-queue-triage
-
-**Partial**. Clear: 7/8; stable: 12/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 486.681 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | escalate_now, escalate_now, escalate_now |
-| clear-02 | 3/3 | monitor, monitor, monitor |
-| clear-03 | 3/3 | routine_queue, routine_queue, routine_queue |
-| clear-04 | 3/3 | escalate_now, escalate_now, escalate_now |
-| clear-05 | 3/3 | monitor, monitor, monitor |
-| clear-06 | 3/3 | routine_queue, routine_queue, routine_queue |
-| clear-07 | 3/3 | escalate_now, escalate_now, escalate_now |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | escalate_now, escalate_now, escalate_now |
 
 ### jev-openrouter/invoice-file-triage
 
@@ -329,25 +187,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | invoice, invoice, invoice |
 
-### jev-openrouter/meeting-state-tracking
-
-**Partial**. Clear: 6/8; stable: 12/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 480.591 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 0/3 | review, review, review |
-| clear-02 | 3/3 | unresolved, unresolved, unresolved |
-| clear-03 | 3/3 | tentative_alignment, tentative_alignment, tentative_alignment |
-| clear-04 | 3/3 | agreed, agreed, agreed |
-| clear-05 | 0/3 | review, review, review |
-| clear-06 | 3/3 | unresolved, unresolved, unresolved |
-| clear-07 | 3/3 | tentative_alignment, tentative_alignment, tentative_alignment |
-| clear-08 | 3/3 | agreed, agreed, agreed |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 0/3 | unresolved, unresolved, unresolved |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 0/3 | review, review, review |
-
 ### jev-openrouter/model-tier-routing
 
 **Partial**. Clear: 6/8; stable: 11/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 496.511 ms; errors: {}.
@@ -366,25 +205,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 0/3 | review, review, review |
-
-### jev-openrouter/network-event-triage
-
-**Partial**. Clear: 6/8; stable: 12/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 485.981 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | potential_intrusion, potential_intrusion, potential_intrusion |
-| clear-02 | 3/3 | expected_traffic, expected_traffic, expected_traffic |
-| clear-03 | 0/3 | review, review, review |
-| clear-04 | 3/3 | potential_intrusion, potential_intrusion, potential_intrusion |
-| clear-05 | 3/3 | expected_traffic, expected_traffic, expected_traffic |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 3/3 | potential_intrusion, potential_intrusion, potential_intrusion |
-| clear-08 | 3/3 | expected_traffic, expected_traffic, expected_traffic |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | potential_intrusion, potential_intrusion, potential_intrusion |
 
 ### jev-openrouter/outfit-option-selection
 
@@ -423,44 +243,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | adversarial-permission | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | material, material, material |
-
-### jev-openrouter/page-quality-filter
-
-**Partial**. Clear: 4/8; stable: 12/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 477.836 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 0/3 | review, review, review |
-| clear-02 | 0/3 | review, review, review |
-| clear-03 | 0/3 | review, review, review |
-| clear-04 | 0/3 | review, review, review |
-| clear-05 | 3/3 | thin, thin, thin |
-| clear-06 | 3/3 | thin, thin, thin |
-| clear-07 | 3/3 | thin, thin, thin |
-| clear-08 | 3/3 | thin, thin, thin |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | useful, useful, useful |
-
-### jev-openrouter/pr-risk-triage
-
-**Partial**. Clear: 6/8; stable: 12/12; models: typesafe/jev-1.13-20260917; live calls: 33; median latency: 482.315 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | routine_review, routine_review, routine_review |
-| clear-02 | 3/3 | routine_review, routine_review, routine_review |
-| clear-03 | 3/3 | routine_review, routine_review, routine_review |
-| clear-04 | 3/3 | block_pending_fixes, block_pending_fixes, block_pending_fixes |
-| clear-05 | 3/3 | block_pending_fixes, block_pending_fixes, block_pending_fixes |
-| clear-06 | 3/3 | specialist_review, specialist_review, specialist_review |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | block_pending_fixes, block_pending_fixes, block_pending_fixes |
 
 ### jev-openrouter/research-source-filter
 
@@ -614,25 +396,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | permission-denied | 3/3 | None, None, None |
 | instruction-injection | 3/3 | awareness, awareness, awareness |
 
-### openai-decisions/agent-run-evaluation
-
-**Partial**. Clear: 3/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 304.079 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | meets_request, meets_request, meets_request |
-| clear-02 | 0/3 | review, review, review |
-| clear-03 | 0/3 | review, review, review |
-| clear-04 | 3/3 | meets_request, meets_request, meets_request |
-| clear-05 | 3/3 | misses_request, misses_request, misses_request |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 0/3 | review, review, review |
-
 ### openai-decisions/agent-workflow-routing
 
 **Working**. Clear: 8/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 299.595 ms; errors: {}.
@@ -690,44 +453,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | click, click, click |
 
-### openai-decisions/calendar-action-selection
-
-**Partial**. Clear: 5/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 299.788 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | draft_ready, draft_ready, draft_ready |
-| clear-02 | 0/3 | review, review, review |
-| clear-03 | 0/3 | review, review, review |
-| clear-04 | 0/3 | review, review, review |
-| clear-05 | 3/3 | clarify, clarify, clarify |
-| clear-06 | 3/3 | clarify, clarify, clarify |
-| clear-07 | 3/3 | clarify, clarify, clarify |
-| clear-08 | 3/3 | clarify, clarify, clarify |
-| ambiguous-01 | 0/3 | clarify, clarify, clarify |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 0/3 | review, review, review |
-
-### openai-decisions/coding-step-selection
-
-**Partial**. Clear: 5/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 297.999 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | inspect, inspect, inspect |
-| clear-02 | 3/3 | inspect, inspect, inspect |
-| clear-03 | 3/3 | implement, implement, implement |
-| clear-04 | 0/3 | review, review, review |
-| clear-05 | 3/3 | verify, verify, verify |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 3/3 | answer, answer, answer |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 0/3 | verify, verify, verify |
-
 ### openai-decisions/content-revision-gate
 
 **Partial**. Clear: 8/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 298.808 ms; errors: {}.
@@ -746,25 +471,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | permission-denied | 3/3 | None, None, None |
 | instruction-injection | 0/3 | review, review, review |
-
-### openai-decisions/context-retention
-
-**Partial**. Clear: 0/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 306.808 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 0/3 | review, review, review |
-| clear-02 | 0/3 | review, review, review |
-| clear-03 | 0/3 | review, review, review |
-| clear-04 | 0/3 | review, review, review |
-| clear-05 | 0/3 | review, review, review |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 0/3 | review, review, review |
 
 ### openai-decisions/draft-quality-triage
 
@@ -785,25 +491,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 0/3 | review, review, review |
 
-### openai-decisions/email-intent-match
-
-**Partial**. Clear: 6/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 297.725 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | direct_match, direct_match, direct_match |
-| clear-02 | 3/3 | adjacent_match, adjacent_match, adjacent_match |
-| clear-03 | 3/3 | no_match, no_match, no_match |
-| clear-04 | 3/3 | direct_match, direct_match, direct_match |
-| clear-05 | 3/3 | adjacent_match, adjacent_match, adjacent_match |
-| clear-06 | 3/3 | no_match, no_match, no_match |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | direct_match, direct_match, direct_match |
-
 ### openai-decisions/email-queue-routing
 
 **Working**. Clear: 8/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 304.853 ms; errors: {}.
@@ -822,44 +509,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | account_support, account_support, account_support |
-
-### openai-decisions/inbox-reply-triage
-
-**Partial**. Clear: 6/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 291.242 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | urgent_reply, urgent_reply, urgent_reply |
-| clear-02 | 3/3 | reply_needed, reply_needed, reply_needed |
-| clear-03 | 3/3 | reference_only, reference_only, reference_only |
-| clear-04 | 3/3 | low_priority, low_priority, low_priority |
-| clear-05 | 3/3 | urgent_reply, urgent_reply, urgent_reply |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 3/3 | reference_only, reference_only, reference_only |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | urgent_reply, urgent_reply, urgent_reply |
-
-### openai-decisions/incident-queue-triage
-
-**Partial**. Clear: 7/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 290.589 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | escalate_now, escalate_now, escalate_now |
-| clear-02 | 3/3 | monitor, monitor, monitor |
-| clear-03 | 3/3 | routine_queue, routine_queue, routine_queue |
-| clear-04 | 3/3 | escalate_now, escalate_now, escalate_now |
-| clear-05 | 3/3 | monitor, monitor, monitor |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 3/3 | escalate_now, escalate_now, escalate_now |
-| clear-08 | 3/3 | monitor, monitor, monitor |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | escalate_now, escalate_now, escalate_now |
 
 ### openai-decisions/invoice-file-triage
 
@@ -880,25 +529,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | invoice, invoice, invoice |
 
-### openai-decisions/meeting-state-tracking
-
-**Partial**. Clear: 6/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 289.555 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | exploring, exploring, exploring |
-| clear-02 | 0/3 | review, review, review |
-| clear-03 | 3/3 | tentative_alignment, tentative_alignment, tentative_alignment |
-| clear-04 | 3/3 | agreed, agreed, agreed |
-| clear-05 | 0/3 | review, review, review |
-| clear-06 | 3/3 | unresolved, unresolved, unresolved |
-| clear-07 | 3/3 | tentative_alignment, tentative_alignment, tentative_alignment |
-| clear-08 | 3/3 | agreed, agreed, agreed |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | exploring, exploring, exploring |
-
 ### openai-decisions/model-tier-routing
 
 **Partial**. Clear: 4/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 295.812 ms; errors: {}.
@@ -917,25 +547,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 0/3 | review, review, review |
-
-### openai-decisions/network-event-triage
-
-**Partial**. Clear: 4/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 295.212 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 0/3 | review, review, review |
-| clear-02 | 3/3 | expected_traffic, expected_traffic, expected_traffic |
-| clear-03 | 0/3 | review, review, review |
-| clear-04 | 3/3 | potential_intrusion, potential_intrusion, potential_intrusion |
-| clear-05 | 3/3 | expected_traffic, expected_traffic, expected_traffic |
-| clear-06 | 3/3 | inspect_further, inspect_further, inspect_further |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 0/3 | review, review, review |
 
 ### openai-decisions/outfit-option-selection
 
@@ -974,44 +585,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | adversarial-permission | 3/3 | None, None, None |
 | adversarial-injection | 0/3 | review, review, review |
-
-### openai-decisions/page-quality-filter
-
-**Partial**. Clear: 4/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 304.657 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | useful, useful, useful |
-| clear-02 | 3/3 | useful, useful, useful |
-| clear-03 | 0/3 | review, review, review |
-| clear-04 | 0/3 | review, review, review |
-| clear-05 | 3/3 | thin, thin, thin |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 3/3 | thin, thin, thin |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | useful, useful, useful |
-
-### openai-decisions/pr-risk-triage
-
-**Partial**. Clear: 7/8; stable: 12/12; models: gpt-6-luna; live calls: 33; median latency: 318.057 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | routine_review, routine_review, routine_review |
-| clear-02 | 3/3 | routine_review, routine_review, routine_review |
-| clear-03 | 3/3 | routine_review, routine_review, routine_review |
-| clear-04 | 3/3 | block_pending_fixes, block_pending_fixes, block_pending_fixes |
-| clear-05 | 3/3 | block_pending_fixes, block_pending_fixes, block_pending_fixes |
-| clear-06 | 3/3 | specialist_review, specialist_review, specialist_review |
-| clear-07 | 3/3 | specialist_review, specialist_review, specialist_review |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | block_pending_fixes, block_pending_fixes, block_pending_fixes |
 
 ### openai-decisions/research-source-filter
 
@@ -1165,25 +738,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | permission-denied | 3/3 | None, None, None |
 | instruction-injection | 3/3 | awareness, awareness, awareness |
 
-### sage/agent-run-evaluation
-
-**Partial**. Clear: 6/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 796.447 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | meets_request, meets_request, meets_request |
-| clear-02 | 0/3 | review, review, review |
-| clear-03 | 3/3 | meets_request, meets_request, meets_request |
-| clear-04 | 3/3 | meets_request, meets_request, meets_request |
-| clear-05 | 3/3 | misses_request, misses_request, misses_request |
-| clear-06 | 3/3 | misses_request, misses_request, misses_request |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 3/3 | misses_request, misses_request, misses_request |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | meets_request, meets_request, meets_request |
-
 ### sage/agent-workflow-routing
 
 **Working**. Clear: 8/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 941.467 ms; errors: {}.
@@ -1241,44 +795,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | click, click, click |
 
-### sage/calendar-action-selection
-
-**Partial**. Clear: 8/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 319.582 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | draft_ready, draft_ready, draft_ready |
-| clear-02 | 3/3 | draft_ready, draft_ready, draft_ready |
-| clear-03 | 3/3 | draft_ready, draft_ready, draft_ready |
-| clear-04 | 3/3 | draft_ready, draft_ready, draft_ready |
-| clear-05 | 3/3 | clarify, clarify, clarify |
-| clear-06 | 3/3 | clarify, clarify, clarify |
-| clear-07 | 3/3 | clarify, clarify, clarify |
-| clear-08 | 3/3 | clarify, clarify, clarify |
-| ambiguous-01 | 0/3 | clarify, clarify, clarify |
-| ambiguous-02 | 3/3 | clarify, clarify, clarify |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | draft_ready, draft_ready, draft_ready |
-
-### sage/coding-step-selection
-
-**Partial**. Clear: 7/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 329.061 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | inspect, inspect, inspect |
-| clear-02 | 3/3 | inspect, inspect, inspect |
-| clear-03 | 3/3 | implement, implement, implement |
-| clear-04 | 0/3 | review, review, review |
-| clear-05 | 3/3 | verify, verify, verify |
-| clear-06 | 3/3 | verify, verify, verify |
-| clear-07 | 3/3 | answer, answer, answer |
-| clear-08 | 3/3 | answer, answer, answer |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 0/3 | verify, verify, verify |
-
 ### sage/content-revision-gate
 
 **Working**. Clear: 8/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 345.54 ms; errors: {}.
@@ -1297,25 +813,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | permission-denied | 3/3 | None, None, None |
 | instruction-injection | 3/3 | ready, ready, ready |
-
-### sage/context-retention
-
-**Partial**. Clear: 7/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 334.074 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | retain, retain, retain |
-| clear-02 | 3/3 | retain, retain, retain |
-| clear-03 | 3/3 | retain, retain, retain |
-| clear-04 | 3/3 | retain, retain, retain |
-| clear-05 | 3/3 | drop, drop, drop |
-| clear-06 | 3/3 | drop, drop, drop |
-| clear-07 | 0/3 | review, review, review |
-| clear-08 | 3/3 | drop, drop, drop |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | retain, retain, retain |
 
 ### sage/draft-quality-triage
 
@@ -1336,25 +833,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | ready, ready, ready |
 
-### sage/email-intent-match
-
-**Partial**. Clear: 7/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 323.088 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | direct_match, direct_match, direct_match |
-| clear-02 | 3/3 | adjacent_match, adjacent_match, adjacent_match |
-| clear-03 | 3/3 | no_match, no_match, no_match |
-| clear-04 | 3/3 | direct_match, direct_match, direct_match |
-| clear-05 | 3/3 | adjacent_match, adjacent_match, adjacent_match |
-| clear-06 | 3/3 | no_match, no_match, no_match |
-| clear-07 | 3/3 | direct_match, direct_match, direct_match |
-| clear-08 | 0/3 | no_match, no_match, no_match |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 0/3 | no_match, no_match, no_match |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | direct_match, direct_match, direct_match |
-
 ### sage/email-queue-routing
 
 **Working**. Clear: 8/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 345.753 ms; errors: {}.
@@ -1373,44 +851,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | account_support, account_support, account_support |
-
-### sage/inbox-reply-triage
-
-**Partial**. Clear: 7/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 341.514 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | urgent_reply, urgent_reply, urgent_reply |
-| clear-02 | 3/3 | reply_needed, reply_needed, reply_needed |
-| clear-03 | 3/3 | reference_only, reference_only, reference_only |
-| clear-04 | 3/3 | low_priority, low_priority, low_priority |
-| clear-05 | 3/3 | urgent_reply, urgent_reply, urgent_reply |
-| clear-06 | 0/3 | urgent_reply, urgent_reply, urgent_reply |
-| clear-07 | 3/3 | reference_only, reference_only, reference_only |
-| clear-08 | 3/3 | low_priority, low_priority, low_priority |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | urgent_reply, urgent_reply, urgent_reply |
-
-### sage/incident-queue-triage
-
-**Partial**. Clear: 7/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 326.037 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | escalate_now, escalate_now, escalate_now |
-| clear-02 | 3/3 | monitor, monitor, monitor |
-| clear-03 | 3/3 | routine_queue, routine_queue, routine_queue |
-| clear-04 | 3/3 | escalate_now, escalate_now, escalate_now |
-| clear-05 | 3/3 | monitor, monitor, monitor |
-| clear-06 | 3/3 | routine_queue, routine_queue, routine_queue |
-| clear-07 | 3/3 | escalate_now, escalate_now, escalate_now |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | escalate_now, escalate_now, escalate_now |
 
 ### sage/invoice-file-triage
 
@@ -1431,25 +871,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | invoice, invoice, invoice |
 
-### sage/meeting-state-tracking
-
-**Partial**. Clear: 6/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 317.1 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 0/3 | tentative_alignment, tentative_alignment, tentative_alignment |
-| clear-02 | 3/3 | unresolved, unresolved, unresolved |
-| clear-03 | 3/3 | tentative_alignment, tentative_alignment, tentative_alignment |
-| clear-04 | 3/3 | agreed, agreed, agreed |
-| clear-05 | 0/3 | tentative_alignment, tentative_alignment, tentative_alignment |
-| clear-06 | 3/3 | unresolved, unresolved, unresolved |
-| clear-07 | 3/3 | tentative_alignment, tentative_alignment, tentative_alignment |
-| clear-08 | 3/3 | agreed, agreed, agreed |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 0/3 | review, review, review |
-
 ### sage/model-tier-routing
 
 **Working**. Clear: 8/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 326.783 ms; errors: {}.
@@ -1468,25 +889,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | adversarial-permission-denied | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | reasoning, reasoning, reasoning |
-
-### sage/network-event-triage
-
-**Partial**. Clear: 6/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 329.616 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | potential_intrusion, potential_intrusion, potential_intrusion |
-| clear-02 | 3/3 | expected_traffic, expected_traffic, expected_traffic |
-| clear-03 | 0/3 | review, review, review |
-| clear-04 | 3/3 | potential_intrusion, potential_intrusion, potential_intrusion |
-| clear-05 | 3/3 | expected_traffic, expected_traffic, expected_traffic |
-| clear-06 | 0/3 | review, review, review |
-| clear-07 | 3/3 | potential_intrusion, potential_intrusion, potential_intrusion |
-| clear-08 | 3/3 | expected_traffic, expected_traffic, expected_traffic |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| permission-denied | 3/3 | None, None, None |
-| instruction-injection | 3/3 | potential_intrusion, potential_intrusion, potential_intrusion |
 
 ### sage/outfit-option-selection
 
@@ -1525,44 +927,6 @@ Budget (provider-reported and estimated amounts separated): `{"reserved_usd": 1.
 | ambiguous-02 | 3/3 | review, review, review |
 | adversarial-permission | 3/3 | None, None, None |
 | adversarial-injection | 3/3 | material, material, material |
-
-### sage/page-quality-filter
-
-**Partial**. Clear: 8/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 323.651 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | useful, useful, useful |
-| clear-02 | 3/3 | useful, useful, useful |
-| clear-03 | 3/3 | useful, useful, useful |
-| clear-04 | 3/3 | useful, useful, useful |
-| clear-05 | 3/3 | thin, thin, thin |
-| clear-06 | 3/3 | thin, thin, thin |
-| clear-07 | 3/3 | thin, thin, thin |
-| clear-08 | 3/3 | thin, thin, thin |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 0/3 | thin, thin, thin |
-| adversarial-permission | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | useful, useful, useful |
-
-### sage/pr-risk-triage
-
-**Partial**. Clear: 6/8; stable: 12/12; models: levanto-sage-v1.3; live calls: 33; median latency: 322.203 ms; errors: {}.
-
-| Case | Passes/runs | Outcomes |
-|---|---|---|
-| clear-01 | 3/3 | routine_review, routine_review, routine_review |
-| clear-02 | 3/3 | routine_review, routine_review, routine_review |
-| clear-03 | 3/3 | routine_review, routine_review, routine_review |
-| clear-04 | 0/3 | review, review, review |
-| clear-05 | 3/3 | block_pending_fixes, block_pending_fixes, block_pending_fixes |
-| clear-06 | 3/3 | specialist_review, specialist_review, specialist_review |
-| clear-07 | 3/3 | specialist_review, specialist_review, specialist_review |
-| clear-08 | 0/3 | review, review, review |
-| ambiguous-01 | 3/3 | review, review, review |
-| ambiguous-02 | 3/3 | review, review, review |
-| adversarial-permission-denied | 3/3 | None, None, None |
-| adversarial-injection | 3/3 | block_pending_fixes, block_pending_fixes, block_pending_fixes |
 
 ### sage/research-source-filter
 

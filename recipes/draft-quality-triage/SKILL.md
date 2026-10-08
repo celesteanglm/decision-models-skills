@@ -5,6 +5,10 @@ description: Classify a draft against its stated goal and available feedback.
 
 # Decide whether a draft is ready for another revision
 
+**Working with:** ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen)
+
+Only these labels indicate verified compatibility. Other backends did not qualify. See [compatibility evidence](COMPATIBILITY.md).
+
 Use this portable recipe to recommend one bounded label from text evidence. It does not perform the recommended action. Missing or conflicting evidence should lead to review.
 
 The recipe configuration and examples are local to this folder: [recipe](recipe.json), [sample input](examples/input.json), [hand-authored demo answer](examples/demo.json), and [acceptance fixtures](fixtures/acceptance.json). The demo answer is illustrative configuration, not model output or calibration evidence.

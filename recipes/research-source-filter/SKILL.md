@@ -5,10 +5,14 @@ description: Assess whether a source excerpt is useful for a stated research bri
 
 # Research Source Filter
 
+**Working with:** ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen)
+
+Only these labels indicate verified compatibility. Other backends did not qualify. See [compatibility evidence](COMPATIBILITY.md).
+
 Use this portable recipe to make one narrow choice from supplied text. It recommends a label and does not execute follow-up work. Run the hand-authored demonstration from this folder with:
 
 ```sh
-decision-models recipe --recipe ./recipe.json --provider sage --input ./examples/input.json --demo-answers ./examples/demo.json --mode demo
+decision-models recipe --recipe ./recipe.json --provider openai-decisions --input ./examples/input.json --demo-answers ./examples/demo.json --mode demo
 ```
 
 `examples/input.json` and `examples/demo.json` are demo-only materials; acceptance cases are in `fixtures/acceptance.json`. Live mode uses the same command with `--mode live` and without `--demo-answers`; credentials stay in the environment.

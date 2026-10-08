@@ -5,6 +5,10 @@ description: Recommend source fields that can populate requested template fields
 
 # Template Field Matching
 
+**Working with:** ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen)
+
+Only these labels indicate verified compatibility. Other backends did not qualify. See [compatibility evidence](COMPATIBILITY.md).
+
 Use this portable recipe to make one narrow choice from supplied text. It recommends a label and does not execute follow-up work. Run the hand-authored demonstration from this folder with:
 
 ```sh

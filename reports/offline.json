@@ -1,11 +1,11 @@
 {
   "passed": true,
-  "source_hash": "e6115d0899d71d4c653e88d391ecf5d7f60ce7c94a2657de0dbc0e80abf08674",
-  "checked_at": "2026-10-08T11:19:40.798858+00:00",
+  "source_hash": "a3f556710808172a405c5aedc43410d1abd74e9edde360219bc33a9e0299b016",
+  "checked_at": "2026-10-08T15:04:02.597772+00:00",
   "python": "3.12.10",
   "checks": [
     "unittest suite",
-    "105 credential-free copied-skill/recipe demos from another cwd"
+    "44 credential-free copied-skill/recipe demos from another cwd"
   ],
   "demos": [
     {
@@ -15,11 +15,6 @@
     },
     {
       "skill": "input-guardrails",
-      "provider": "openai-decisions",
-      "action": "allow"
-    },
-    {
-      "skill": "input-guardrails",
       "provider": "sage",
       "action": "allow"
     },
@@ -90,42 +85,12 @@
     },
     {
       "skill": "output-evaluation",
-      "provider": "openai-decisions",
-      "action": "pass"
-    },
-    {
-      "skill": "output-evaluation",
       "provider": "sage",
       "action": "pass"
     },
     {
       "recipe": "ad-funnel-classification",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "ad-funnel-classification",
       "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "ad-funnel-classification",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "agent-run-evaluation",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "agent-run-evaluation",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "agent-run-evaluation",
-      "provider": "sage",
       "action": "recommend"
     },
     {
@@ -145,16 +110,6 @@
     },
     {
       "recipe": "brand-news-matching",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "brand-news-matching",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "brand-news-matching",
       "provider": "sage",
       "action": "recommend"
     },
@@ -165,101 +120,16 @@
     },
     {
       "recipe": "browser-action-selection",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "browser-action-selection",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "calendar-action-selection",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "calendar-action-selection",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "calendar-action-selection",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "coding-step-selection",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "coding-step-selection",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "coding-step-selection",
       "provider": "sage",
       "action": "recommend"
     },
     {
       "recipe": "content-revision-gate",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "content-revision-gate",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "content-revision-gate",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "context-retention",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "context-retention",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "context-retention",
       "provider": "sage",
       "action": "recommend"
     },
     {
       "recipe": "draft-quality-triage",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "draft-quality-triage",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "draft-quality-triage",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "email-intent-match",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "email-intent-match",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "email-intent-match",
       "provider": "sage",
       "action": "recommend"
     },
@@ -279,103 +149,18 @@
       "action": "recommend"
     },
     {
-      "recipe": "inbox-reply-triage",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "inbox-reply-triage",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "inbox-reply-triage",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "incident-queue-triage",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "incident-queue-triage",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "incident-queue-triage",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
       "recipe": "invoice-file-triage",
       "provider": "jev-openrouter",
       "action": "recommend"
     },
     {
       "recipe": "invoice-file-triage",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "invoice-file-triage",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "meeting-state-tracking",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "meeting-state-tracking",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "meeting-state-tracking",
       "provider": "sage",
       "action": "recommend"
     },
     {
       "recipe": "model-tier-routing",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "model-tier-routing",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "model-tier-routing",
       "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "network-event-triage",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "network-event-triage",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "network-event-triage",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "outfit-option-selection",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "outfit-option-selection",
-      "provider": "openai-decisions",
       "action": "recommend"
     },
     {
@@ -390,57 +175,12 @@
     },
     {
       "recipe": "page-change-triage",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "page-change-triage",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "page-quality-filter",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "page-quality-filter",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "page-quality-filter",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "pr-risk-triage",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "pr-risk-triage",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "pr-risk-triage",
       "provider": "sage",
       "action": "recommend"
     },
     {
       "recipe": "research-source-filter",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "research-source-filter",
       "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "research-source-filter",
-      "provider": "sage",
       "action": "recommend"
     },
     {
@@ -451,11 +191,6 @@
     {
       "recipe": "retrieved-instruction-screening",
       "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "retrieved-instruction-screening",
-      "provider": "sage",
       "action": "recommend"
     },
     {
@@ -475,26 +210,6 @@
     },
     {
       "recipe": "spoken-slide-selection",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "spoken-slide-selection",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "spoken-slide-selection",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "spreadsheet-urgency",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "spreadsheet-urgency",
       "provider": "openai-decisions",
       "action": "recommend"
     },
@@ -505,26 +220,6 @@
     },
     {
       "recipe": "suspicious-email-escalation",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "suspicious-email-escalation",
-      "provider": "openai-decisions",
-      "action": "recommend"
-    },
-    {
-      "recipe": "suspicious-email-escalation",
-      "provider": "sage",
-      "action": "recommend"
-    },
-    {
-      "recipe": "template-field-matching",
-      "provider": "jev-openrouter",
-      "action": "recommend"
-    },
-    {
-      "recipe": "template-field-matching",
       "provider": "openai-decisions",
       "action": "recommend"
     },

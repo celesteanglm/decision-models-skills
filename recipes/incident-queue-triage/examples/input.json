@@ -1,6 +1,0 @@
-{
-  "state": {
-    "content": "The checkout API has returned errors for 38% of requests for 24 minutes. Support confirms customers cannot complete purchases, and the on-call log shows the issue is still active."
-  },
-  "permission_granted": true
-}

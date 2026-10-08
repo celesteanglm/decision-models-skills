@@ -18,6 +18,8 @@ def main():
     marker.parent.mkdir(exist_ok=True)
     marker.unlink(missing_ok=True)
     env = dict(os.environ)
+    catalog_path = repo / "reports" / "catalog.json"
+    catalog = json.loads(catalog_path.read_text()) if catalog_path.exists() else None
     for name in ("OPENROUTER_API_KEY", "OPENAI_API_KEY", "SAGE_API_KEY", "PYTHONPATH"):
         env.pop(name, None)
     subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", str(repo / "tests"), "-v"],
@@ -31,6 +33,8 @@ def main():
             copied = project / ".agents" / "skills" / skill
             shutil.copytree(repo / "skills" / skill, copied)
             for provider in PROVIDERS:
+                if catalog and provider not in catalog["skills"][skill]["working_backends"]:
+                    continue
                 command = [sys.executable, "-m", "decision_models", "run", skill,
                            "--provider", provider, "--mode", "demo",
                            "--input", str(copied / "examples" / "input.json"),
@@ -48,6 +52,8 @@ def main():
             copied = project / ".agents" / "skills" / folder.name
             shutil.copytree(folder, copied)
             for provider in PROVIDERS:
+                if catalog and provider not in catalog["recipes"][folder.name]["working_backends"]:
+                    continue
                 command = [sys.executable, "-m", "decision_models", "recipe",
                            "--recipe", str(copied / "recipe.json"), "--provider", provider,
                            "--mode", "demo", "--input", str(copied / "examples" / "input.json"),

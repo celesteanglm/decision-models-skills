@@ -5,6 +5,10 @@ description: Evaluate an answer for grounding, relevance, action honesty, and us
 
 # Output evaluation
 
+**Working with:** ![Jev / OpenRouter: Working](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen) ![Sage: Working](https://img.shields.io/badge/Sage-Working-brightgreen)
+
+Only these labels indicate verified compatibility. Other backends did not qualify. See [compatibility evidence](COMPATIBILITY.md).
+
 Requires Python 3.10+ and the separately installed shared CLI: `python -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'`. Run the commands below from this skill folder.
 
 Evaluate four independent signals: grounding in supplied evidence, relevance to the request, honesty about completed actions, and helpfulness. The result is `pass`, `fail`, or `review`. It is a recommendation for the caller; it does not execute or reverse actions.
@@ -26,7 +30,7 @@ Grounding, relevance, and action honesty use separate yes/no probabilities. Help
 Install the shared package from the repository first. From this skill directory, run the offline hand-authored demo:
 
 ```sh
-decision-models run output-evaluation --provider jev-openrouter --input examples/input.json --mode demo --demo-answers examples/demo.json
+decision-models run output-evaluation --provider sage --input examples/input.json --mode demo --demo-answers examples/demo.json
 ```
 
 The demo answers are synthetic and labeled by the CLI. Live mode requires the selected provider's API key in the environment.

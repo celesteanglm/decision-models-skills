@@ -63,5 +63,6 @@
     "Synthetic development cases reviewed without expected labels, not human gold or production calibration.",
     "Repetitions measure consistency, not independent samples. Stable wrong decisions remain wrong.",
     "Compatibility describes bounded text recommendations, not original applications or promotional performance."
-  ]
+  ],
+  "scope": "Historical evaluation of 29 original candidates. The current catalog publishes only 18 recipes with a Working backend; see catalog.json and VERIFIED_CATALOG.md."
 }

@@ -1,0 +1,14 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "potential_intrusion",
+    "probabilities": {
+      "potential_intrusion": 0.97,
+      "expected_traffic": 0.01,
+      "inspect_further": 0.01,
+      "review": 0.01
+    },
+    "confidence": 0.95
+  }
+}

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "decision-models-skills"
 version = "0.1.0"
-description = "Runnable, attributed decision skills for Jev, OpenAI Decisions API, and Sage"
+description = "Portable skills and community recipes for small-model decisions, routing, and evaluation"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}

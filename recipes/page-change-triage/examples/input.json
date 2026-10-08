@@ -1,0 +1,6 @@
+{
+  "state": {
+    "content": "Goal: monitor service quotas. Before: daily requests limited to 1000. After: daily requests limited to 500."
+  },
+  "permission_granted": true
+}

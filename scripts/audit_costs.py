@@ -23,7 +23,9 @@ def main():
                     max(output, floor) * rate["output_per_million"]) / 1_000_000
         return "token_price_estimated_usd", estimate, max(0, floor - output)
 
-    for filename in ("baseline.json", "v2.json", "v3.json", "v4.json", "live.json", "jev-sage-retest.json"):
+    retained = ["baseline.json", "v2.json", "v3.json", "v4.json", "live.json", "jev-sage-retest.json"]
+    retained.extend(p.name for p in (reports / "community-recipes.json", reports / "community-core-regression.json") if p.exists())
+    for filename in retained:
         receipt = json.loads((reports / filename).read_text())
         record = {"receipt": filename, "source_hash": receipt["source_hash"],
                   "fixture_evaluations": len(receipt["rows"]),

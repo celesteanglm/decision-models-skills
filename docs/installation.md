@@ -53,6 +53,18 @@ decision-models run input-guardrails \
 
 Replace `../my-project` with the destination project. Copy the whole skill folder, including its examples and fixtures. Repeat the copy for other skills as needed. Run Codex in that project and mention `$input-guardrails`, or ask it to perform a task matching the skill description. For example: `Use $input-guardrails to run its supplied example in demo mode with jev-openrouter.` Codex loads `SKILL.md`; the installed CLI performs the workflow. Keep the virtual environment active so the CLI is on `PATH`.
 
+Community recipes use the same folder discovery convention. For example, copy `recipes/context-retention` into `.agents/skills/context-retention`, then invoke `$context-retention` in the agent. Its direct CLI command uses `recipe` and the copied configuration:
+
+```sh
+decision-models recipe \
+  --recipe .agents/skills/context-retention/recipe.json \
+  --provider sage --mode demo \
+  --input .agents/skills/context-retention/examples/input.json \
+  --demo-answers .agents/skills/context-retention/examples/demo.json
+```
+
+Copy the complete recipe folder. Its source links, policy, examples, and fixtures remain available without the research catalog or repository checkout. The shared CLI remains a separate dependency.
+
 To make the skill available across projects, copy it to `~/.agents/skills/input-guardrails` instead. Other agent hosts have their own discovery paths; consult their documentation before copying folders.
 
 ## Repository structure and distribution
@@ -104,3 +116,13 @@ decision-models report --input reports/evaluation.json --output reports/evaluati
 ```
 
 For live evaluation, specify the provider(s), `--mode live`, `--rates reports/rates.json`, and the total budget. The evaluator defaults to three repetitions; those repetitions of the 12 cases per skill are workflow checks, not independent statistical samples. Treat the $5 default live budget as a spending ceiling.
+
+For the 29 community recipes, use a new output filename for each immutable run:
+
+```sh
+decision-models evaluate-recipes --repo . --mode demo \
+  --providers jev-openrouter openai-decisions sage \
+  --output reports/recipe-demo.json
+```
+
+Recipe demo evaluation exits successfully and labels all compatibility cells `Not tested`. Live mode requires the current offline receipt and a reviewed rates file. It preflights complete coverage before dispatch; `--budget 1.5` covered all three backends at the recorded rates. It writes an append-only attempt journal plus consolidated JSON and Markdown receipts. A live run with any cell below Working exits 1 while preserving evidence. The default recipe budget is US$1; a run that cannot fit dispatches no requests.

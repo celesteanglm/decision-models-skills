@@ -1,5 +1,7 @@
 # Decision Models Skills
 
+Portable skills and community recipes for small-model decisions, routing, and evaluation.
+
 Six small Python workflows turn a defined decision into a structured provider request, validate the response, and apply a documented policy. The supported workflows are input guardrails, model routing, passage reranking, tool-call gating, confidence gates, and output evaluation.
 
 This project requires Python 3.10 or newer and has no runtime dependencies beyond the Python standard library. It supports Jev through OpenRouter, OpenAI Decisions, and Levanto Sage SystemOne. The shared CLI is installed separately from the portable `skills/<name>/` folders. You can copy a skill folder into another project and use it there once the CLI is installed and available on `PATH`.
@@ -20,13 +22,31 @@ skills/input-guardrails/
 
 The repository README explains setup for people; each `SKILL.md` contains instructions for an agent. Installing the Python package supplies the CLI. Copying a skill folder supplies the agent instructions. Both are needed for these workflows. See [installation and invocation](docs/installation.md) for the complete path from clone to a first demo.
 
+## Community use cases
+
+[29 runnable decision recipes](research/README.md) cover context retention, browser actions, PR triage, agent evaluation, model and workflow routing, email triage, field matching, page quality/change detection, research filtering, and other text workflows. They were selected from **36 inspected posts dated 8 September–8 October 2026**, with 26 eligible original posts ranked by usefulness, reproducibility, source evidence, and timestamped engagement. Games and posts below 100 likes or 10,000 views were excluded. X search required login, so this is a ranked discovered sample, not an exhaustive global top-tweet list.
+
+Each `recipes/<name>/` is an installable skill folder with `SKILL.md`, trusted `recipe.json`, local examples, 12 frozen fixtures, and original source links. These are independently authored decision slices inspired by credited authors; they do not recreate complete source applications or substantiate promotional speed/accuracy claims.
+
+```sh
+decision-models recipe \
+  --recipe recipes/context-retention/recipe.json \
+  --provider sage --mode demo \
+  --input recipes/context-retention/examples/input.json \
+  --demo-answers recipes/context-retention/examples/demo.json
+```
+
+The same recipe supports all three native backends. For live mode, omit `--demo-answers`, set the corresponding environment credential, and explicitly pass `--mode live`. Copy the entire recipe folder and use absolute paths to run from another directory. See [recipe contracts](RECIPE_CONTRACT.md), [research and source ranking](research/README.md), [recipe compatibility receipts](reports/community-recipes.md), and [adding another model adapter](docs/model-adapters.md).
+
 ## Verified results
+
+The 29 community recipes completed **3,132 fixture evaluations and 2,871 real API calls**. Jev/OpenRouter has **7 Working / 22 Partial**, Decisions API **8 Working / 21 Partial**, and Sage **13 Working / 16 Partial**. There were no service errors or deterministic permission violations. Start with [workflow routing](recipes/agent-workflow-routing/SKILL.md), [email queue routing](recipes/email-queue-routing/SKILL.md), or [listing fit](recipes/secondhand-listing-fit/SKILL.md), which qualify as Working on all three backends. See the [29-by-three table and per-case evidence](reports/community-recipes.md) and [compact summary](reports/community-summary.json). Stable outcomes can still be wrong; these synthetic cases do not establish production accuracy.
 
 Live acceptance on 2026-10-08 marks all six Jev/OpenRouter and Sage workflows **Working**. OpenAI Decisions has four **Working** workflows; input guardrails and output evaluation are **Partial**. The [generated compatibility table and per-case evidence](reports/COMPATIBILITY.md) record the resolved models, fixture revision, usage, latency, and repeated-run stability. Reranking evidence covers the requested `top_k=1` and `top_k=2` profiles; it does not certify every full-list configuration.
 
-Clean wheel installs pass 89 tests and 18 copied-skill demos on both Python 3.10 and 3.12. All retained live iterations and smoke calls total approximately **US$0.123 in provider-reported and token-estimated costs**, with US$2.652 conservatively reserved against the US$5 limit. See [cost reconciliation](reports/costs.json) and [evaluation history](docs/evaluation-history.md). Estimates are not provider invoices.
+Clean wheel installs pass 107 tests and 105 copied-skill/recipe demos on both Python 3.10 and 3.12. The [clean-install record](reports/community-offline.json) includes the wheel digest. All retained live iterations and smoke calls total approximately **US$0.206 in provider-reported and token-estimated costs**, with US$4.537 conservatively reserved against the US$5 limit. See [cost reconciliation](reports/costs.json) and [evaluation history](docs/evaluation-history.md). Estimates are not provider invoices.
 
-The [fresh Jev/OpenRouter and Sage live rerun](reports/JEV_SAGE_RETEST.md) made 390 API requests across all six workflows, with both backends meeting the Working criteria. Its receipts record the individual pass counts and stability.
+The [current core regression](reports/community-core-regression.json) made 585 API requests across the three backends on the same source revision as the community recipes. All six Jev and Sage workflows meet Working criteria; the generated report preserves per-case pass counts and stability. Earlier iterations remain in the evaluation history.
 
 ## Install the CLI
 

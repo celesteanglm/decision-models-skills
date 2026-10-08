@@ -1,0 +1,14 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "direct_mapping",
+    "probabilities": {
+      "direct_mapping": 0.97,
+      "derived_mapping": 0.01,
+      "no_suitable_field": 0.01,
+      "review": 0.01
+    },
+    "confidence": 0.95
+  }
+}

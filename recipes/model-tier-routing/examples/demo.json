@@ -1,0 +1,14 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "fast",
+    "probabilities": {
+      "fast": 0.97,
+      "reasoning": 0.01,
+      "specialist": 0.01,
+      "review": 0.01
+    },
+    "confidence": 0.95
+  }
+}

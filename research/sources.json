@@ -1,0 +1,1196 @@
+{
+  "schema_version": 1,
+  "window": {
+    "since": "2026-09-08",
+    "through": "2026-10-08",
+    "date_basis": "UTC publication dates; both calendar dates inclusive"
+  },
+  "discovery": [
+    "Public web search for Jev, Decisions API and use cases",
+    "https://jevai.dev/user-cases/",
+    "User-provided posts and their quoted original articles",
+    "Original links surfaced by indexed public Decisions API coverage"
+  ],
+  "limitations": [
+    "X Top search redirected to login. This is a ranked discovered sample, not an exhaustive global top-tweet ranking.",
+    "FXTwitter supplied exact metric field names; counts from other mirrors disagreed, so those unlabeled sequences were not used. Metrics are third-party snapshots, not audited X analytics.",
+    "Announcement posts, infrastructure tutorials, duplicate amplifications, games, and below-floor posts are excluded from the contribution ranking.",
+    "Twenty-nine independently authored decision slices come from fewer distinct source posts; an original post can inspire several explicitly attributed recipes.",
+    "Reported speed, cost, accuracy, and AUPRC values from authors were not treated as independently reproduced results."
+  ],
+  "posts": [
+    {
+      "id": "2102802621664985241",
+      "url": "https://x.com/Av1dlive/status/2102802621664985241",
+      "author": {
+        "name": "Avid",
+        "handle": "Av1dlive"
+      },
+      "published_at": "2026-09-23T16:49:47+00:00",
+      "observed_at": "2026-10-08T09:36:49.493022+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Coding harness decisions",
+      "summary": "Select among admitted coding routes and tool bundles, with host enforcement and recorded decisions.",
+      "metrics": {
+        "likes": 1004,
+        "retweets": 122,
+        "replies": 59,
+        "views": 1195161,
+        "bookmarks": 3484,
+        "quotes": 25
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 5,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "coding-step-selection"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2102881280115249597",
+      "url": "https://x.com/nutlope/status/2102881280115249597",
+      "author": {
+        "name": "Hassan",
+        "handle": "nutlope"
+      },
+      "published_at": "2026-09-23T22:02:21+00:00",
+      "observed_at": "2026-10-08T09:36:49.327077+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Fine-tuning an alternative decision model",
+      "summary": "Describes training a small open model for bounded classification.",
+      "metrics": {
+        "likes": 2024,
+        "retweets": 148,
+        "replies": 49,
+        "views": 813337,
+        "bookmarks": 4868,
+        "quotes": 44
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [],
+      "exclusion": "Infrastructure tutorial; retained as adapter roadmap reference",
+      "inspiration_only": true
+    },
+    {
+      "id": "2102536894169096357",
+      "url": "https://x.com/googlegemma/status/2102536894169096357",
+      "author": {
+        "name": "Google Gemma",
+        "handle": "googlegemma"
+      },
+      "published_at": "2026-09-22T23:13:53+00:00",
+      "observed_at": "2026-10-08T09:36:49.225251+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Hosting an alternative decision endpoint",
+      "summary": "Shows deployment of an independently developed compatible endpoint.",
+      "metrics": {
+        "likes": 6996,
+        "retweets": 656,
+        "replies": 104,
+        "views": 642280,
+        "bookmarks": 5048,
+        "quotes": 135
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 5,
+        "evidence": 4
+      },
+      "selected_recipes": [],
+      "exclusion": "Infrastructure tutorial; retained as adapter roadmap reference",
+      "inspiration_only": true
+    },
+    {
+      "id": "2100411066966749359",
+      "url": "https://x.com/gregpr07/status/2100411066966749359",
+      "author": {
+        "name": "Gregor Zunic",
+        "handle": "gregpr07"
+      },
+      "published_at": "2026-09-17T02:26:36+00:00",
+      "observed_at": "2026-10-08T09:36:49.257434+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Browser action selection",
+      "summary": "Select a browser action from current page state and an available action menu.",
+      "metrics": {
+        "likes": 9130,
+        "retweets": 662,
+        "replies": 295,
+        "views": 3254978,
+        "bookmarks": 9967,
+        "quotes": 336
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "browser-action-selection"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100694549362553153",
+      "url": "https://x.com/tamarajtran/status/2100694549362553153",
+      "author": {
+        "name": "tamara",
+        "handle": "tamarajtran"
+      },
+      "published_at": "2026-09-17T21:13:04+00:00",
+      "observed_at": "2026-10-08T09:36:49.522891+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Context retention",
+      "summary": "Judge which prior tool outputs should remain in context.",
+      "metrics": {
+        "likes": 10876,
+        "retweets": 678,
+        "replies": 425,
+        "views": 3901672,
+        "bookmarks": 8207,
+        "quotes": 337
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "context-retention"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2101007708044574906",
+      "url": "https://x.com/levie/status/2101007708044574906",
+      "author": {
+        "name": "Aaron Levie",
+        "handle": "levie"
+      },
+      "published_at": "2026-09-18T17:57:27+00:00",
+      "observed_at": "2026-10-08T09:36:49.768942+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Incident document routing",
+      "summary": "Classify incident impact before recommending a workflow queue.",
+      "metrics": {
+        "likes": 668,
+        "retweets": 76,
+        "replies": 76,
+        "views": 116128,
+        "bookmarks": 572,
+        "quotes": 15
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 5
+      },
+      "selected_recipes": [
+        "incident-queue-triage"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100757989212754085",
+      "url": "https://x.com/AlanDaitch/status/2100757989212754085",
+      "author": {
+        "name": "Alan Daitch",
+        "handle": "AlanDaitch"
+      },
+      "published_at": "2026-09-18T01:25:09+00:00",
+      "observed_at": "2026-10-08T09:36:49.759556+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Secondhand listing fit",
+      "summary": "Screen listing descriptions against explicit purchase requirements.",
+      "metrics": {
+        "likes": 953,
+        "retweets": 41,
+        "replies": 19,
+        "views": 86396,
+        "bookmarks": 1124,
+        "quotes": 9
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "secondhand-listing-fit"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100749640866165092",
+      "url": "https://x.com/rinte0321/status/2100749640866165092",
+      "author": {
+        "name": "Rinte",
+        "handle": "rinte0321"
+      },
+      "published_at": "2026-09-18T00:51:59+00:00",
+      "observed_at": "2026-10-08T09:36:49.777196+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Spoken-topic slide selection",
+      "summary": "Match the current spoken topic to a prepared slide.",
+      "metrics": {
+        "likes": 420,
+        "retweets": 39,
+        "replies": 5,
+        "views": 80611,
+        "bookmarks": 322,
+        "quotes": 20
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "spoken-slide-selection"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100734646824902713",
+      "url": "https://x.com/tsuyoshi_osiire/status/2100734646824902713",
+      "author": {
+        "name": "かねこつよし",
+        "handle": "tsuyoshi_osiire"
+      },
+      "published_at": "2026-09-17T23:52:24+00:00",
+      "observed_at": "2026-10-08T09:36:49.826665+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Meeting state tracking",
+      "summary": "Classify discussion progress and agreement using transcript evidence.",
+      "metrics": {
+        "likes": 458,
+        "retweets": 48,
+        "replies": 4,
+        "views": 68049,
+        "bookmarks": 387,
+        "quotes": 18
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 3,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "meeting-state-tracking"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100864907046768890",
+      "url": "https://x.com/Saccc_c/status/2100864907046768890",
+      "author": {
+        "name": "Sac",
+        "handle": "Saccc_c"
+      },
+      "published_at": "2026-09-18T08:30:00+00:00",
+      "observed_at": "2026-10-08T09:36:50.303964+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Computer action selection",
+      "summary": "Choose a next computer step from a calendar-task state.",
+      "metrics": {
+        "likes": 1759,
+        "retweets": 170,
+        "replies": 125,
+        "views": 624667,
+        "bookmarks": 2236,
+        "quotes": 17
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 3,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "calendar-action-selection"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2101000339948282090",
+      "url": "https://x.com/SUOHA_AI/status/2101000339948282090",
+      "author": {
+        "name": "梭哈.AI",
+        "handle": "SUOHA_AI"
+      },
+      "published_at": "2026-09-18T17:28:10+00:00",
+      "observed_at": "2026-10-08T09:36:50.136563+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Brand news matching",
+      "summary": "Classify whether a news item is relevant to a stated brand context.",
+      "metrics": {
+        "likes": 2273,
+        "retweets": 333,
+        "replies": 194,
+        "views": 415185,
+        "bookmarks": 2675,
+        "quotes": 18
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "brand-news-matching"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100960281769738433",
+      "url": "https://x.com/dabit3/status/2100960281769738433",
+      "author": {
+        "name": "nader dabit",
+        "handle": "dabit3"
+      },
+      "published_at": "2026-09-18T14:48:59+00:00",
+      "observed_at": "2026-10-08T09:36:50.402214+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Intent-based email retrieval",
+      "summary": "Screen retrieved messages against the information sought by a user.",
+      "metrics": {
+        "likes": 909,
+        "retweets": 36,
+        "replies": 44,
+        "views": 135429,
+        "bookmarks": 814,
+        "quotes": 5
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "email-intent-match"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100454070536351824",
+      "url": "https://x.com/ephraimduncan/status/2100454070536351824",
+      "author": {
+        "name": "Duncan",
+        "handle": "ephraimduncan"
+      },
+      "published_at": "2026-09-17T05:17:29+00:00",
+      "observed_at": "2026-10-08T09:36:50.127205+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Model tier routing",
+      "summary": "Choose an eligible model for an incoming task.",
+      "metrics": {
+        "likes": 1874,
+        "retweets": 68,
+        "replies": 88,
+        "views": 119620,
+        "bookmarks": 1068,
+        "quotes": 30
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "model-tier-routing"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100801037192024478",
+      "url": "https://x.com/yongfook/status/2100801037192024478",
+      "author": {
+        "name": "Jon Yongfook",
+        "handle": "yongfook"
+      },
+      "published_at": "2026-09-18T04:16:12+00:00",
+      "observed_at": "2026-10-08T09:36:50.627655+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Template field matching",
+      "summary": "Match differently named source fields to template slots.",
+      "metrics": {
+        "likes": 135,
+        "retweets": 4,
+        "replies": 18,
+        "views": 15259,
+        "bookmarks": 107,
+        "quotes": 1
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 5,
+        "evidence": 5
+      },
+      "selected_recipes": [
+        "template-field-matching"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100780008193020049",
+      "url": "https://x.com/dabit3/status/2100780008193020049",
+      "author": {
+        "name": "nader dabit",
+        "handle": "dabit3"
+      },
+      "published_at": "2026-09-18T02:52:39+00:00",
+      "observed_at": "2026-10-08T09:36:50.572500+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Semantic spreadsheet urgency",
+      "summary": "Assign urgency from a row’s meaning rather than numeric arithmetic.",
+      "metrics": {
+        "likes": 1204,
+        "retweets": 57,
+        "replies": 42,
+        "views": 277886,
+        "bookmarks": 935,
+        "quotes": 20
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "spreadsheet-urgency"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2102802134723100805",
+      "url": "https://x.com/PiPyL_96/status/2102802134723100805",
+      "author": {
+        "name": "Cream O",
+        "handle": "PiPyL_96"
+      },
+      "published_at": "2026-09-23T16:47:51+00:00",
+      "observed_at": "2026-10-08T09:36:50.840116+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Social feed filtering",
+      "summary": "Apply reversible filtering to snippets using user-defined criteria.",
+      "metrics": {
+        "likes": 0,
+        "retweets": 0,
+        "replies": 1,
+        "views": 47,
+        "bookmarks": 0,
+        "quotes": 1
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [],
+      "exclusion": "Below engagement floor",
+      "inspiration_only": true
+    },
+    {
+      "id": "2102156469680431169",
+      "url": "https://x.com/brainstormity/status/2102156469680431169",
+      "author": {
+        "name": "brainstormity",
+        "handle": "brainstormity"
+      },
+      "published_at": "2026-09-21T22:02:13+00:00",
+      "observed_at": "2026-10-08T09:36:50.706331+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Network event triage",
+      "summary": "Flag packet-derived descriptions for investigation; the anecdote does not establish a confirmed security finding.",
+      "metrics": {
+        "likes": 1032,
+        "retweets": 74,
+        "replies": 36,
+        "views": 192722,
+        "bookmarks": 1137,
+        "quotes": 17
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 3,
+        "evidence": 3
+      },
+      "selected_recipes": [
+        "network-event-triage"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100906882365788167",
+      "url": "https://x.com/marcelpociot/status/2100906882365788167",
+      "author": {
+        "name": "Marcel Pociot 🧪",
+        "handle": "marcelpociot"
+      },
+      "published_at": "2026-09-18T11:16:48+00:00",
+      "observed_at": "2026-10-08T09:36:51.051348+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Invoice file classification",
+      "summary": "Recognize a document type before proposing file organization.",
+      "metrics": {
+        "likes": 1150,
+        "retweets": 48,
+        "replies": 73,
+        "views": 139931,
+        "bookmarks": 908,
+        "quotes": 18
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "invoice-file-triage"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100614659690713543",
+      "url": "https://x.com/nutlope/status/2100614659690713543",
+      "author": {
+        "name": "Hassan",
+        "handle": "nutlope"
+      },
+      "published_at": "2026-09-17T15:55:37+00:00",
+      "observed_at": "2026-10-08T09:36:50.943994+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Suspicious email escalation",
+      "summary": "Use a first-pass classification and refer uncertain messages for closer review.",
+      "metrics": {
+        "likes": 872,
+        "retweets": 51,
+        "replies": 61,
+        "views": 60725,
+        "bookmarks": 762,
+        "quotes": 13
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "suspicious-email-escalation"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100404532119269426",
+      "url": "https://x.com/rileybrown/status/2100404532119269426",
+      "author": {
+        "name": "Riley Brown",
+        "handle": "rileybrown"
+      },
+      "published_at": "2026-09-17T02:00:38+00:00",
+      "observed_at": "2026-10-08T09:36:51.126031+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Email queue classification",
+      "summary": "Classify a batch of email messages into bounded queues.",
+      "metrics": {
+        "likes": 3877,
+        "retweets": 98,
+        "replies": 124,
+        "views": 297899,
+        "bookmarks": 1707,
+        "quotes": 53
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "email-queue-routing"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2102503045649318315",
+      "url": "https://x.com/rahul_nlu/status/2102503045649318315",
+      "author": {
+        "name": "Rahul Goel",
+        "handle": "rahul_nlu"
+      },
+      "published_at": "2026-09-22T20:59:23+00:00",
+      "observed_at": "2026-10-08T09:36:51.139375+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Sales-call criterion checking",
+      "summary": "Judge whether a transcript contains evidence for sales qualification criteria.",
+      "metrics": {
+        "likes": 10,
+        "retweets": 3,
+        "replies": 2,
+        "views": 669,
+        "bookmarks": 5,
+        "quotes": 1
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [],
+      "exclusion": "Below engagement floor",
+      "inspiration_only": true
+    },
+    {
+      "id": "2100585126652481915",
+      "url": "https://x.com/redp314/status/2100585126652481915",
+      "author": {
+        "name": "Paolo Rosson",
+        "handle": "redp314"
+      },
+      "published_at": "2026-09-17T13:58:15+00:00",
+      "observed_at": "2026-10-08T09:36:51.392425+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Pull-request risk triage",
+      "summary": "Identify review risks in a diff using bounded checks.",
+      "metrics": {
+        "likes": 2765,
+        "retweets": 143,
+        "replies": 99,
+        "views": 359193,
+        "bookmarks": 2562,
+        "quotes": 49
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "pr-risk-triage"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2101454284927959080",
+      "url": "https://x.com/LangChain/status/2101454284927959080",
+      "author": {
+        "name": "LangChain",
+        "handle": "LangChain"
+      },
+      "published_at": "2026-09-19T23:31:59+00:00",
+      "observed_at": "2026-10-08T09:36:51.386353+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Agent evaluation",
+      "summary": "Compare structured judges on fixed agent traces, while distinguishing repeatability from correctness.",
+      "metrics": {
+        "likes": 3006,
+        "retweets": 381,
+        "replies": 214,
+        "views": 633765,
+        "bookmarks": 4232,
+        "quotes": 135
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 5,
+        "evidence": 5
+      },
+      "selected_recipes": [
+        "agent-run-evaluation"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100722975645598191",
+      "url": "https://x.com/robj3d3/status/2100722975645598191",
+      "author": {
+        "name": "Rob Hallam",
+        "handle": "robj3d3"
+      },
+      "published_at": "2026-09-17T23:06:01+00:00",
+      "observed_at": "2026-10-08T09:36:51.798170+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Draft quality screening",
+      "summary": "Evaluate draft attributes to guide editing; this does not establish future engagement.",
+      "metrics": {
+        "likes": 1384,
+        "retweets": 65,
+        "replies": 85,
+        "views": 240643,
+        "bookmarks": 2097,
+        "quotes": 20
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "draft-quality-triage"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2100939189869002819",
+      "url": "https://x.com/mightyking/status/2100939189869002819",
+      "author": {
+        "name": "Stav Zilbershtein",
+        "handle": "mightyking"
+      },
+      "published_at": "2026-09-18T13:25:11+00:00",
+      "observed_at": "2026-10-08T09:36:51.569011+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "https://jevai.dev/user-cases/",
+      "topic": "Jev",
+      "title": "Ad funnel classification",
+      "summary": "Label textual campaign descriptions using fixed funnel categories.",
+      "metrics": {
+        "likes": 227,
+        "retweets": 186,
+        "replies": 25,
+        "views": 173815,
+        "bookmarks": 209,
+        "quotes": 20
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "ad-funnel-classification"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2107469584773300545",
+      "url": "https://x.com/akshay_pachaar/status/2107469584773300545",
+      "author": {
+        "name": "Akshay 🚀",
+        "handle": "akshay_pachaar"
+      },
+      "published_at": "2026-10-06T13:54:38+00:00",
+      "observed_at": "2026-10-08T09:36:51.865763+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "user-provided or quoted source",
+      "topic": "Jev",
+      "title": "Six bounded workflow patterns",
+      "summary": "Describes guardrails, routing, retrieval judgments, tool gates, review gates, and evaluation.",
+      "metrics": {
+        "likes": 485,
+        "retweets": 66,
+        "replies": 49,
+        "views": 31633,
+        "bookmarks": 515,
+        "quotes": 5
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "retrieved-instruction-screening"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2107908322368360477",
+      "url": "https://x.com/milesdeutscher/status/2107908322368360477",
+      "author": {
+        "name": "Miles Deutscher",
+        "handle": "milesdeutscher"
+      },
+      "published_at": "2026-10-07T18:58:01+00:00",
+      "observed_at": "2026-10-08T09:36:51.851224+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "user-provided or quoted source",
+      "topic": "Jev",
+      "title": "Small-model and large-model combination",
+      "summary": "Shares another author’s workflow article; broad speed and cost multipliers lack a controlled comparison.",
+      "metrics": {
+        "likes": 866,
+        "retweets": 102,
+        "replies": 24,
+        "views": 99859,
+        "bookmarks": 1851,
+        "quotes": 1
+      },
+      "editorial_scores": {
+        "usefulness": 3,
+        "reproducibility": 2,
+        "evidence": 2
+      },
+      "selected_recipes": [],
+      "exclusion": "General announcement or amplification; corroboration only",
+      "inspiration_only": true
+    },
+    {
+      "id": "2107835983735787568",
+      "url": "https://x.com/aiedge_/status/2107835983735787568",
+      "author": {
+        "name": "AI Edge",
+        "handle": "aiedge_"
+      },
+      "published_at": "2026-10-07T14:10:34+00:00",
+      "observed_at": "2026-10-08T09:36:51.883556+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "user-provided or quoted source",
+      "topic": "Jev",
+      "title": "Research, inbox, and content workflows",
+      "summary": "Explains combining bounded decisions with a separate generative executor.",
+      "metrics": {
+        "likes": 117,
+        "retweets": 14,
+        "replies": 4,
+        "views": 105240,
+        "bookmarks": 375,
+        "quotes": 5
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "content-revision-gate",
+        "inbox-reply-triage",
+        "research-source-filter"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2105003318917697873",
+      "url": "https://x.com/OpenAIDevs/status/2105003318917697873",
+      "author": {
+        "name": "OpenAI Developers",
+        "handle": "OpenAIDevs"
+      },
+      "published_at": "2026-09-29T18:34:34+00:00",
+      "observed_at": "2026-10-08T11:00:04.675419+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "public search and original linked source anchors",
+      "topic": "Decisions API",
+      "title": "Decisions API preview",
+      "summary": "Official introduction to structured classification, routing, and action selection.",
+      "metrics": {
+        "likes": 5941,
+        "retweets": 417,
+        "replies": 236,
+        "views": 754229,
+        "bookmarks": 2271,
+        "quotes": 393
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 5
+      },
+      "selected_recipes": [],
+      "exclusion": "General announcement or amplification; corroboration only",
+      "inspiration_only": true
+    },
+    {
+      "id": "2107573382229188645",
+      "url": "https://x.com/OpenAIDevs/status/2107573382229188645",
+      "author": {
+        "name": "OpenAI Developers",
+        "handle": "OpenAIDevs"
+      },
+      "published_at": "2026-10-06T20:47:05+00:00",
+      "observed_at": "2026-10-08T11:00:04.790093+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "public search and original linked source anchors",
+      "topic": "Decisions API",
+      "title": "Decisions API public beta",
+      "summary": "Official announcement of choosing models, tools, and actions with a decision endpoint.",
+      "metrics": {
+        "likes": 4892,
+        "retweets": 449,
+        "replies": 287,
+        "views": 1743476,
+        "bookmarks": 3097,
+        "quotes": 376
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 4,
+        "evidence": 5
+      },
+      "selected_recipes": [
+        "agent-workflow-routing"
+      ],
+      "exclusion": "General announcement or amplification; corroboration only",
+      "inspiration_only": true
+    },
+    {
+      "id": "2107574912349303197",
+      "url": "https://x.com/thsottiaux/status/2107574912349303197",
+      "author": {
+        "name": "Tibo",
+        "handle": "thsottiaux"
+      },
+      "published_at": "2026-10-06T20:53:10+00:00",
+      "observed_at": "2026-10-08T11:00:04.841422+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "public search and original linked source anchors",
+      "topic": "Decisions API",
+      "title": "General realtime classification",
+      "summary": "Describes potential internal use without a sufficiently specified workflow.",
+      "metrics": {
+        "likes": 3413,
+        "retweets": 145,
+        "replies": 311,
+        "views": 434101,
+        "bookmarks": 807,
+        "quotes": 84
+      },
+      "editorial_scores": {
+        "usefulness": 3,
+        "reproducibility": 2,
+        "evidence": 3
+      },
+      "selected_recipes": [],
+      "exclusion": "General announcement or amplification; corroboration only",
+      "inspiration_only": true
+    },
+    {
+      "id": "2107573880974127319",
+      "url": "https://x.com/charlierguo/status/2107573880974127319",
+      "author": {
+        "name": "Charlie Guo",
+        "handle": "charlierguo"
+      },
+      "published_at": "2026-10-06T20:49:04+00:00",
+      "observed_at": "2026-10-08T11:00:04.780957+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "public search and original linked source anchors",
+      "topic": "Decisions API",
+      "title": "Outfit option selection",
+      "summary": "Demonstrates choosing outfits; this repository adapts only explicit text descriptions.",
+      "metrics": {
+        "likes": 688,
+        "retweets": 37,
+        "replies": 32,
+        "views": 64450,
+        "bookmarks": 572,
+        "quotes": 10
+      },
+      "editorial_scores": {
+        "usefulness": 4,
+        "reproducibility": 3,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "outfit-option-selection"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2107576429928169934",
+      "url": "https://x.com/ethank_6/status/2107576429928169934",
+      "author": {
+        "name": "Ethan Kam",
+        "handle": "ethank_6"
+      },
+      "published_at": "2026-10-06T20:59:12+00:00",
+      "observed_at": "2026-10-08T11:00:05.004338+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "public search and original linked source anchors",
+      "topic": "Decisions API",
+      "title": "Page quality and change classification",
+      "summary": "Reports page filtering and page-change classification, without sufficient data to reproduce the quoted performance.",
+      "metrics": {
+        "likes": 290,
+        "retweets": 12,
+        "replies": 14,
+        "views": 42757,
+        "bookmarks": 282,
+        "quotes": 1
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 4
+      },
+      "selected_recipes": [
+        "page-change-triage",
+        "page-quality-filter"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2107911336583946374",
+      "url": "https://x.com/ericwilliamrea/status/2107911336583946374",
+      "author": {
+        "name": "Eric Rea",
+        "handle": "ericwilliamrea"
+      },
+      "published_at": "2026-10-07T19:10:00+00:00",
+      "observed_at": "2026-10-08T11:00:05.123019+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "public search and original linked source anchors",
+      "topic": "Decisions API",
+      "title": "Agent workflow routing",
+      "summary": "Describes selecting a configured workflow before an agent begins work.",
+      "metrics": {
+        "likes": 82,
+        "retweets": 4,
+        "replies": 7,
+        "views": 13902,
+        "bookmarks": 22,
+        "quotes": 0
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 5
+      },
+      "selected_recipes": [
+        "agent-workflow-routing"
+      ],
+      "exclusion": null,
+      "inspiration_only": true
+    },
+    {
+      "id": "2107595612623446040",
+      "url": "https://x.com/zklapow/status/2107595612623446040",
+      "author": {
+        "name": "Ze'ev Klapow",
+        "handle": "zklapow"
+      },
+      "published_at": "2026-10-06T22:15:25+00:00",
+      "observed_at": "2026-10-08T11:00:05.079714+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "public search and original linked source anchors",
+      "topic": "Decisions API",
+      "title": "Security review selection",
+      "summary": "Describes selecting security checks from pull-request attributes.",
+      "metrics": {
+        "likes": 3,
+        "retweets": 0,
+        "replies": 1,
+        "views": 102,
+        "bookmarks": 1,
+        "quotes": 1
+      },
+      "editorial_scores": {
+        "usefulness": 5,
+        "reproducibility": 4,
+        "evidence": 5
+      },
+      "selected_recipes": [],
+      "exclusion": "Below engagement floor",
+      "inspiration_only": true
+    },
+    {
+      "id": "2107595661428290029",
+      "url": "https://x.com/zklapow/status/2107595661428290029",
+      "author": {
+        "name": "Ze'ev Klapow",
+        "handle": "zklapow"
+      },
+      "published_at": "2026-10-06T22:15:37+00:00",
+      "observed_at": "2026-10-08T11:00:05.568678+00:00",
+      "retrieval": "FXTwitter public API",
+      "discovery_url": "public search and original linked source anchors",
+      "topic": "Decisions API",
+      "title": "Security triage performance claim",
+      "summary": "Reports early comparative results without enough methodology to reproduce them.",
+      "metrics": {
+        "likes": 2,
+        "retweets": 0,
+        "replies": 1,
+        "views": 131,
+        "bookmarks": 0,
+        "quotes": 0
+      },
+      "editorial_scores": {
+        "usefulness": 3,
+        "reproducibility": 2,
+        "evidence": 2
+      },
+      "selected_recipes": [],
+      "exclusion": "Below engagement floor",
+      "inspiration_only": true
+    }
+  ]
+}

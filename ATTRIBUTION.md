@@ -16,6 +16,12 @@ The Python implementation and the six workflow policies in this repository were 
 
 The cited MIT licenses permit reuse subject to their terms. This repository does not incorporate code from those repositories based on the review performed for this release. If future changes copy any material, include that material's original copyright and license notice with the copied files.
 
+## Community recipe inspiration
+
+The [dated research record](research/README.md) ranks original Jev and Decisions API posts and links every contributed recipe to its source. [sources.json](research/sources.json) records all inspected posts, original authors, publication dates, engagement snapshots, editorial ratings, and exclusions. The independent [Jev AI Dev collection](https://jevai.dev/user-cases/) helped discover original posts; its code, prose, and examples were not incorporated.
+
+Each recipe's implementation, instructions, and synthetic fixtures were authored for this project. Credit is for the demonstrated idea, not a claim of source-code adaptation, endorsement, or reproduced performance. AI Edge is credited for the original research/inbox/content workflow article and Miles Deutscher for sharing it. TypeSafe's official skills and Akshay Pachaar retain their existing credits above. Native adapter tests do not substantiate social-media benchmark claims.
+
 ## Project license
 
 This repository is distributed under the MIT License. See [`LICENSE`](LICENSE).

@@ -1,0 +1,13 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "ready",
+    "probabilities": {
+      "ready": 0.97,
+      "revise": 0.015,
+      "review": 0.015
+    },
+    "confidence": 0.95
+  }
+}

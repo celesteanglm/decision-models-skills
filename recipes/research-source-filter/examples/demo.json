@@ -1,0 +1,14 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "include",
+    "probabilities": {
+      "include": 0.97,
+      "exclude": 0.01,
+      "verify_first": 0.01,
+      "review": 0.01
+    },
+    "confidence": 0.95
+  }
+}

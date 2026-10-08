@@ -1,0 +1,14 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "awareness",
+    "probabilities": {
+      "awareness": 0.97,
+      "consideration": 0.01,
+      "conversion": 0.01,
+      "review": 0.01
+    },
+    "confidence": 0.95
+  }
+}

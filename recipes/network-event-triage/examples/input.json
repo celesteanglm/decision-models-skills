@@ -1,0 +1,6 @@
+{
+  "state": {
+    "content": "A workstation made repeated outbound connections to an unfamiliar host every 20 seconds. The flow began minutes after a new local account appeared, and the destination is absent from the organization’s approved inventory."
+  },
+  "permission_granted": true
+}

@@ -1,0 +1,67 @@
+{
+  "source_hash": "e6115d0899d71d4c653e88d391ecf5d7f60ce7c94a2657de0dbc0e80abf08674",
+  "started_at": "2026-10-08T11:16:34.860697+00:00",
+  "completed_at": "2026-10-08T11:24:50.801230+00:00",
+  "recipe_count": 29,
+  "original_posts": 26,
+  "inspected_posts": 36,
+  "unique_cases_per_backend": 348,
+  "repetitions": 3,
+  "fixture_evaluations": 3132,
+  "paid_requests": 2871,
+  "deterministic_checks": 261,
+  "errors": 0,
+  "deterministic_safety_violations": 0,
+  "providers": {
+    "jev-openrouter": {
+      "statuses": {
+        "Partial": 22,
+        "Working": 7
+      },
+      "passed_fixture_expectations": 897,
+      "total_fixture_evaluations": 1044,
+      "stable_cases": 339,
+      "resolved_models": [
+        "typesafe/jev-1.13-20260917"
+      ]
+    },
+    "openai-decisions": {
+      "statuses": {
+        "Working": 8,
+        "Partial": 21
+      },
+      "passed_fixture_expectations": 831,
+      "total_fixture_evaluations": 1044,
+      "stable_cases": 348,
+      "resolved_models": [
+        "gpt-6-luna"
+      ]
+    },
+    "sage": {
+      "statuses": {
+        "Partial": 16,
+        "Working": 13
+      },
+      "passed_fixture_expectations": 969,
+      "total_fixture_evaluations": 1044,
+      "stable_cases": 348,
+      "resolved_models": [
+        "levanto-sage-v1.3"
+      ]
+    }
+  },
+  "all_three_working": [
+    "agent-workflow-routing",
+    "email-queue-routing",
+    "secondhand-listing-fit"
+  ],
+  "new_reported_and_estimated_usd": 0.08289799,
+  "cumulative_reported_and_estimated_usd": 0.20576051,
+  "cumulative_reserved_usd": 4.53731847,
+  "limitations": [
+    "Ranked discovered sample; X Top search required login. Metrics are timestamped third-party snapshots.",
+    "Synthetic development cases reviewed without expected labels, not human gold or production calibration.",
+    "Repetitions measure consistency, not independent samples. Stable wrong decisions remain wrong.",
+    "Compatibility describes bounded text recommendations, not original applications or promotional performance."
+  ]
+}

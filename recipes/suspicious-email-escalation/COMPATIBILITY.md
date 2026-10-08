@@ -1,6 +1,8 @@
-# Backend compatibility
+# Recorded reference implementation results
 
-**Working with:** ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen)
+These runs tested the optional Python reference implementation against native decision APIs. They did not evaluate the model-agnostic SKILL.md instructions on an agent's current model. No listed provider, Python package, or CLI is required to use the skill.
+
+**Reference implementation — Working with:** ![Decisions API: Working](https://img.shields.io/badge/Decisions%20API-Working-brightgreen)
 
 | Backend | Result | Tested model | Passed checks |
 |---|---|---|---|

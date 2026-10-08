@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "decision-models-skills"
 version = "0.1.0"
-description = "Portable skills and community recipes for small-model decisions, routing, and evaluation"
+description = "Optional Python reference implementation for model-agnostic decision skills"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -13,9 +13,6 @@ dependencies = []
 
 [project.urls]
 Repository = "https://github.com/celesteanglm/decision-models-skills"
-
-[project.scripts]
-decision-models = "decision_models.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -68,6 +68,13 @@ class VerifiedCatalogTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, "unsupported badge"):
                 verify_catalog(repo)
 
+    def test_reference_receipt_cannot_claim_instruction_only_qualification(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            change_manifest(repo, lambda m: m['scope'].update(instruction_only='Working'))
+            with self.assertRaisesRegex(AssertionError, 'reference evidence cannot qualify instruction-only'):
+                verify_catalog(repo)
+
     def test_rejects_stale_human_readable_results(self):
         with tempfile.TemporaryDirectory() as root:
             repo = copy_inputs(root)

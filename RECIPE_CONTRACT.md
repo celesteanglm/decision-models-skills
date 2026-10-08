@@ -1,14 +1,16 @@
-# Portable community recipes
+# Optional recipe reference configuration
 
-Recipes are independently authored, text-only demonstrations of a bounded decision from a credited community use case. They recommend a label; they never connect accounts, execute tools, send messages, move files, or call a generative executor. A demo of the decision is not a reproduction or benchmark of the source application.
+Use-case skills are self-contained SKILL.md instructions. They can be followed with the agent's current model or a user-selected model tool, without a package, executable, or JSON configuration. Put the full decision menu, inputs, procedure, result, and review behavior in the entrypoint.
 
-Each `recipes/<id>/` contains `SKILL.md`, `recipe.json`, `examples/input.json`, `examples/demo.json`, and `fixtures/acceptance.json`. The separately installed CLI runs copied folders from any directory:
+`recipe.json` describes the frozen native-API decision and numerical policy exercised by the optional Python reference implementation. It is not required to use the Markdown skill, and its thresholds do not apply automatically to arbitrary agent models. The schemas below are reference-runtime contracts.
+
+Maintainers can exercise a copied reference configuration with the optional installed Python package:
 
 ```sh
-decision-models recipe --recipe /path/to/copied/recipe.json --provider sage --input /path/to/copied/examples/input.json --demo-answers /path/to/copied/examples/demo.json --mode demo
+python -m decision_models recipe --recipe /path/to/copied/recipe.json --provider sage --input /path/to/copied/examples/input.json --demo-answers /path/to/copied/examples/demo.json --mode demo
 ```
 
-Live mode uses the same command with `--mode live` and without `--demo-answers`. Credentials are environment-only. Native provider selection and optional `--model` are separate from the portable recipe. Native confidence and probabilities remain distinct; typed output is not proof of correctness. Other small models need a compatible adapter and fresh model-specific evaluation.
+Live reference mode uses `--mode live` without synthetic answers and environment-only credentials. See [CONTRIBUTING.md](CONTRIBUTING.md). A valid typed output is not proof of correctness, and native confidence is distinct from probabilities.
 
 ## Frozen schema version 1
 
@@ -31,6 +33,6 @@ All docs use portable paths and impersonal synthetic examples. No code or source
 
 Independent fixture review may establish a narrowly allowed list of safe ambiguous outcomes before live evaluation. Use `expected.choices` with explicit labels and `expected.actions`, rather than a single `choice`, for alternatives such as review or a recommendation to request missing details. Never allow unrelated substantive choices merely to make an ambiguous fixture pass. The frozen oracle is independent of provider outputs; it is not adjusted after live evaluation.
 
-## Publication labels
+## Recorded reference labels
 
-Publish a recipe only when at least one backend meets the frozen Working criteria. Show positive Working badges only for those backends; Partial, Blocked, and Not tested do not qualify. Each copied folder must include `COMPATIBILITY.md` and `compatibility.json` with exact tested models, pass counts, failure reasons, tested runtime/configuration/fixture hashes, and a link and checksum for retained raw evidence. `scripts/verified_catalog.py` checks local summaries, labels, inclusion, and unchanged evaluated artifacts offline; its optional `--receipt` audits a downloaded raw run. Raw test runs belong in ignored local output or CI artifacts, rather than the source tree. Adapter availability and a successful demo do not establish workflow compatibility.
+Qualify a reference backend only when it meets the frozen Working criteria. Show positive Working badges on the local compatibility page only for those backends; Partial, Blocked, and Not tested do not qualify. Each copied folder must include `COMPATIBILITY.md` and `compatibility.json` with exact tested models, pass counts, failure reasons, tested runtime/configuration/fixture hashes, and a link and checksum for retained raw evidence. `scripts/verified_catalog.py` checks local summaries, labels, inclusion, and unchanged evaluated artifacts offline; its optional `--receipt` audits a downloaded raw run. Raw test runs belong in ignored local output or CI artifacts, rather than the source tree. Adapter availability and a successful reference demo do not establish instruction-only model compatibility. Keep the reference scope explicit in compatibility.json; never transfer its labels to the agent using SKILL.md.

@@ -312,5 +312,9 @@
         }
       }
     }
+  },
+  "scope": {
+    "reference_implementation": "python-native-apis",
+    "instruction_only": "Not evaluated"
   }
 }

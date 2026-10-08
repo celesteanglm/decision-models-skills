@@ -3,12 +3,11 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
-import re
 
 from decision_models.evaluation import source_hash
 from scripts.verified_catalog import (
-    artifacts, backend_results, badge, compatibility_markdown,
-    PROVIDERS, runtime_revision, sha256,
+    artifacts, backend_results, compatibility_markdown,
+    EVIDENCE_SCOPE, runtime_revision, sha256,
 )
 
 
@@ -21,6 +20,7 @@ def build_manifest(repo, folder, receipt, receipt_hash, evidence_url):
     assert any(b["status"] == "Working" for b in backends.values()), "no Working backend"
     return {
         "schema_version": 1, "id": folder.name, "kind": folder.parent.name,
+        "scope": dict(EVIDENCE_SCOPE),
         "mode": "live", "tested_at": receipt["updated_at"], "repetitions": 3,
         "fixture_revision": fixture_revision, "runtime_revision": runtime_revision(repo),
         "artifacts": artifacts(folder),
@@ -32,13 +32,6 @@ def build_manifest(repo, folder, receipt, receipt_hash, evidence_url):
 def write_manifest(folder, manifest):
     (folder / "compatibility.json").write_text(json.dumps(manifest, indent=2) + "\n")
     (folder / "COMPATIBILITY.md").write_text(compatibility_markdown(manifest))
-    skill = folder / "SKILL.md"
-    working = [p for p in PROVIDERS if manifest["backends"][p]["status"] == "Working"]
-    text, count = re.subn(r"^\*\*Working with:\*\*.*$",
-                         "**Working with:** " + " ".join(badge(p) for p in working),
-                         skill.read_text(), flags=re.MULTILINE)
-    assert count == 1, "skill needs one Working-with line"
-    skill.write_text(text)
 
 
 def main():

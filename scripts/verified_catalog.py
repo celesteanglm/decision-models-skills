@@ -12,6 +12,7 @@ from decision_models.runtime import SKILLS
 PROVIDERS = ("jev-openrouter", "openai-decisions", "sage")
 SLUGS = {"jev-openrouter": "Jev%20%2F%20OpenRouter", "openai-decisions": "Decisions%20API", "sage": "Sage"}
 NAMES = {"jev-openrouter": "Jev / OpenRouter", "openai-decisions": "Decisions API", "sage": "Sage"}
+EVIDENCE_SCOPE = {"reference_implementation": "python-native-apis", "instruction_only": "Not evaluated"}
 
 
 def sha256(path):
@@ -86,7 +87,9 @@ def qualification(backend, fixtures):
 
 def compatibility_markdown(manifest):
     working = [p for p in PROVIDERS if manifest["backends"][p]["status"] == "Working"]
-    lines = ["# Backend compatibility", "", "**Working with:** " + " ".join(badge(p) for p in working),
+    lines = ["# Recorded reference implementation results",
+             "", "These runs tested the optional Python reference implementation against native decision APIs. They did not evaluate the model-agnostic SKILL.md instructions on an agent's current model. No listed provider, Python package, or CLI is required to use the skill.",
+             "", "**Reference implementation — Working with:** " + " ".join(badge(p) for p in working),
              "", "| Backend | Result | Tested model | Passed checks |",
              "|---|---|---|---|"]
     for provider in PROVIDERS:
@@ -135,6 +138,7 @@ def verify_catalog(repo, receipts=()):
             manifest = json.loads((folder / "compatibility.json").read_text())
             assert manifest["schema_version"] == 1 and manifest["id"] == folder.name and manifest["kind"] == kind
             assert manifest["mode"] == "live" and manifest["repetitions"] == 3, "synthetic evidence cannot qualify"
+            assert manifest["scope"] == EVIDENCE_SCOPE, "reference evidence cannot qualify instruction-only use"
             assert manifest["runtime_revision"] == revision, "runtime changed since evaluation"
             assert manifest["artifacts"] == artifacts(folder), f"unverified artifacts: {folder.name}"
             fixtures = json.loads((folder / "fixtures/acceptance.json").read_text())
@@ -157,7 +161,7 @@ def verify_catalog(repo, receipts=()):
                 assert manifest["backends"] == backend_results(receipt, folder.name), "summary differs from raw evidence"
             skill = (folder / "SKILL.md").read_text()
             labels = re.findall(r"https://img\.shields\.io/badge/([^\s)]+)-Working-brightgreen", skill)
-            assert set(labels) == {SLUGS[p] for p in working}, f"unsupported badge: {folder.name}"
+            assert not labels, f"unsupported badge in model-agnostic instructions: {folder.name}"
             assert "[compatibility evidence](COMPATIBILITY.md)" in skill
             assert (folder / "COMPATIBILITY.md").read_text() == compatibility_markdown(manifest), f"stale compatibility page: {folder.name}"
             assert f"]({kind}/{folder.name}/SKILL.md)" in (repo / "README.md").read_text(), f"skill missing from README: {folder.name}"

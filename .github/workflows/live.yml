@@ -47,7 +47,7 @@ jobs:
           SAGE_API_KEY: ${{ secrets.SAGE_API_KEY }}
           TEST_PROVIDER: ${{ inputs.provider }}
           TEST_BUDGET: ${{ inputs.budget_usd }}
-        run: decision-models evaluate --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-live.json
+        run: python -m decision_models evaluate --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-live.json
       - name: Evaluate frozen community recipes
         if: inputs.suite == 'recipes'
         env:
@@ -56,7 +56,7 @@ jobs:
           SAGE_API_KEY: ${{ secrets.SAGE_API_KEY }}
           TEST_PROVIDER: ${{ inputs.provider }}
           TEST_BUDGET: ${{ inputs.budget_usd }}
-        run: decision-models evaluate-recipes --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-recipes.json
+        run: python -m decision_models evaluate-recipes --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-recipes.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -19,7 +19,7 @@ def main():
     registry = verify_catalog(repo, args.receipt)
     failed = [skill for skill in SKILLS if registry["skills"][skill]["statuses"]["jev-openrouter"] != "Working"]
     assert not failed, "Jev publication gate failed: " + ", ".join(failed)
-    print("Publication gate passed: all six Jev core workflows are Working for the unchanged evaluated artifacts.")
+    print("Reference gate passed: all six Jev core workflows are Working for the unchanged evaluated Python artifacts.")
 
 
 if __name__ == "__main__":

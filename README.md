@@ -1,48 +1,29 @@
 # Decision Models Skills
 
-Agent skills for small-model decisions: six reusable workflows and 18 ready-to-run use cases, backed by a shared Python CLI.
+Model-agnostic agent skills for bounded decisions, routing, and evaluation. Choose among six core skills and 18 use-case skills, install or reference the folder, and ask your agent to use it.
 
-Every skill recommends a bounded decision from supplied evidence. The calling application applies that recommendation. Python 3.10+ is required; the runtime uses only the standard library.
+## Use a skill
 
-## Install and try a skill
+Copy a folder from `skills/` or `recipes/` into your agent's supported skill directory, or point the agent at its `SKILL.md`. For example:
 
-Clone the repository and install the shared CLI:
+> Use the email-queue-routing skill at /path/to/email-queue-routing/SKILL.md. Recommend a queue for this email: “Please explain the duplicate charge on my latest invoice.”
 
-```sh
-git clone https://github.com/celesteanglm/decision-models-skills.git
-cd decision-models-skills
-python3 -m venv .venv
-. .venv/bin/activate
-python -m pip install .
+The agent follows the instructions using its current model. If you want a specific decision model or already have a model tool configured, name it in your request. The skill leaves that integration to your agent's existing setup. If a specifically requested integration is unavailable, the agent should explain the missing configuration.
 
-decision-models run input-guardrails \
-  --provider jev-openrouter --mode demo \
-  --input skills/input-guardrails/examples/input.json \
-  --demo-answers skills/input-guardrails/examples/demo.json
-```
-
-Demo mode uses hand-authored synthetic answers and makes no API requests. It demonstrates the interface; it provides no model-quality evidence.
-
-To use a copied skill folder in another project, install the CLI separately:
-
-```sh
-python -m pip install 'decision-models-skills @ git+https://github.com/celesteanglm/decision-models-skills.git@main'
-```
-
-Copy the whole skill folder into your agent's skill directory, for example `.agents/skills/<name>/`. The agent reads its `SKILL.md`; the installed package supplies the `decision-models` command. Run from the copied folder or pass absolute paths to its examples and configuration. No repository-root imports or editable install are required.
+Using these instructions requires no Python installation, API key, package installation, separate CLI, or bundled executable. An optional external model tool has its own runtime, credentials, and access requirements.
 
 ## Choose a skill
 
-Both categories use the same agent skill format:
+Both categories use the same `SKILL.md` format:
 
-- **Core skills** in `skills/` provide reusable workflows with dedicated input contracts. Run them with `decision-models run <name>`.
-- **Use-case skills (recipes)** in `recipes/` specialize a decision using local `recipe.json` configuration. Run them with `decision-models recipe --recipe <path>`.
+- **Core skills** in `skills/` describe reusable decision procedures.
+- **Use-case skills (recipes)** in `recipes/` include a task-specific decision menu and examples. Their `recipe.json` is optional reference configuration.
 
-Open a skill's instructions to see its Working backend labels. Its compatibility page lists every tested backend, exact models, pass counts, failures, and test date.
+Each entrypoint explains the needed evidence, decision procedure, result, and review or escalation behavior. The result is a recommendation; executing an action is a separate request and authorization decision.
 
 ### Core skills
 
-| Skill | Use it to | Compatibility |
+| Skill | Use it to | Recorded reference checks |
 |---|---|---|
 | [input-guardrails](skills/input-guardrails/SKILL.md) | Screen input before a downstream workflow. | [Results](skills/input-guardrails/COMPATIBILITY.md) |
 | [model-routing](skills/model-routing/SKILL.md) | Recommend an eligible model for a task. | [Results](skills/model-routing/COMPATIBILITY.md) |
@@ -53,7 +34,7 @@ Open a skill's instructions to see its Working backend labels. Its compatibility
 
 ### Use-case skills (recipes)
 
-| Skill | Use it to | Compatibility |
+| Skill | Use it to | Recorded reference checks |
 |---|---|---|
 | [ad-funnel-classification](recipes/ad-funnel-classification/SKILL.md) | Classify ad copy by the customer-journey stage suggested by its text. | [Results](recipes/ad-funnel-classification/COMPATIBILITY.md) |
 | [agent-workflow-routing](recipes/agent-workflow-routing/SKILL.md) | Recommend a configured workflow from an incoming customer request. | [Results](recipes/agent-workflow-routing/COMPATIBILITY.md) |
@@ -74,58 +55,43 @@ Open a skill's instructions to see its Working backend labels. Its compatibility
 | [suspicious-email-escalation](recipes/suspicious-email-escalation/SKILL.md) | Classify email text for fraud or phishing indicators and identify when security review is warranted. | [Results](recipes/suspicious-email-escalation/COMPATIBILITY.md) |
 | [template-field-matching](recipes/template-field-matching/SKILL.md) | Recommend source fields that can populate requested template fields based on names and supplied definitions. | [Results](recipes/template-field-matching/COMPATIBILITY.md) |
 
+
+## Plug in a model
+
+The instructions define what to assess and what to return. They do not select a vendor, endpoint, or executable.
+
+- Use the agent's current model for a qualitative decision based on the supplied evidence.
+- Request an existing model/tool integration when you want to delegate the judgment. Preserve the user's chosen model and tool configuration.
+- Require numerical gates only when the chosen integration supplies the needed native metric. Missing required metrics lead to review or escalation; the agent must not invent probabilities or reinterpret self-reported confidence as calibration.
+
 For example:
 
-```sh
-decision-models recipe \
-  --recipe recipes/email-queue-routing/recipe.json \
-  --provider sage --mode demo \
-  --input recipes/email-queue-routing/examples/input.json \
-  --demo-answers recipes/email-queue-routing/examples/demo.json
-```
+> Use the input-guardrails skill to assess this prompt against the supplied policy. Use my configured decision-model tool, and return review if it cannot supply the probability required by my policy.
 
-## Make a live request
-
-Choose a backend labeled Working for the specific skill. Set its credential in the process environment, use `--mode live`, and omit `--demo-answers`:
-
-```sh
-export OPENROUTER_API_KEY='…'
-decision-models run input-guardrails \
-  --provider jev-openrouter --mode live \
-  --input skills/input-guardrails/examples/input.json
-```
-
-| Provider flag | Credential variable | Native protocol |
-|---|---|---|
-| `jev-openrouter` | `OPENROUTER_API_KEY` | [OpenRouter Decisions](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request) |
-| `openai-decisions` | `OPENAI_API_KEY` | [OpenAI Decisions](https://developers.openai.com/api/docs/guides/decisions) |
-| `sage` | `SAGE_API_KEY` | [Sage SystemOne](https://docs.levanto.ai/systemone) |
-
-The program does not load `.env` files. Live requests can incur provider charges. `--model` selects a model implementing the chosen adapter's protocol; other models require their own adapter and evaluation. The [implementation contract](IMPLEMENTATION_CONTRACT.md) describes the adapter interface.
-
-## What each skill contains
+## What each folder contains
 
 ```text
 <skill>/
-├── SKILL.md                 Instructions, inputs, usage, Working backends
-├── COMPATIBILITY.md         Human-readable results and failures
-├── compatibility.json       Test summaries, models, revisions, evidence link
-├── examples/                Sample input and synthetic demo answers
-├── fixtures/acceptance.json Frozen evaluation cases
-└── recipe.json              Use-case configuration (recipes only)
+├── SKILL.md                 Self-contained instructions for the agent
+├── COMPATIBILITY.md         Recorded optional-reference checks and limitations
+├── compatibility.json       Machine-readable reference evidence
+├── examples/                Illustrative inputs and synthetic reference answers
+├── fixtures/acceptance.json Frozen reference-implementation evaluation cases
+└── recipe.json              Optional reference configuration (recipes only)
 ```
 
-Compatibility is specific to the tested runtime, configuration, fixtures, and resolved model. Working means the backend met the documented synthetic acceptance gate; Partial, Blocked, and Not tested do not qualify. These results establish neither production accuracy nor calibrated confidence thresholds.
+The inputs may be supplied naturally; the JSON examples illustrate information to provide, not a required transport format. Expected fixture labels and synthetic demo answers are maintainer evaluation material, not evidence for a live decision.
 
-## Verify or contribute
+## What has been tested
 
-```sh
-python scripts/verify.py
-python scripts/check_release.py
-```
+Each folder's compatibility page records exact models, pass counts, failures, dates, and evidence links for the optional Python reference implementation against native decision APIs. Working labels apply to that evaluated implementation and its frozen artifacts.
 
-Offline verification checks tests, copied-folder demos, local compatibility summaries, backend labels, and the hashes of evaluated artifacts. It makes no provider requests and requires no archived test runs. To audit summaries against retained raw evidence, download the linked run and pass `--receipt /path/to/run.json` to `scripts/verified_catalog.py`.
+Those historical receipts do not benchmark the revised instruction-only skills on an arbitrary agent or model. The instructions are model-agnostic; decision quality still depends on the model, evidence, and task. No listed backend is required to use a skill.
 
-[Contributing](CONTRIBUTING.md) covers live evaluation, reviewed rates, and publishing skill-local summaries. [Recipe contract](RECIPE_CONTRACT.md) defines use-case configuration and acceptance criteria. [Attribution](ATTRIBUTION.md) credits original sources.
+## Maintain the reference implementation
 
-Working docs and research stay local and ignored. Raw test outputs are generated under ignored `reports/` and uploaded by CI as artifacts; the public source tree retains the compact compatibility files beside each skill. Historical evidence links use immutable commits. Retain future release evidence as versioned release assets when it must outlive CI artifact retention.
+`src/decision_models/` contains optional Python code used to reproduce API contracts, numerical policies, and reference evaluation. It is maintainer tooling; agents using the Markdown skills do not install or import it. The package exposes no global console command.
+
+See [Contributing](CONTRIBUTING.md) for folder validation and optional Python checks, [Recipe contract](RECIPE_CONTRACT.md) for reference configuration, [Implementation contract](IMPLEMENTATION_CONTRACT.md) for the optional adapters, and [Attribution](ATTRIBUTION.md) for original sources.
+
+Working docs and research stay local and ignored. Raw test outputs go to ignored `reports/` or CI artifacts; compact reference evidence stays beside each skill.

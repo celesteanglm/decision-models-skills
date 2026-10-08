@@ -1,4 +1,4 @@
-"""Verify the installed CLI, contracts and portable skills without credentials."""
+"""Verify instruction folders and the optional reference implementation offline."""
 import json
 import os
 from pathlib import Path
@@ -10,6 +10,8 @@ from datetime import datetime, timezone
 
 from decision_models.evaluation import source_hash
 from decision_models.runtime import SKILLS, PROVIDERS
+from verified_catalog import verify_catalog
+from verify_skills import verify_skills
 
 
 def main():
@@ -18,8 +20,8 @@ def main():
     marker.parent.mkdir(exist_ok=True)
     marker.unlink(missing_ok=True)
     env = dict(os.environ)
-    catalog_path = repo / "reports" / "catalog.json"
-    catalog = json.loads(catalog_path.read_text()) if catalog_path.exists() else None
+    instructions = verify_skills(repo)
+    catalog = verify_catalog(repo)
     for name in ("OPENROUTER_API_KEY", "OPENAI_API_KEY", "SAGE_API_KEY", "PYTHONPATH"):
         env.pop(name, None)
     subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", str(repo / "tests"), "-v"],
@@ -66,7 +68,8 @@ def main():
                                        "action": receipt["result"]["action"]})
     marker.write_text(json.dumps({"passed": True, "source_hash": source_hash(repo),
         "checked_at": datetime.now(timezone.utc).isoformat(), "python": sys.version.split()[0],
-        "checks": ["unittest suite", f"{len(demonstrations)} credential-free copied-skill/recipe demos from another cwd"],
+        "checks": [f"{len(instructions)} self-contained instruction folders", "unittest suite",
+                   f"{len(demonstrations)} credential-free reference-implementation demos from copied inputs"],
         "demos": demonstrations}, indent=2) + "\n")
     print(f"Offline verification passed: {marker}")
 

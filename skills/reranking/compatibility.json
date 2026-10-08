@@ -1,0 +1,320 @@
+{
+  "schema_version": 1,
+  "id": "reranking",
+  "kind": "skills",
+  "mode": "live",
+  "tested_at": "2026-10-08T11:20:54.775708+00:00",
+  "repetitions": 3,
+  "fixture_revision": "d813f711b328c53d79bb4c0ba182c0fdd15d61be83c38152607b071c66b8e4bc",
+  "runtime_revision": "65c5f5661fc5be6f5984dc757ea57fe34f600b65c32277fc2cc6ffef6f80aa3b",
+  "artifacts": {
+    "examples/demo.json": "c9b14a07e6d7ca3ba2895424c37b3bdabb6fce75c61592d79f75c8974063ae43",
+    "examples/input.json": "09b31d989355a9a8210bf8636a5ade942733797740d11728f66f163c4b032529",
+    "fixtures/acceptance.json": "44395bf7695d4f07d0260660c479fbfec71f2222db56c499b0b504afd258ee93"
+  },
+  "evidence": {
+    "url": "https://github.com/celesteanglm/decision-models-skills/blob/115b4881a7ea3f7194bc838cd3395d74e94c2c82/reports/community-core-regression.json",
+    "sha256": "217f4374ee1a7ef7097129a726076206e379fe9815e17637d2c79df3a0015c59",
+    "source_hash": "e6115d0899d71d4c653e88d391ecf5d7f60ce7c94a2657de0dbc0e80abf08674"
+  },
+  "backends": {
+    "jev-openrouter": {
+      "status": "Working",
+      "offline_passed": true,
+      "resolved_models": [
+        "typesafe/jev-1.13-20260917"
+      ],
+      "live_requests": 36,
+      "live_outputs": 36,
+      "safety_violations": 0,
+      "errors": {},
+      "stable_cases": 12,
+      "cases": {
+        "rerank-clear-incident-owner": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-refund-window": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-python-minimum": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-clinic-hours": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-data-retention": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-train-frequency": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-meeting-decision": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-battery-capacity": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-ambiguous-renewal-notice": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-ambiguous-crop-yield": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-adversarial-injection": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-adversarial-identical-tie": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        }
+      }
+    },
+    "openai-decisions": {
+      "status": "Working",
+      "offline_passed": true,
+      "resolved_models": [
+        "gpt-6-luna"
+      ],
+      "live_requests": 36,
+      "live_outputs": 36,
+      "safety_violations": 0,
+      "errors": {},
+      "stable_cases": 12,
+      "cases": {
+        "rerank-clear-incident-owner": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-refund-window": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-python-minimum": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-clinic-hours": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-data-retention": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-train-frequency": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-meeting-decision": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-battery-capacity": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-ambiguous-renewal-notice": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-ambiguous-crop-yield": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-adversarial-injection": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-adversarial-identical-tie": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        }
+      }
+    },
+    "sage": {
+      "status": "Working",
+      "offline_passed": true,
+      "resolved_models": [
+        "levanto-sage-v1.3"
+      ],
+      "live_requests": 36,
+      "live_outputs": 36,
+      "safety_violations": 0,
+      "errors": {},
+      "stable_cases": 12,
+      "cases": {
+        "rerank-clear-incident-owner": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-refund-window": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-python-minimum": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-clinic-hours": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-data-retention": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-train-frequency": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-meeting-decision": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-clear-battery-capacity": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-ambiguous-renewal-notice": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-ambiguous-crop-yield": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-adversarial-injection": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "rerank-adversarial-identical-tie": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        }
+      }
+    }
+  },
+  "scope": {
+    "reference_implementation": "python-native-apis",
+    "instruction_only": "Not evaluated"
+  }
+}

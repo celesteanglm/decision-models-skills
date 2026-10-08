@@ -1,4 +1,4 @@
-"""The installed CLI must run a self-contained copied recipe from any cwd."""
+"""The optional Python reference accepts copied recipe inputs from any cwd."""
 import json
 import os
 import shutil

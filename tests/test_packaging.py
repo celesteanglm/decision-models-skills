@@ -10,12 +10,6 @@ from pathlib import Path
 
 
 REPO = Path(__file__).resolve().parents[1]
-CLI = Path(sys.executable).absolute().parent / "decision-models"
-if not CLI.is_file():
-    installed_cli = shutil.which("decision-models")
-    CLI = Path(installed_cli) if installed_cli else CLI
-
-
 class PackagingTests(unittest.TestCase):
     def test_all_skills_have_valid_frontmatter_and_referenced_local_assets(self):
         for skill_dir in sorted((REPO / "skills").iterdir()):
@@ -39,8 +33,7 @@ class PackagingTests(unittest.TestCase):
                 local = target.split("#", 1)[0]
                 self.assertTrue((skill_dir / local).resolve().is_file(), f"{skill}: broken reference {target}")
 
-    def test_copied_skill_runs_from_an_unrelated_working_directory_with_installed_cli(self):
-        self.assertTrue(CLI.is_file(), "project virtualenv console script must be installed")
+    def test_optional_reference_implementation_accepts_copied_core_inputs(self):
         with tempfile.TemporaryDirectory(prefix="skill-copy-") as temp:
             root = Path(temp)
             for source in sorted((REPO / "skills").iterdir()):
@@ -50,7 +43,7 @@ class PackagingTests(unittest.TestCase):
                 shutil.copytree(source, skill_copy)
                 with self.subTest(skill=source.name):
                     output = subprocess.run(
-                        [str(CLI), "run", source.name, "--provider", "sage",
+                        [sys.executable, "-m", "decision_models", "run", source.name, "--provider", "sage",
                          "--input", "examples/input.json", "--mode", "demo",
                          "--demo-answers", "examples/demo.json"],
                         cwd=skill_copy, env={k: v for k, v in os.environ.items() if k != "PYTHONPATH"},

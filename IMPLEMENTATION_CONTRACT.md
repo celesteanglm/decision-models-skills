@@ -1,6 +1,6 @@
-# Frozen implementation contract
+# Optional Python reference implementation contract
 
-Python 3.10+, standard library. Do not edit shared files from adapter/workflow tasks.
+This contract governs the maintainer reference code, not installation or use of the model-agnostic SKILL.md instructions. The reference uses Python 3.10+ and the standard library.
 
 ## Provider modules
 
@@ -16,4 +16,4 @@ Each `workflows/<underscore_name>.py` exports `build(data)` returning `{state, q
 
 All skills include standalone `SKILL.md`, `examples/input.json`, `examples/demo.json`, and `fixtures/acceptance.json`. Demo JSON contains canonical `answers` ONLY; runtime provides synthetic model and validates them. Each acceptance fixture: `{id, category: clear|ambiguous|adversarial, input: application inputs, expected: {actions: [...], ...}, demo_answers: canonical answer map}`. Exactly 8 clear, 2 ambiguous, 2 adversarial per skill. Expectations remain outside model inputs. Reranking can add `expected.top_id`; evaluator can add `expected.metric_ranges`. Every fixture must independently define expected behavior/rationale. Root may revise fixture design before freezing. Skill names/slugs: input-guardrails, model-routing, reranking, tool-call-gating, confidence-gates, output-evaluation.
 
-Example commands: `decision-models run <slug> --provider jev-openrouter --input /path/examples/input.json --mode demo --demo-answers /path/examples/demo.json`. Live omits demo answers and uses `--mode live`. Shared package and CLI are installed separately from copied skill folders. No repo-root import tricks, PYTHONPATH requirements, or implicit editable installs in user instructions.
+Maintainer example: `python -m decision_models run <slug> --provider jev-openrouter --input /path/examples/input.json --mode demo --demo-answers /path/examples/demo.json`. Live mode omits synthetic answers and uses `--mode live`. Install the optional reference package for these maintainer commands. Users can install or reference the Markdown skill folders independently; they do not require this package or a global console command.

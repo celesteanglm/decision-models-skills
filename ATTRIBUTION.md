@@ -12,13 +12,13 @@ The Python implementation and the six workflow policies in this repository were 
 - [kerpopule/hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills): MIT-licensed community discovery/reference material.
 - [yuyang2230/jev-agent-skill](https://github.com/yuyang2230/jev-agent-skill): MIT-licensed community discovery/reference material.
 - [patchy631/jev-as-judge](https://github.com/patchy631/jev-as-judge): ideas only. Repository review on 2026-10-08 found no visible license, so no code, prose, or test cases were copied or adapted.
-- Provider API and pricing references are listed in [Compatibility](docs/compatibility.md).
+- Provider references: [OpenRouter Decisions API](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request), [OpenAI Decisions API](https://developers.openai.com/api/docs/guides/decisions), and [Levanto Sage SystemOne](https://docs.levanto.ai/systemone).
 
 The cited MIT licenses permit reuse subject to their terms. This repository does not incorporate code from those repositories based on the review performed for this release. If future changes copy any material, include that material's original copyright and license notice with the copied files.
 
 ## Community recipe inspiration
 
-The [dated research record](research/README.md) ranks original Jev and Decisions API posts and links every contributed recipe to its source. [sources.json](research/sources.json) records all inspected posts, original authors, publication dates, engagement snapshots, editorial ratings, and exclusions. The independent [Jev AI Dev collection](https://jevai.dev/user-cases/) helped discover original posts; its code, prose, and examples were not incorporated.
+Each use-case skill links its original source in its own SKILL.md and recipe.json. The independent [Jev AI Dev collection](https://jevai.dev/user-cases/) helped discover original posts; its code, prose, and examples were not incorporated. Research notes and engagement rankings are local working material, excluded from the published source tree.
 
 Each recipe's implementation, instructions, and synthetic fixtures were authored for this project. Credit is for the demonstrated idea, not a claim of source-code adaptation, endorsement, or reproduced performance. AI Edge is credited for the original research/inbox/content workflow article and Miles Deutscher for sharing it. TypeSafe's official skills and Akshay Pachaar retain their existing credits above. Native adapter tests do not substantiate social-media benchmark claims.
 

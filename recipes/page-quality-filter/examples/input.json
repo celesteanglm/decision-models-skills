@@ -1,6 +1,0 @@
-{
-  "state": {
-    "content": "Task: compare database backups. Page explains daily incremental backups, weekly full backups, restore testing, and documented recovery tradeoffs."
-  },
-  "permission_granted": true
-}

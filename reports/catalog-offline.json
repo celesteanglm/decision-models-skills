@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-10-08T15:04:29.631807+00:00",
+  "source_hash": "a3f556710808172a405c5aedc43410d1abd74e9edde360219bc33a9e0299b016",
+  "qualification": "unchanged evaluated artifacts verified against immutable live receipts; no new live calls",
+  "recipe_count": 18,
+  "core_skill_count": 6,
+  "tests_passed_per_version": 112,
+  "credential_free_copied_demos_per_version": 44,
+  "python_versions": [
+    "3.10.13",
+    "3.12.10"
+  ],
+  "checks": [
+    "reject no-Working inclusion",
+    "reject Working labels for Partial backends in skills and README",
+    "verify fixture/artifact/receipt hashes",
+    "copied-folder portability",
+    "publication gate"
+  ]
+}

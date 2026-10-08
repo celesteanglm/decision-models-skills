@@ -30,3 +30,7 @@ Fixtures are a list of exactly 12 cases: eight clear, two ambiguous, two adversa
 All docs use portable paths and impersonal synthetic examples. No code or source prose is copied. Fixtures must not embed literal expected labels as answers to be repeated by the model. This contract is owned by the consolidating agent.
 
 Independent fixture review may establish a narrowly allowed list of safe ambiguous outcomes before live evaluation. Use `expected.choices` with explicit labels and `expected.actions`, rather than a single `choice`, for alternatives such as review or a recommendation to request missing details. Never allow unrelated substantive choices merely to make an ambiguous fixture pass. The frozen oracle is independent of provider outputs; it is not adjusted after live evaluation.
+
+## Publication labels
+
+Publish a recipe only when at least one backend meets the frozen Working criteria. Show positive Working badges only for those backends; Partial, Blocked, and Not tested do not qualify. Each copied folder must include `COMPATIBILITY.md` with the exact tested models, fixture revision, and evidence link. `reports/catalog.json` and `scripts/verified_catalog.py` enforce inclusion and labels against unchanged artifacts and the original live receipts. Adapter availability and a successful demo do not establish workflow compatibility.

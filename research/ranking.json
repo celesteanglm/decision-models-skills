@@ -14,7 +14,7 @@
     },
     "engagement": "Weighted log1p counts, capped: likes 40% at 10000, bookmarks 30% at 10000, reposts 20% at 1000, views 10% at 1000000.",
     "editorial_ratings": "Manual 1-5 assessments in sources.json. Reproducibility means a bounded slice can be independently implemented, not that the author's benchmark was reproduced.",
-    "selection": "Exclude games, weak engagement, infrastructure-only tutorials, unsupported broad announcements, and duplicate amplification. Preserve all inspected source records and exclusion reasons."
+    "selection": "Include only source posts inspiring at least one currently published recipe with a Working backend. Exclude games, weak engagement, infrastructure-only tutorials, unsupported broad announcements, and duplicate amplification. Preserve all inspected source records and exclusion reasons."
   },
   "limitations": [
     "X Top search redirected to login. This is a ranked discovered sample, not an exhaustive global top-tweet ranking.",
@@ -24,78 +24,6 @@
     "Reported speed, cost, accuracy, and AUPRC values from authors were not treated as independently reproduced results."
   ],
   "ranked_posts": [
-    {
-      "id": "2101454284927959080",
-      "url": "https://x.com/LangChain/status/2101454284927959080",
-      "author": {
-        "name": "LangChain",
-        "handle": "LangChain"
-      },
-      "published_at": "2026-09-19T23:31:59+00:00",
-      "observed_at": "2026-10-08T09:36:51.386353+00:00",
-      "retrieval": "FXTwitter public API",
-      "discovery_url": "https://jevai.dev/user-cases/",
-      "topic": "Jev",
-      "title": "Agent evaluation",
-      "summary": "Compare structured judges on fixed agent traces, while distinguishing repeatability from correctness.",
-      "metrics": {
-        "likes": 3006,
-        "retweets": 381,
-        "replies": 214,
-        "views": 633765,
-        "bookmarks": 4232,
-        "quotes": 135
-      },
-      "editorial_scores": {
-        "usefulness": 5,
-        "reproducibility": 5,
-        "evidence": 5
-      },
-      "selected_recipes": [
-        "agent-run-evaluation"
-      ],
-      "exclusion": null,
-      "inspiration_only": true,
-      "engagement_score": 4.443,
-      "score": 97.772,
-      "rank": 1
-    },
-    {
-      "id": "2102802621664985241",
-      "url": "https://x.com/Av1dlive/status/2102802621664985241",
-      "author": {
-        "name": "Avid",
-        "handle": "Av1dlive"
-      },
-      "published_at": "2026-09-23T16:49:47+00:00",
-      "observed_at": "2026-10-08T09:36:49.493022+00:00",
-      "retrieval": "FXTwitter public API",
-      "discovery_url": "https://jevai.dev/user-cases/",
-      "topic": "Jev",
-      "title": "Coding harness decisions",
-      "summary": "Select among admitted coding routes and tool bundles, with host enforcement and recorded decisions.",
-      "metrics": {
-        "likes": 1004,
-        "retweets": 122,
-        "replies": 59,
-        "views": 1195161,
-        "bookmarks": 3484,
-        "quotes": 25
-      },
-      "editorial_scores": {
-        "usefulness": 5,
-        "reproducibility": 5,
-        "evidence": 4
-      },
-      "selected_recipes": [
-        "coding-step-selection"
-      ],
-      "exclusion": null,
-      "inspiration_only": true,
-      "engagement_score": 4.026,
-      "score": 93.104,
-      "rank": 2
-    },
     {
       "id": "2100411066966749359",
       "url": "https://x.com/gregpr07/status/2100411066966749359",
@@ -130,43 +58,7 @@
       "inspiration_only": true,
       "engagement_score": 4.92,
       "score": 91.68,
-      "rank": 3
-    },
-    {
-      "id": "2100694549362553153",
-      "url": "https://x.com/tamarajtran/status/2100694549362553153",
-      "author": {
-        "name": "tamara",
-        "handle": "tamarajtran"
-      },
-      "published_at": "2026-09-17T21:13:04+00:00",
-      "observed_at": "2026-10-08T09:36:49.522891+00:00",
-      "retrieval": "FXTwitter public API",
-      "discovery_url": "https://jevai.dev/user-cases/",
-      "topic": "Jev",
-      "title": "Context retention",
-      "summary": "Judge which prior tool outputs should remain in context.",
-      "metrics": {
-        "likes": 10876,
-        "retweets": 678,
-        "replies": 425,
-        "views": 3901672,
-        "bookmarks": 8207,
-        "quotes": 337
-      },
-      "editorial_scores": {
-        "usefulness": 5,
-        "reproducibility": 4,
-        "evidence": 4
-      },
-      "selected_recipes": [
-        "context-retention"
-      ],
-      "exclusion": null,
-      "inspiration_only": true,
-      "engagement_score": 4.912,
-      "score": 91.647,
-      "rank": 4
+      "rank": 1
     },
     {
       "id": "2100801037192024478",
@@ -202,79 +94,7 @@
       "inspiration_only": true,
       "engagement_score": 2.411,
       "score": 89.643,
-      "rank": 5
-    },
-    {
-      "id": "2101007708044574906",
-      "url": "https://x.com/levie/status/2101007708044574906",
-      "author": {
-        "name": "Aaron Levie",
-        "handle": "levie"
-      },
-      "published_at": "2026-09-18T17:57:27+00:00",
-      "observed_at": "2026-10-08T09:36:49.768942+00:00",
-      "retrieval": "FXTwitter public API",
-      "discovery_url": "https://jevai.dev/user-cases/",
-      "topic": "Jev",
-      "title": "Incident document routing",
-      "summary": "Classify incident impact before recommending a workflow queue.",
-      "metrics": {
-        "likes": 668,
-        "retweets": 76,
-        "replies": 76,
-        "views": 116128,
-        "bookmarks": 572,
-        "quotes": 15
-      },
-      "editorial_scores": {
-        "usefulness": 5,
-        "reproducibility": 4,
-        "evidence": 5
-      },
-      "selected_recipes": [
-        "incident-queue-triage"
-      ],
-      "exclusion": null,
-      "inspiration_only": true,
-      "engagement_score": 3.498,
-      "score": 88.991,
-      "rank": 6
-    },
-    {
-      "id": "2100585126652481915",
-      "url": "https://x.com/redp314/status/2100585126652481915",
-      "author": {
-        "name": "Paolo Rosson",
-        "handle": "redp314"
-      },
-      "published_at": "2026-09-17T13:58:15+00:00",
-      "observed_at": "2026-10-08T09:36:51.392425+00:00",
-      "retrieval": "FXTwitter public API",
-      "discovery_url": "https://jevai.dev/user-cases/",
-      "topic": "Jev",
-      "title": "Pull-request risk triage",
-      "summary": "Identify review risks in a diff using bounded checks.",
-      "metrics": {
-        "likes": 2765,
-        "retweets": 143,
-        "replies": 99,
-        "views": 359193,
-        "bookmarks": 2562,
-        "quotes": 49
-      },
-      "editorial_scores": {
-        "usefulness": 5,
-        "reproducibility": 4,
-        "evidence": 4
-      },
-      "selected_recipes": [
-        "pr-risk-triage"
-      ],
-      "exclusion": null,
-      "inspiration_only": true,
-      "engagement_score": 4.181,
-      "score": 88.726,
-      "rank": 7
+      "rank": 2
     },
     {
       "id": "2100404532119269426",
@@ -310,7 +130,7 @@
       "inspiration_only": true,
       "engagement_score": 4.128,
       "score": 88.511,
-      "rank": 8
+      "rank": 3
     },
     {
       "id": "2100454070536351824",
@@ -346,7 +166,7 @@
       "inspiration_only": true,
       "engagement_score": 3.808,
       "score": 87.233,
-      "rank": 9
+      "rank": 4
     },
     {
       "id": "2100906882365788167",
@@ -382,7 +202,7 @@
       "inspiration_only": true,
       "engagement_score": 3.632,
       "score": 86.528,
-      "rank": 10
+      "rank": 5
     },
     {
       "id": "2100614659690713543",
@@ -418,43 +238,7 @@
       "inspiration_only": true,
       "engagement_score": 3.522,
       "score": 86.088,
-      "rank": 11
-    },
-    {
-      "id": "2100960281769738433",
-      "url": "https://x.com/dabit3/status/2100960281769738433",
-      "author": {
-        "name": "nader dabit",
-        "handle": "dabit3"
-      },
-      "published_at": "2026-09-18T14:48:59+00:00",
-      "observed_at": "2026-10-08T09:36:50.402214+00:00",
-      "retrieval": "FXTwitter public API",
-      "discovery_url": "https://jevai.dev/user-cases/",
-      "topic": "Jev",
-      "title": "Intent-based email retrieval",
-      "summary": "Screen retrieved messages against the information sought by a user.",
-      "metrics": {
-        "likes": 909,
-        "retweets": 36,
-        "replies": 44,
-        "views": 135429,
-        "bookmarks": 814,
-        "quotes": 5
-      },
-      "editorial_scores": {
-        "usefulness": 5,
-        "reproducibility": 4,
-        "evidence": 4
-      },
-      "selected_recipes": [
-        "email-intent-match"
-      ],
-      "exclusion": null,
-      "inspiration_only": true,
-      "engagement_score": 3.521,
-      "score": 86.086,
-      "rank": 12
+      "rank": 6
     },
     {
       "id": "2107469584773300545",
@@ -490,7 +274,7 @@
       "inspiration_only": true,
       "engagement_score": 3.344,
       "score": 85.377,
-      "rank": 13
+      "rank": 7
     },
     {
       "id": "2107576429928169934",
@@ -527,7 +311,7 @@
       "inspiration_only": true,
       "engagement_score": 2.909,
       "score": 83.634,
-      "rank": 14
+      "rank": 8
     },
     {
       "id": "2107835983735787568",
@@ -565,7 +349,7 @@
       "inspiration_only": true,
       "engagement_score": 2.812,
       "score": 83.248,
-      "rank": 15
+      "rank": 9
     },
     {
       "id": "2107911336583946374",
@@ -601,7 +385,7 @@
       "inspiration_only": true,
       "engagement_score": 2.048,
       "score": 83.194,
-      "rank": 16
+      "rank": 10
     },
     {
       "id": "2101000339948282090",
@@ -637,7 +421,7 @@
       "inspiration_only": true,
       "engagement_score": 4.273,
       "score": 81.092,
-      "rank": 17
+      "rank": 11
     },
     {
       "id": "2100722975645598191",
@@ -673,7 +457,7 @@
       "inspiration_only": true,
       "engagement_score": 3.871,
       "score": 79.485,
-      "rank": 18
+      "rank": 12
     },
     {
       "id": "2100780008193020049",
@@ -709,7 +493,7 @@
       "inspiration_only": true,
       "engagement_score": 3.696,
       "score": 78.784,
-      "rank": 19
+      "rank": 13
     },
     {
       "id": "2100757989212754085",
@@ -745,7 +529,7 @@
       "inspiration_only": true,
       "engagement_score": 3.586,
       "score": 78.345,
-      "rank": 20
+      "rank": 14
     },
     {
       "id": "2100939189869002819",
@@ -781,7 +565,7 @@
       "inspiration_only": true,
       "engagement_score": 3.244,
       "score": 76.974,
-      "rank": 21
+      "rank": 15
     },
     {
       "id": "2100749640866165092",
@@ -817,43 +601,7 @@
       "inspiration_only": true,
       "engagement_score": 3.196,
       "score": 76.784,
-      "rank": 22
-    },
-    {
-      "id": "2100864907046768890",
-      "url": "https://x.com/Saccc_c/status/2100864907046768890",
-      "author": {
-        "name": "Sac",
-        "handle": "Saccc_c"
-      },
-      "published_at": "2026-09-18T08:30:00+00:00",
-      "observed_at": "2026-10-08T09:36:50.303964+00:00",
-      "retrieval": "FXTwitter public API",
-      "discovery_url": "https://jevai.dev/user-cases/",
-      "topic": "Jev",
-      "title": "Computer action selection",
-      "summary": "Choose a next computer step from a calendar-task state.",
-      "metrics": {
-        "likes": 1759,
-        "retweets": 170,
-        "replies": 125,
-        "views": 624667,
-        "bookmarks": 2236,
-        "quotes": 17
-      },
-      "editorial_scores": {
-        "usefulness": 4,
-        "reproducibility": 3,
-        "evidence": 4
-      },
-      "selected_recipes": [
-        "calendar-action-selection"
-      ],
-      "exclusion": null,
-      "inspiration_only": true,
-      "engagement_score": 4.106,
-      "score": 75.424,
-      "rank": 23
+      "rank": 16
     },
     {
       "id": "2107573880974127319",
@@ -889,79 +637,7 @@
       "inspiration_only": true,
       "engagement_score": 3.381,
       "score": 72.523,
-      "rank": 24
-    },
-    {
-      "id": "2100734646824902713",
-      "url": "https://x.com/tsuyoshi_osiire/status/2100734646824902713",
-      "author": {
-        "name": "かねこつよし",
-        "handle": "tsuyoshi_osiire"
-      },
-      "published_at": "2026-09-17T23:52:24+00:00",
-      "observed_at": "2026-10-08T09:36:49.826665+00:00",
-      "retrieval": "FXTwitter public API",
-      "discovery_url": "https://jevai.dev/user-cases/",
-      "topic": "Jev",
-      "title": "Meeting state tracking",
-      "summary": "Classify discussion progress and agreement using transcript evidence.",
-      "metrics": {
-        "likes": 458,
-        "retweets": 48,
-        "replies": 4,
-        "views": 68049,
-        "bookmarks": 387,
-        "quotes": 18
-      },
-      "editorial_scores": {
-        "usefulness": 4,
-        "reproducibility": 3,
-        "evidence": 4
-      },
-      "selected_recipes": [
-        "meeting-state-tracking"
-      ],
-      "exclusion": null,
-      "inspiration_only": true,
-      "engagement_score": 3.268,
-      "score": 72.071,
-      "rank": 25
-    },
-    {
-      "id": "2102156469680431169",
-      "url": "https://x.com/brainstormity/status/2102156469680431169",
-      "author": {
-        "name": "brainstormity",
-        "handle": "brainstormity"
-      },
-      "published_at": "2026-09-21T22:02:13+00:00",
-      "observed_at": "2026-10-08T09:36:50.706331+00:00",
-      "retrieval": "FXTwitter public API",
-      "discovery_url": "https://jevai.dev/user-cases/",
-      "topic": "Jev",
-      "title": "Network event triage",
-      "summary": "Flag packet-derived descriptions for investigation; the anecdote does not establish a confirmed security finding.",
-      "metrics": {
-        "likes": 1032,
-        "retweets": 74,
-        "replies": 36,
-        "views": 192722,
-        "bookmarks": 1137,
-        "quotes": 17
-      },
-      "editorial_scores": {
-        "usefulness": 4,
-        "reproducibility": 3,
-        "evidence": 3
-      },
-      "selected_recipes": [
-        "network-event-triage"
-      ],
-      "exclusion": null,
-      "inspiration_only": true,
-      "engagement_score": 3.718,
-      "score": 70.874,
-      "rank": 26
+      "rank": 17
     }
   ]
 }

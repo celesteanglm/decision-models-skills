@@ -87,6 +87,13 @@ class PublishScopeTests(unittest.TestCase):
             self.assertFalse(any((repo / name).exists() for name in ("reports", "docs", "research")))
 
     def test_helper_configuration_fixture_and_runtime_drift_are_rejected(self):
+        for helpers in ({}, {HELPERS[0]: sha256(REPO / HELPERS[0])}):
+            with self.subTest(helpers=helpers), tempfile.TemporaryDirectory() as root:
+                repo = copy_repo(root)
+                receipt = receipt_for(repo)
+                receipt["reference_artifacts"] = helpers
+                with self.assertRaisesRegex(AssertionError, "incomplete reference helper set"):
+                    build(repo, receipt)
         mutations = {
             "helper": (HELPERS[0], "\n# helper drift\n", "reference helper changed"),
             "configuration": (f"recipes/{PUBLISHED}/recipe.json", " ", "scoped artifacts changed"),

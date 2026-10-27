@@ -93,6 +93,12 @@ class VerifiedCatalogTests(unittest.TestCase):
                     verify_catalog(repo)
 
     def test_rejects_runtime_changes(self):
+        for helpers in ({}, {"scripts/usecase_reference.py": sha256(REPO / "scripts/usecase_reference.py")}):
+            with self.subTest(helpers=helpers), tempfile.TemporaryDirectory() as root:
+                repo = copy_inputs(root)
+                change_manifest(repo, lambda m: m.update(reference_artifacts=helpers))
+                with self.assertRaisesRegex(AssertionError, "incomplete reference helper set"):
+                    verify_catalog(repo)
         with tempfile.TemporaryDirectory() as root:
             repo = copy_inputs(root)
             path = repo / "src/decision_models/recipes.py"

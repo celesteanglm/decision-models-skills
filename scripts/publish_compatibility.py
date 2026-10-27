@@ -7,7 +7,7 @@ from pathlib import Path
 from decision_models.evaluation import source_hash
 from scripts.verified_catalog import (
     artifacts, backend_results, compatibility_markdown,
-    EVIDENCE_SCOPE, runtime_revision, sha256,
+    EVIDENCE_SCOPE, REFERENCE_HELPERS, runtime_revision, sha256,
 )
 
 
@@ -19,6 +19,7 @@ def build_manifest(repo, folder, receipt, receipt_hash, evidence_url):
     backends = backend_results(receipt, folder.name)
     assert any(b["status"] == "Working" for b in backends.values()), "no Working backend"
     if "evaluated_artifacts" in receipt:
+        assert set(receipt.get("reference_artifacts", {})) == REFERENCE_HELPERS, "incomplete reference helper set"
         assert receipt["runtime_revision"] == runtime_revision(repo), "reference runtime changed"
         assert receipt["evaluated_artifacts"][folder.name] == artifacts(folder), "scoped artifacts changed"
         for relative, digest in receipt["reference_artifacts"].items():

@@ -13,6 +13,7 @@ PROVIDERS = ("jev-openrouter", "openai-decisions", "sage")
 SLUGS = {"jev-openrouter": "Jev%20%2F%20OpenRouter", "openai-decisions": "Decisions%20API", "sage": "Sage"}
 NAMES = {"jev-openrouter": "Jev / OpenRouter", "openai-decisions": "Decisions API", "sage": "Sage"}
 EVIDENCE_SCOPE = {"reference_implementation": "python-native-apis", "instruction_only": "Not evaluated"}
+REFERENCE_HELPERS = {"scripts/usecase_reference.py", "scripts/evaluate_usecases.py"}
 
 
 def sha256(path):
@@ -144,6 +145,8 @@ def verify_catalog(repo, receipts=()):
             assert manifest["mode"] == "live" and manifest["repetitions"] == 3, "synthetic evidence cannot qualify"
             assert manifest["scope"] == EVIDENCE_SCOPE, "reference evidence cannot qualify instruction-only use"
             assert manifest["runtime_revision"] == revision, "runtime changed since evaluation"
+            if "reference_artifacts" in manifest:
+                assert set(manifest["reference_artifacts"]) == REFERENCE_HELPERS, "incomplete reference helper set"
             for relative, digest in manifest.get("reference_artifacts", {}).items():
                 path = (repo / relative).resolve()
                 assert path.is_relative_to(repo.resolve()) and path.is_file() and sha256(path) == digest, "reference helper changed since evaluation"

@@ -265,13 +265,13 @@ class EvaluationTests(unittest.TestCase):
                  patch.object(evaluation, "execute", side_effect=lambda *args, **kwargs: calls.append(args)):
                 with self.assertRaises(DecisionError) as caught:
                     evaluate_fixtures(copied, ["sage"], "live", 3, 1.0,
-                                      Path(temp) / "receipt.json", RATES, ["input-guardrails"])
+                                      Path(temp) / "receipt.json", RATES, ["input-guardrails"], model="levanto-sage-v1.4")
             self.assertEqual(caught.exception.code, "offline_verification_required")
             self.assertEqual(calls, [])
 
     def test_ambiguous_paid_failure_stops_that_provider_but_allows_another_provider(self):
         rates = {
-            "sage": {"source": "test-reviewed", "checked_at": "2026-10-08",
+            "openai-decisions": {"source": "test-reviewed", "checked_at": "2026-10-08",
                      "input_per_million": 1.0, "output_per_million": 1.0},
             "jev-openrouter": {"source": "test-reviewed", "checked_at": "2026-10-08",
                                "input_per_million": 1.0, "output_per_million": 1.0},
@@ -288,7 +288,7 @@ class EvaluationTests(unittest.TestCase):
                         payload = adapter_for(provider).build_payload(
                             prepared["state"], prepared["questions"], adapter_for(provider).default_model)
                         kwargs["before_attempt"](provider, payload)
-                    if provider == "sage":
+                    if provider == "openai-decisions":
                         raise DecisionError(failure_code, "charge status unknown")
                     if prepared["early_result"] is None:
                         kwargs["after_attempt"](provider, {"usage": {"input_tokens": 0, "output_tokens": 0}})
@@ -308,12 +308,12 @@ class EvaluationTests(unittest.TestCase):
                     receipt_path = Path(temp) / "receipt.json"
                     with patch.object(evaluation, "source_hash", return_value="fresh"), \
                          patch.object(evaluation, "execute", mocked_execute):
-                        receipt = evaluate_fixtures(repo, ["sage", "jev-openrouter"], "live", 3, 5.0,
-                                                    receipt_path, rates, ["input-guardrails"])
+                        receipt = evaluate_fixtures(repo, ["openai-decisions", "jev-openrouter"], "live", 3, 5.0,
+                                                    receipt_path, rates, ["input-guardrails"], model=None)
 
-                sage_rows = [row for row in receipt["rows"] if row["provider"] == "sage"]
+                sage_rows = [row for row in receipt["rows"] if row["provider"] == "openai-decisions"]
                 openrouter_rows = [row for row in receipt["rows"] if row["provider"] == "jev-openrouter"]
-                self.assertEqual(provider_calls["sage"], 1)
+                self.assertEqual(provider_calls["openai-decisions"], 1)
                 self.assertEqual(len(sage_rows), 1)
                 self.assertEqual(sage_rows[0]["repetition"], 1)
                 self.assertEqual(sage_rows[0]["error"]["code"], failure_code)
@@ -357,7 +357,7 @@ class EvaluationTests(unittest.TestCase):
             with patch.object(evaluation, "source_hash", return_value="fresh"), \
                  patch.object(evaluation, "execute", mocked_execute):
                 receipt = evaluate_fixtures(repo, ["sage"], "live", 3, 5.0,
-                                            receipt_path, rates, ["input-guardrails"])
+                                            receipt_path, rates, ["input-guardrails"], model="levanto-sage-v1.4")
 
         self.assertEqual(calls, 2)
         self.assertEqual(len(receipt["rows"]), 2)

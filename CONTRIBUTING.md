@@ -36,10 +36,11 @@ The package exposes no global console command. Maintainers can invoke its module
 python -m decision_models evaluate --repo . --mode demo \
   --providers jev-openrouter --output reports/demo-general.json
 python -m decision_models evaluate-use-cases --repo . --mode demo \
-  --providers sage --output reports/demo-use-cases.json
+  --providers sage --model levanto-sage-v1.4 --output reports/demo-use-cases.json
 python -m decision_models decide --config skills/study-tool-selection/decision.json \
   --provider sage --input skills/study-tool-selection/examples/input.json \
-  --mode demo --demo-answers skills/study-tool-selection/examples/demo.json
+  --model levanto-sage-v1.4 --mode demo \
+  --demo-answers skills/study-tool-selection/examples/demo.json
 ```
 
 Synthetic demo answers cannot qualify a backend; core demo evaluation intentionally exits 1 and reports Not tested. The offline suite includes reference implementation tests and demos from copied JSON inputs; those demos do not execute or benchmark the model-agnostic instructions.
@@ -47,6 +48,8 @@ Synthetic demo answers cannot qualify a backend; core demo evaluation intentiona
 Follow [IMPLEMENTATION_CONTRACT.md](IMPLEMENTATION_CONTRACT.md) and [DECISION_CONTRACT.md](DECISION_CONTRACT.md) when changing the reference code or configuration. Keep native probabilities and confidence separate, credentials in the environment, and runtime behavior independent of expected fixture labels. Freeze fixture expectations before inference and keep failures.
 
 For live reference checks, explicitly choose `--mode live`, configure the provider credential, and supply `--rates /path/to/reviewed-rates.json`. The rates object is keyed by provider flag; each entry needs `source`, `checked_at`, `input_per_million`, and `output_per_million`. Review current pricing before a run. `--budget` reserves an allowance capped at US$5. Run offline verification first; stop on unknown-charge timeouts. Live evaluation is manual and never triggered automatically by a push.
+
+Sage live commands require an explicit `--model`, including evaluation and smoke commands. Use `--providers sage --model levanto-sage-v1.4` for the current text deployment recorded here. A model override selects exactly one provider per run. The bundled v1.3 default remains historical for reproducing archived contracts; live onboarding never selects it implicitly. Selecting v1.4 does not transfer old v1.3 compatibility results or guarantee that every skill passes on v1.4.
 
 ## Record what was tested
 
@@ -69,6 +72,24 @@ The publisher targets the unified `skills/` collection. It requires a live recei
 Publishing metadata changes the aggregate source hash. Verify again before subsequent reference evaluations. `python scripts/verified_catalog.py` checks recorded summaries offline; repeat `--receipt /path/to/downloaded-run.json` to audit them against retained raw evidence and checksums. Offline consistency checks do not fetch remote evidence or invoke models.
 
 For the unified layout migration, `--migration-receipt /path/to/downloaded-audit.json` additionally checks the retained offline audit against the local decision contracts, runtime, helper code, and recorded counts. Historical native labels retain their original dates and require this migration metadata. Future changes to decision behavior need fresh live evidence; a folder move alone can be verified with frozen request/policy contracts and archived-response replay.
+
+## Preserve evidence when changing integration code
+
+The runtime upgrade audit compares the current code with the frozen source snapshot at `0d93d0e10c177e1f0341284de1a1c3cf2745aa46`. Its committed golden contains hashes, not raw provider responses. CI checks all 948 request and policy cases. The full audit also replays four pinned native receipts against both runtimes, keeping 2,598 native responses separate from 246 deterministic outcomes.
+
+Run `python -m scripts.audit_reference_upgrade --help` for the full comparison. Supply `--baseline-root` pointing to a checkout of that commit, all four downloaded receipts in `--receipts`, and a new `--output` path. The audit rejects changed fixtures, image assets, requests, answers, or recommendations. New adapters and stricter errors need their own tests; unchanged historical checks do not qualify them.
+
+Retain the sanitized comparison on the evidence branch, then record its immutable URL:
+
+```sh
+python -m scripts.publish_compatibility \
+  --upgrade-receipt reports/reference-upgrade-audit.json \
+  --upgrade-url https://github.com/OWNER/REPO/blob/COMMIT/reference-upgrade.json
+python scripts/verify.py
+python scripts/verified_catalog.py --upgrade-receipt reports/reference-upgrade-audit.json
+```
+
+This operation appends comparison metadata without changing original test dates, model names, outcomes, or thresholds. It requires complete evidence before writing any summary. Do not regenerate the golden from current output to make a changed behavior pass. A changed decision needs fresh qualification.
 
 ## Local working material
 

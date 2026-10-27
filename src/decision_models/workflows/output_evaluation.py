@@ -11,6 +11,23 @@ FAIL_BELOW = 0.20
 ACTION_MARKER_PREFIX = "[[action:"
 
 
+def validate_policy(policy):
+    required = {"grounded", "relevant", "helpfulness", "fail_below"}
+    if not isinstance(policy, dict) or set(policy) != required:
+        raise DecisionError("invalid_request", "output policy needs grounded, relevant, helpfulness, and fail_below")
+    try:
+        grounded = number(policy["grounded"], 0, 1, "grounded")
+        relevant = number(policy["relevant"], 0, 1, "relevant")
+        helpfulness = number(policy["helpfulness"], 0, 4, "helpfulness")
+        fail_below = number(policy["fail_below"], 0, 1, "fail_below")
+    except DecisionError as exc:
+        raise DecisionError("invalid_request", "output policy thresholds are outside their allowed ranges") from exc
+    if fail_below >= min(grounded, relevant):
+        raise DecisionError("invalid_request", "fail_below must be below grounded and relevant thresholds")
+    return {"grounded": grounded, "relevant": relevant,
+            "helpfulness": helpfulness, "fail_below": fail_below}
+
+
 def _validate(data):
     for field in ("request", "response"):
         if not isinstance(data.get(field), str) or not data[field].strip():
@@ -115,7 +132,8 @@ def decide(data, response):
     if any(not isinstance(answers.get(name), dict) or answers[name].get("status") == "refusal" for name in names):
         return {"action": "review", "reasons": ["judge_refusal_or_missing_answer"]}
     provider = data.get("_provider", "jev-openrouter")
-    if provider not in PASS_THRESHOLDS:
+    policy = data.get("_policy")
+    if policy is None and provider not in PASS_THRESHOLDS:
         raise DecisionError("invalid_request", "unknown provider threshold profile")
     grounded = number(answers["grounded"].get("probability_true"), 0, 1, "grounded")
     relevant = number(answers["relevant"].get("probability_true"), 0, 1, "relevant")
@@ -125,18 +143,20 @@ def decide(data, response):
     by_id = {item["action_id"]: item["status"] for item in tool_results}
     deterministic_violation = any(by_id.get(action_id) != "succeeded" for action_id in markers)
     action_honest = 0.0 if deterministic_violation else judged_action_honest
-    thresholds = PASS_THRESHOLDS[provider]
+    configured = validate_policy(policy) if policy is not None else dict(
+        PASS_THRESHOLDS[provider], fail_below=FAIL_BELOW)
     metrics = {"grounded_probability": grounded, "relevant_probability": relevant,
                "action_honest_probability": action_honest, "helpfulness_score": helpfulness}
     if deterministic_violation:
         action, reasons = "fail", ["action_marker_not_confirmed_by_successful_tool_result"]
-    elif min(grounded, relevant, action_honest) < FAIL_BELOW:
+    elif min(grounded, relevant, action_honest) < configured["fail_below"]:
         action, reasons = "fail", ["one_or_more_quality_signals_below_failure_floor"]
-    elif (grounded >= thresholds["grounded"] and relevant >= thresholds["relevant"]
-          and action_honest >= min(thresholds["grounded"], thresholds["relevant"])
-          and helpfulness >= thresholds["helpfulness"]):
+    elif (grounded >= configured["grounded"] and relevant >= configured["relevant"]
+          and action_honest >= min(configured["grounded"], configured["relevant"])
+          and helpfulness >= configured["helpfulness"]):
         action, reasons = "pass", ["all_quality_signals_meet_provider_thresholds"]
     else:
         action, reasons = "review", ["quality_signal_below_pass_threshold"]
     return {"action": action, "reasons": reasons, "metrics": metrics,
-            "thresholds": dict(thresholds), "action_markers_checked": len(markers)}
+            "thresholds": {key: configured[key] for key in ("grounded", "relevant", "helpfulness")},
+            "action_markers_checked": len(markers)}

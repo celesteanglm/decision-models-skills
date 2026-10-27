@@ -12,7 +12,7 @@ import time
 import zlib
 
 from decision_models.contracts import DecisionError, validate_questions, validate_response
-from decision_models.transport import http_transport
+from decision_models.transport import encode_payload, http_transport
 
 
 class SageImageAdapter:
@@ -114,7 +114,7 @@ class SageImageAdapter:
                 if chosen is None or native.get("abstained") is True:
                     answer["status"] = "refusal"
                 else:
-                    if chosen not in question["options"] or not _unit(probability):
+                    if not isinstance(chosen, str) or chosen not in question["options"] or not _unit(probability):
                         raise DecisionError("invalid_response", f"Sage choice {name!r} is malformed")
                     probs = _choice_probabilities(distribution, question["options"])
                     if abs(probability - probs[chosen]) > 0.000001:
@@ -192,20 +192,33 @@ def prepare_image(folder, data, asset_root=None):
 
 
 def execute_image(folder, provider, data, *, mode="demo", demo_answers=None, asset_root=None,
-                  transport=http_transport, before_attempt=None, after_attempt=None):
+                  adapter=None, model=None, transport=http_transport,
+                  before_attempt=None, after_attempt=None):
     config = load_config(folder)
-    if provider != "sage":
+    if adapter is None and provider != "sage":
         raise DecisionError("unsupported_modality", "image modality currently supports only Sage")
+    if adapter is None:
+        adapter = SageImageAdapter()
+    adapter_name = getattr(adapter, "name", None)
+    for attribute in ("endpoint", "key_env", "default_model"):
+        if not isinstance(getattr(adapter, attribute, None), str) or not getattr(adapter, attribute):
+            raise DecisionError("invalid_request", f"image adapter needs a nonempty {attribute}")
+    if not callable(getattr(adapter, "build_payload", None)) or not callable(getattr(adapter, "parse_response", None)):
+        raise DecisionError("invalid_request", "image adapter needs build_payload and parse_response methods")
+    if not isinstance(adapter_name, str) or not adapter_name or provider != adapter_name:
+        raise DecisionError("invalid_request", "provider must match the image adapter name")
     if mode not in ("demo", "live"):
         raise DecisionError("invalid_request", "mode must be demo or live")
+    requested_model = adapter.default_model if model is None else model
+    if not isinstance(requested_model, str) or not requested_model:
+        raise DecisionError("invalid_request", "model must be a nonempty string")
     out = {"skill": config["id"], "provider": provider, "mode": mode,
-           "requested_model": SageImageAdapter.default_model, "executed_action": False}
+           "requested_model": requested_model, "executed_action": False}
     prepared = prepare_image(folder, data, asset_root)
     if prepared["early_result"] is not None:
         return dict(out, result=prepared["early_result"], source="deterministic",
                     response=None, latency_ms=0, attempts=0, image=None)
     questions = [config["question"]]
-    adapter = SageImageAdapter()
     started = time.perf_counter()
     if mode == "demo":
         response = _demo_response(demo_answers, questions)
@@ -213,13 +226,16 @@ def execute_image(folder, provider, data, *, mode="demo", demo_answers=None, ass
         key = os.environ.get(adapter.key_env)
         if not key:
             raise DecisionError("missing_credentials", f"set {adapter.key_env} for live mode")
-        payload = adapter.build_payload(prepared["content"], questions)
+        payload = adapter.build_payload(prepared["content"], questions, requested_model)
+        # Fail closed before reserving an attempt or making a provider call if the
+        # adapter produced values that cannot be represented as finite UTF-8 JSON.
+        encode_payload(payload)
         if before_attempt:
             before_attempt(provider, payload)
         raw = transport(adapter.endpoint, payload, key, 20)
         if after_attempt:
             after_attempt(provider, raw)
-        response = adapter.parse_response(raw, questions)
+        response = validate_response(adapter.parse_response(raw, questions), questions)
     result = _decision_from_response(config, response)
     return dict(out, result=result, source=mode, response=response,
                 latency_ms=round((time.perf_counter() - started) * 1000, 3),

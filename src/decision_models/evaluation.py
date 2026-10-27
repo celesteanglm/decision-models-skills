@@ -10,7 +10,7 @@ import time
 import os
 
 from .contracts import DecisionError, validate_response
-from .runtime import SKILLS, PROVIDERS, adapter_for, execute
+from .runtime import SKILLS, PROVIDERS, adapter_for, execute, validate_model_selection
 from .transport import http_transport
 
 
@@ -176,7 +176,8 @@ def source_hash(repo):
     return digest.hexdigest()
 
 
-def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, rates=None, skills=SKILLS):
+def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, rates=None, skills=SKILLS, *, model=None):
+    validate_model_selection(providers, mode, model)
     if repetitions != 3:
         raise DecisionError("invalid_request", "acceptance requires exactly three repetitions")
     ledger = Budget(budget_limit,rates) if mode=="live" else None
@@ -201,7 +202,8 @@ def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, 
                  s: hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest() for s,c in fixture_sets.items()},
              "profiles":{"reranking_top_k":sorted({str(c["input"].get("top_k","all"))
                  for c in fixture_sets.get("reranking",[])})},
-             "rates":rates if mode=="live" else None,"rows":rows}
+             "rates":rates if mode=="live" else None,"rows":rows,
+             "requested_model":model}
     output.parent.mkdir(parents=True,exist_ok=True)
     blocked_providers=set()
     stopped=False
@@ -229,6 +231,7 @@ def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, 
                         ledger.latest_raw = None
                     try:
                         out=execute(skill,provider,case["input"],mode=mode,demo_answers=case.get("demo_answers"),
+                                    model=model,
                                     before_attempt=ledger.reserve if ledger else None,
                                     after_attempt=ledger.record if ledger else None, retries=0)
                         passed, failures=acceptance(out,case["expected"])
@@ -264,7 +267,8 @@ def evaluate_fixtures(repo, providers, mode, repetitions, budget_limit, output, 
     return receipt
 
 
-def smoke_provider(provider):
+def smoke_provider(provider, *, model=None):
+    validate_model_selection([provider], "live", model)
     adapter=adapter_for(provider)
     key=os.environ.get(adapter.key_env)
     if not key:
@@ -273,7 +277,7 @@ def smoke_provider(provider):
         {"name":"billing","kind":"predicate","instructions":"Does ticket report a payment or billing problem?"},
         {"name":"team","kind":"choice","instructions":"Which team handles ticket?","options":{"billing":"Payments and invoices","technical":"Software defects"}},
         {"name":"urgency","kind":"score","instructions":"How urgently does ticket request action?","levels":["Can wait","Needs attention today","Immediate emergency"]}]
-    payload=adapter.build_payload({"ticket":"I was charged twice. Please correct my invoice today."},questions,adapter.default_model)
+    payload=adapter.build_payload({"ticket":"I was charged twice. Please correct my invoice today."},questions,model or adapter.default_model)
     start=time.perf_counter()
     raw=http_transport(adapter.endpoint,payload,key,20)
     response=adapter.parse_response(raw,questions)

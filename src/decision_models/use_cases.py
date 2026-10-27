@@ -7,7 +7,7 @@ import os
 
 from .contracts import DecisionError, number, validate_questions, validate_response
 from .runtime import adapter_for
-from .transport import http_transport
+from .transport import encode_payload, http_transport
 
 
 def load_use_case(path):
@@ -92,6 +92,7 @@ def execute_use_case(use_case, provider, data, *, mode="demo", demo_answers=None
                    transport=http_transport, before_attempt=None, after_attempt=None, adapter=None):
     if mode not in ("demo", "live"):
         raise DecisionError("invalid_request", "invalid skill mode")
+    encode_payload(data)
     early = prepare_use_case(use_case, data)
     adapter = adapter_for(provider) if adapter is None else adapter
     out = {"skill": use_case["id"], "provider": provider, "mode": mode,
@@ -112,11 +113,13 @@ def execute_use_case(use_case, provider, data, *, mode="demo", demo_answers=None
         # Only state and the trusted question enter inference. Permissions and
         # fixture expectations are never serialized into provider requests.
         payload = adapter.build_payload(data["state"], questions, model or adapter.default_model)
+        encode_payload(payload)
         if before_attempt:
             before_attempt(provider, payload)
         raw = transport(adapter.endpoint, payload, key, 20)
         if after_attempt:
             after_attempt(provider, raw)
         response = adapter.parse_response(raw, questions)
+        validate_response(response, questions)
     return dict(out, result=use_case_decision(use_case, response), source=mode, response=response,
                 latency_ms=round((time.perf_counter() - started) * 1000, 3), attempts=int(mode == "live"))

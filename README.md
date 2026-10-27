@@ -32,6 +32,10 @@ For this example, the expected recommendation is `billing` because the email des
 
 To try another model, change the model-tool line and keep the task, input, and skill rules the same. Run your example again and compare the outcome. A Working label from one backend does not transfer to the new one.
 
+### Optional: connect a custom provider
+
+The complete [offline custom-provider example](examples/custom_provider/README.md) shows the request and response mapping for a fictional fourth backend. It runs with the copied `email-queue-routing` skill from any working directory and needs no API key or network access. Its responses are synthetic, not evidence about a real provider.
+
 ### Connect a provider once
 
 Your agent needs a configured model tool, or you can connect an adapter in your own application. An API key alone does not create that connection. Ask your coding agent to follow the [implementation contract](IMPLEMENTATION_CONTRACT.md) when connecting a new provider.
@@ -45,6 +49,27 @@ The optional Python tools use these environment variables:
 | Sage | `SAGE_API_KEY` | [Sage quickstart](https://docs.levanto.ai/decision-model/quickstart) |
 
 Keep keys in the environment. Do not paste them into prompts or commit them. Your agent's connector may use its own credential setup. Check the chosen skill's results before selecting a backend and model version.
+
+The built-in Jev/OpenRouter and Sage adapters can be called from your own application with an explicit model and environment-only key. Live calls may incur provider charges; run them only with an authorized budget. After installing this package and copying the skill, set `OPENROUTER_API_KEY` in your process environment and use:
+
+```python
+from decision_models.runtime import adapter_for
+from decision_models.use_cases import execute_use_case, load_use_case
+
+skill = load_use_case("/path/to/email-queue-routing/decision.json")
+data = {"permission_granted": True, "state": {"content": "A customer asks why an invoice was charged twice."}}
+result = execute_use_case(skill, "jev-openrouter", data, mode="live",
+                          model="typesafe/jev-1.13", adapter=adapter_for("jev-openrouter"))
+```
+
+For Sage v1.4, set `SAGE_API_KEY` in the process environment and use the same copied skill and input:
+
+```python
+result = execute_use_case(skill, "sage", data, mode="live",
+                          model="levanto-sage-v1.4", adapter=adapter_for("sage"))
+```
+
+Keep `mode="live"` explicit. Do not put credentials in a prompt, input file, source file, or command history.
 
 For a new connection, give your coding agent this brief:
 
@@ -168,6 +193,8 @@ Those historical receipts do not benchmark the revised instruction-only skills o
 
 The unified directory layout was checked offline against 936 frozen provider-request and demo-policy contracts, plus 2,808 replays of archived native responses. Each compatibility page links the migration audit. This preserves the recorded reference results across naming changes; it is not a new live evaluation.
 
+The adapter and error-handling update also matched 948 frozen request and policy checks, 2,598 archived native responses, and 246 deterministic outcomes against the earlier runtime. Each compatibility page links that comparison separately. New providers and model versions still need independent qualification.
+
 ## Maintain the reference implementation
 
 `src/decision_models/` contains optional Python code used to reproduce API contracts, numerical policies, and reference evaluation. It is maintainer tooling; agents using the Markdown skills do not install or import it. The package exposes no global console command.
@@ -176,8 +203,10 @@ See [Contributing](CONTRIBUTING.md) for folder validation and optional Python ch
 
 ## Optional: connect a Python adapter
 
-The Markdown skills work without this code. For a text use-case in your own Python integration, the reference function `execute_use_case` accepts an adapter object directly with `adapter=MyAdapter()`; you do not need to add the adapter to the repository's provider registry. The adapter supplies `name`, `endpoint`, `key_env`, and `default_model`, plus `build_payload(state, questions, model)` and `parse_response(raw, questions)`.
+Start with the [runnable custom-provider example](examples/custom_provider/README.md). It injects a fictional adapter into `execute_use_case`, maps a different request and response format, and demonstrates recommendation, missing-confidence review, and malformed-answer handling offline. No provider registry edits are needed.
 
-`parse_response` should return the canonical response described in the [implementation contract](IMPLEMENTATION_CONTRACT.md), including the resolved model, answer map, native usage, and original raw response. Preserve native choice or score probability distributions and native confidence as separate fields; do not synthesize either. Put API credentials in the environment variable named by `key_env`. See [Contributing](CONTRIBUTING.md) before changing the optional reference implementation. Image configuration uses schema version 2 and the separate `scripts/image_reference.py` adapter. The bundled image runner targets Sage; using another vision backend needs its own integration and fresh compatibility tests.
+For your application, `execute_use_case` and the general `execute` function accept `adapter=MyAdapter()`. The image helper accepts the same argument with a vision-capable adapter. The adapter supplies `name`, `endpoint`, `key_env`, and `default_model`, plus `build_payload(state, questions, model)` and `parse_response(raw, questions)`. For images, the first argument is validated pixel content. General confidence gates and output evaluation require an explicit policy for a new provider so it does not inherit another model's numerical thresholds.
+
+`parse_response` returns the canonical response described in the [implementation contract](IMPLEMENTATION_CONTRACT.md), including the resolved model, answer map, native usage, and original raw response. Preserve native choice or score probability distributions and native confidence as separate fields. Do not invent either. Put API credentials in the environment variable named by `key_env`. See [Contributing](CONTRIBUTING.md) before changing the optional reference implementation. Every new backend needs its own tests before receiving a Working label.
 
 Compact reference evidence stays beside each skill. Raw test outputs stay in ignored `reports/` or retained CI artifacts.

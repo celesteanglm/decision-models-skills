@@ -1,10 +1,9 @@
 """Integration seam between independently implemented providers and workflows."""
 import importlib
-import json
 import os
 import time
 from .contracts import DecisionError, validate_questions, validate_response
-from .transport import http_transport
+from .transport import encode_payload, http_transport
 
 SKILLS = ("input-guardrails", "model-routing", "reranking", "tool-call-gating", "confidence-gates", "output-evaluation")
 PROVIDERS = {"jev-openrouter": "openrouter", "openai-decisions": "openai", "sage": "sage"}
@@ -22,26 +21,55 @@ def workflow_for(skill):
     return importlib.import_module("decision_models.workflows." + skill.replace("-", "_"))
 
 
+def validate_model_selection(providers, mode, model):
+    """Require an intentional model choice on current Sage live entrypoints."""
+    if model is not None and (not isinstance(model, str) or not model.strip() or len(providers) != 1):
+        raise DecisionError("invalid_request", "a model override requires one provider and a nonempty model")
+    if mode == "live" and "sage" in providers and model is None:
+        raise DecisionError("invalid_request", "Sage live mode requires an explicit model; the v1.3 default is historical")
+
+
+def _trusted_policy(skill, provider, policy):
+    if skill == "confidence-gates":
+        from .workflows.confidence_gates import SEND_THRESHOLDS, validate_policy
+        if policy is None:
+            if provider not in SEND_THRESHOLDS:
+                raise DecisionError("invalid_request", "unknown provider requires an explicit confidence policy")
+            return None
+        return validate_policy(policy)
+    if skill == "output-evaluation":
+        from .workflows.output_evaluation import PASS_THRESHOLDS, validate_policy
+        if policy is None:
+            if provider not in PASS_THRESHOLDS:
+                raise DecisionError("invalid_request", "unknown provider requires an explicit output policy")
+            return None
+        return validate_policy(policy)
+    if policy is not None:
+        raise DecisionError("invalid_request", "policy override is unsupported for this workflow")
+    return None
+
+
 def execute(skill, provider, data, *, mode="demo", demo_answers=None, model=None,
-            transport=http_transport, before_attempt=None, after_attempt=None, retries=0):
+            transport=http_transport, before_attempt=None, after_attempt=None, retries=0,
+            adapter=None, policy=None):
     if not isinstance(data, dict):
         raise DecisionError("invalid_request", "workflow input must be a JSON object")
     if mode not in ("demo", "live") or not 0 <= retries <= 2:
         raise DecisionError("invalid_request", "invalid mode or retry count")
-    adapter, workflow = adapter_for(provider), workflow_for(skill)
-    inputs = dict(data, _provider=provider)
+    encode_payload(data)
+    adapter, workflow = (adapter_for(provider) if adapter is None else adapter), workflow_for(skill)
+    inputs = dict(data, _provider=provider, _policy=None)
     prepared = workflow.build(inputs)
     out = {"skill": skill, "provider": provider, "mode": mode, "executed_action": False,
            "requested_model": model or adapter.default_model}
     if prepared.get("early_result") is not None:
         return dict(out, result=prepared["early_result"], source="deterministic", response=None, latency_ms=0, attempts=0)
+    trusted_policy = _trusted_policy(skill, provider, policy)
+    inputs["_policy"] = trusted_policy
     questions = prepared["questions"]
     validate_questions(questions)
     payload = adapter.build_payload(prepared["state"], questions, model or adapter.default_model)
-    try:
-        json.dumps(payload, allow_nan=False)
-    except (ValueError, TypeError) as exc:
-        raise DecisionError("invalid_request", "input must contain finite JSON values") from exc
+    encode_payload(payload)
     start = time.perf_counter()
     attempts = 0
     if mode == "demo":
@@ -63,6 +91,7 @@ def execute(skill, provider, data, *, mode="demo", demo_answers=None, model=None
                 if after_attempt:
                     after_attempt(provider, raw)
                 response = adapter.parse_response(raw, questions)
+                validate_response(response, questions)
                 break
             except DecisionError as exc:
                 if not exc.retryable or attempt >= retries:

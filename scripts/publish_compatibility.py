@@ -7,6 +7,7 @@ from decision_models.evaluation import source_hash
 from scripts.verified_catalog import (
     artifacts, backend_results, compatibility_markdown,
     EVIDENCE_SCOPE, LAYOUT_ORIGINS, REFERENCE_HELPERS_BY_MODALITY, runtime_revision, sha256,
+    json_digest, verify_integration_update,
 )
 
 
@@ -47,6 +48,28 @@ def build_manifest(repo, folder, receipt, receipt_hash, evidence_url, *, history
     return result
 
 
+def apply_integration_update(repo, receipt_path, evidence_url):
+    assert evidence_url.startswith("https://"), "HTTPS evidence URL required"
+    proof = json.loads(receipt_path.read_text())
+    proof_hash = sha256(receipt_path)
+    pending = []
+    for path in sorted((repo / "skills").glob("*/compatibility.json")):
+        manifest = json.loads(path.read_text())
+        assert manifest["artifacts"] == artifacts(path.parent), "reference artifacts changed"
+        manifest["integration_update"] = dict(
+            {key: proof[key] for key in ("previous_runtime_revision", "runtime_revision",
+                "previous_reference_artifacts", "current_reference_artifacts", "golden_sha256",
+                "payload_and_policy_cases", "actual_archived_response_replays", "deterministic_replays", "paid_requests")},
+            kind="offline-reference-upgrade", artifacts_sha256=json_digest(manifest["artifacts"]),
+            evidence_url=evidence_url, evidence_sha256=proof_hash)
+        verify_integration_update(repo, manifest, {proof_hash: proof})
+        pending.append((path.parent, manifest))
+    assert set(proof["artifacts"]) == {folder.name for folder, _ in pending}, "incomplete integration skill coverage"
+    for folder, manifest in pending:
+        write_manifest(folder, manifest)
+    return len(pending)
+
+
 def write_manifest(folder, manifest):
     (folder / "compatibility.json").write_text(json.dumps(manifest, indent=2) + "\n")
     (folder / "COMPATIBILITY.md").write_text(compatibility_markdown(manifest))
@@ -55,12 +78,21 @@ def write_manifest(folder, manifest):
 def main():
     parser = argparse.ArgumentParser(description="Record compatibility summaries from a retained live test run.")
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--receipt", type=Path, required=True)
+    parser.add_argument("--receipt", type=Path)
     parser.add_argument("--ids", nargs="+", help="publish only specified qualifying folders")
-    parser.add_argument("--evidence-url", required=True, help="retained HTTPS audit URL, such as an immutable Git commit or CI artifact")
+    parser.add_argument("--evidence-url", help="retained HTTPS audit URL, such as an immutable Git commit or CI artifact")
+    parser.add_argument("--upgrade-receipt", type=Path, help="offline comparison proof; preserves existing live results")
+    parser.add_argument("--upgrade-url", help="immutable HTTPS location of the offline comparison proof")
     parser.add_argument("--history-receipt", type=Path, help="retained development history for revised image instructions")
     parser.add_argument("--history-url", help="immutable HTTPS location of the development history")
     args = parser.parse_args()
+    if args.upgrade_receipt:
+        assert args.upgrade_url and not args.receipt and not args.ids, "an integration update requires its URL and all existing skills"
+        count = apply_integration_update(args.repo, args.upgrade_receipt, args.upgrade_url)
+        print(f"Recorded {count} offline integration comparisons; live results and dates are unchanged.")
+        return
+    assert args.receipt and args.evidence_url, "live receipt and evidence URL required"
+    assert not args.upgrade_url, "upgrade URL requires an upgrade receipt"
     assert args.evidence_url.startswith("https://"), "HTTPS evidence URL required"
     receipt = json.loads(args.receipt.read_text())
     assert receipt["source_hash"] == source_hash(args.repo) or "evaluated_artifacts" in receipt, "receipt is not for this checkout"

@@ -59,7 +59,7 @@ class UseCaseEvaluationTests(unittest.TestCase):
             with patch.object(use_case_evaluation, "execute_use_case") as execute:
                 with self.assertRaises(DecisionError) as raised:
                     evaluate_use_cases(repo, ["sage"], "live", 3, 0.000001,
-                                     output, rates=RATES)
+                                     output, rates=RATES, model="levanto-sage-v1.4")
             self.assertEqual(raised.exception.code, "budget_exhausted")
             execute.assert_not_called()
             self.assertFalse(output.exists())
@@ -119,7 +119,7 @@ class UseCaseEvaluationTests(unittest.TestCase):
 
             with patch.object(use_case_evaluation, "execute_use_case", side_effect=unknown_charge_timeout):
                 receipt = evaluate_use_cases(repo, ["sage"], "live", 3, 5,
-                                           output, rates=RATES)
+                                           output, rates=RATES, model="levanto-sage-v1.4")
 
             self.assertEqual(len(calls), 1)
             self.assertEqual(len(receipt["rows"]), 1)

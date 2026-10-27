@@ -42,3 +42,9 @@ The optional image runner reads image.json. The text runner rejects that schema 
 Three development wordings used the same frozen fixtures and 0.80 threshold. Preliminary runs failed clipped-button or washed-out-preview checks and are retained. These reused development cases are not a held-out production benchmark.
 
 [Earlier results and frozen prompt revisions](https://github.com/celesteanglm/decision-models-skills/blob/2fc0dc92de0c6aae0ea87818b749440cf4824677/image-evaluation-history.json) (SHA-256: 8db35dfe7b45597270520e30e3c27a2dc84fbbaad5f7832963323a291c64e41b). The first two runs were Partial; only the final configuration qualifies as Working.
+
+## Integration update
+
+The current runners add external adapters and structured error handling. An offline comparison against the recorded source snapshot matched 948 request and policy contracts, 2,598 archived native responses, and 246 deterministic outcomes. The original models, test dates, fixtures, and thresholds above remain unchanged. This comparison made no provider calls and does not qualify a different model or an external adapter.
+
+[Runtime comparison audit](https://github.com/celesteanglm/decision-models-skills/blob/8164fd03d33cca9f1f8f645a1a92b96b7cfafa83/reference-upgrade-20261028.json) (SHA-256: 72c938b2555b8898659fbdab9692598e05d5c58afde9700d18e0a2f8b8a2f1bd).

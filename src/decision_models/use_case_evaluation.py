@@ -11,7 +11,7 @@ import threading
 from .contracts import DecisionError
 from .evaluation import Budget, acceptance, source_hash, summarize
 from .use_cases import execute_use_case, load_use_case, prepare_use_case
-from .runtime import adapter_for
+from .runtime import adapter_for, validate_model_selection
 
 
 def catalog(repo):
@@ -29,7 +29,7 @@ def catalog(repo):
     return entries
 
 
-def preflight(repo, providers, rates, repetitions=3):
+def preflight(repo, providers, rates, repetitions=3, *, model=None):
     if repetitions != 3:
         raise DecisionError("invalid_request", "acceptance requires exactly three repetitions")
     entries = catalog(repo)
@@ -41,7 +41,7 @@ def preflight(repo, providers, rates, repetitions=3):
             for case in cases:
                 if prepare_use_case(use_case, case["input"]) is not None:
                     continue
-                payload = adapter.build_payload(case["input"]["state"], [use_case["question"]], adapter.default_model)
+                payload = adapter.build_payload(case["input"]["state"], [use_case["question"]], model or adapter.default_model)
                 for _ in range(repetitions):
                     ledger.reserve(provider, payload)
         totals[provider] = {"requests": ledger.attempts, "reserved_usd": ledger.reserved_usd}
@@ -50,17 +50,18 @@ def preflight(repo, providers, rates, repetitions=3):
             "source_hash": source_hash(repo), "repetitions": repetitions}
 
 
-def evaluate_use_cases(repo, providers, mode, repetitions, budget_limit, output, rates=None):
+def evaluate_use_cases(repo, providers, mode, repetitions, budget_limit, output, rates=None, *, model=None):
     if mode not in ("demo", "live") or len(set(providers)) != len(providers) or not providers:
         raise DecisionError("invalid_request", "invalid mode or duplicate/empty providers")
     if repetitions != 3:
         raise DecisionError("invalid_request", "acceptance requires exactly three repetitions")
+    validate_model_selection(providers, mode, model)
     entries = catalog(repo)
     revision = source_hash(repo)
     marker = repo / "reports" / "offline.json"
     offline = json.loads(marker.read_text()) if marker.exists() else {}
     offline_ok = offline.get("passed") is True and offline.get("source_hash") == revision
-    plan = preflight(repo, providers, rates, repetitions) if mode == "live" else None
+    plan = preflight(repo, providers, rates, repetitions, model=model) if mode == "live" else None
     if mode == "live":
         Budget(budget_limit, rates)  # validate the user-supplied limit
         if not offline_ok:
@@ -74,6 +75,7 @@ def evaluate_use_cases(repo, providers, mode, repetitions, budget_limit, output,
         raise DecisionError("invalid_request", "choose a new receipt path; existing runs are immutable")
     receipt = {"schema_version": 1, "mode": mode, "started_at": datetime.now(timezone.utc).isoformat(),
                "source_hash": revision, "repetitions": repetitions, "preflight": plan, "rates": rates,
+               "requested_model": model,
                "fixtures": {r["id"]: hashlib.sha256(json.dumps(c, sort_keys=True).encode()).hexdigest() for r, c in entries},
                "policies": {r["id"]: r["policy"] for r, _ in entries}, "rows": []}
     lock = threading.Lock()
@@ -98,6 +100,7 @@ def evaluate_use_cases(repo, providers, mode, repetitions, budget_limit, output,
                         ledger.latest_raw = None
                     try:
                         result = execute_use_case(use_case, provider, case["input"], mode=mode,
+                            model=model,
                             demo_answers=case.get("demo_answers"), before_attempt=ledger.reserve if ledger else None,
                             after_attempt=ledger.record if ledger else None)
                         passed, failures = acceptance(result, case["expected"])

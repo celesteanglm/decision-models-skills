@@ -28,15 +28,13 @@ class SkillPortabilityTests(unittest.TestCase):
         text_configs = list(SKILL_ROOT.glob("*/decision.json"))
         image_configs = list(SKILL_ROOT.glob("*/image.json"))
         self.assertEqual(len(general_ids), 6)
-        self.assertEqual(len(text_configs), 20)
-        self.assertEqual(len(image_configs), 1)
+        self.assertEqual(set(use_case_ids), {p.parent.name for p in text_configs + image_configs})
         self.assertEqual(len(use_case_ids), len(text_configs) + len(image_configs))
         catalog_ids = general_ids + use_case_ids
         self.assertEqual(len(catalog_ids), len(set(catalog_ids)))
         self.assertEqual(set(catalog_ids), {folder.name for folder in FOLDERS})
         self.assertEqual(len(FOLDERS), len(general_ids) + len(text_configs) + len(image_configs))
         self.assertTrue(all(folder.is_dir() for folder in FOLDERS))
-        self.assertEqual(len(text_configs), 20)
         other_roots = {
             root.name for root in REPO.iterdir()
             if root.is_dir() and root.name != 'skills' and not root.name.startswith('.')

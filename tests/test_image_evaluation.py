@@ -1,5 +1,6 @@
 import copy
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -8,8 +9,8 @@ from unittest.mock import Mock, patch
 from decision_models.contracts import DecisionError
 from decision_models.evaluation import source_hash
 from scripts.evaluate_images import ImageBudget, evaluate
-from scripts.image_reference import SageImageAdapter, prepare_image
-from tests.test_image_reference import image_config, png_bytes
+from scripts.image_reference import SageImageAdapter, execute_image, prepare_image
+from tests.test_image_reference import image_config, native_raw, png_bytes
 
 
 class ImageEvaluationTests(unittest.TestCase):
@@ -116,3 +117,28 @@ class ImageEvaluationTests(unittest.TestCase):
                 evaluate(self.repo, self.folder, self.output, mode='live')
         self.assertEqual(error.exception.code, 'invalid_request')
         run.assert_not_called()
+
+    def test_malformed_choice_is_journaled_with_raw_usage_and_stops_without_retry(self):
+        raw = native_raw(usage={'billed_input_tokens': 200, 'input_tokens': 100,
+                                'image_tokens': 100, 'output_tokens': 1})
+        raw['results'][0]['answers'] = [raw['results'][0]['answers'][1]]
+        raw['results'][0]['answers'][0]['result']['result']['chosen'] = []
+        transport = Mock(return_value=raw)
+
+        def run(*args, **kwargs):
+            return execute_image(*args, transport=transport, **kwargs)
+
+        with patch.dict(os.environ, {'SAGE_API_KEY': 'synthetic-test-only'}, clear=True), \
+             patch('scripts.evaluate_images.execute_image', side_effect=run):
+            receipt = evaluate(self.repo, self.folder, self.output, mode='live', historical_bound=0)
+        transport.assert_called_once()
+        self.assertEqual(len(receipt['rows']), 1)
+        row = receipt['rows'][0]
+        self.assertEqual(row['error']['code'], 'invalid_response')
+        self.assertEqual(row['raw_response'], raw)
+        self.assertEqual(row['attempts'], 1)
+        self.assertIsNotNone(row['charge'])
+        self.assertEqual(json.loads(self.output.read_text())['rows'][0]['error']['code'], 'invalid_response')
+        events = [json.loads(line) for line in self.output.with_suffix('.jsonl').read_text().splitlines()]
+        self.assertEqual(events[0]['event'], 'reserved')
+        self.assertEqual(events[1]['raw_response'], raw)

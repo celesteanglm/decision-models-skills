@@ -11,6 +11,10 @@ on:
         type: choice
         options: [jev-openrouter, openai-decisions, sage]
         required: true
+      model:
+        description: Explicit model ID (required for Sage, e.g. levanto-sage-v1.4)
+        required: false
+        default: ''
       budget_usd:
         description: Total reserved allowance, at most US$5
         default: '1'
@@ -47,7 +51,11 @@ jobs:
           SAGE_API_KEY: ${{ secrets.SAGE_API_KEY }}
           TEST_PROVIDER: ${{ inputs.provider }}
           TEST_BUDGET: ${{ inputs.budget_usd }}
-        run: python -m decision_models evaluate --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-live.json
+          TEST_MODEL: ${{ inputs.model }}
+        run: |
+          model_args=()
+          if [ -n "$TEST_MODEL" ]; then model_args=(--model "$TEST_MODEL"); fi
+          python -m decision_models evaluate --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-live.json "${model_args[@]}"
       - name: Evaluate frozen use cases
         if: inputs.suite == 'use-cases'
         env:
@@ -56,7 +64,11 @@ jobs:
           SAGE_API_KEY: ${{ secrets.SAGE_API_KEY }}
           TEST_PROVIDER: ${{ inputs.provider }}
           TEST_BUDGET: ${{ inputs.budget_usd }}
-        run: python -m decision_models evaluate-use-cases --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-use-cases.json
+          TEST_MODEL: ${{ inputs.model }}
+        run: |
+          model_args=()
+          if [ -n "$TEST_MODEL" ]; then model_args=(--model "$TEST_MODEL"); fi
+          python -m decision_models evaluate-use-cases --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-use-cases.json "${model_args[@]}"
       - uses: actions/upload-artifact@v4
         if: always()
         with:

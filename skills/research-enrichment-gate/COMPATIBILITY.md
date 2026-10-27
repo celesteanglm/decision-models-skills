@@ -38,3 +38,9 @@ The additional reference-helper hashes in compatibility.json bind this result to
 The live results above predate the unified skills directory. An offline check of 936 provider-request and demo-policy contracts, plus 2,808 replays of archived native responses, confirmed identical requests, permissions, numerical gates, and recommendations after the path and naming changes. This migration made no paid requests and is not a new live evaluation.
 
 [Migration audit](https://github.com/celesteanglm/decision-models-skills/blob/7b0e764a4e15d43be4e252365780b2393fdfa7f6/unified-layout-audit.json) (SHA-256: 69a859f7e0af3cd74011e50e4c806ec74f983458ed1c32fb978b3c8ef1a4fecc) preserves the verification record and original runtime revision.
+
+## Integration update
+
+The current runners add external adapters and structured error handling. An offline comparison against the recorded source snapshot matched 948 request and policy contracts, 2,598 archived native responses, and 246 deterministic outcomes. The original models, test dates, fixtures, and thresholds above remain unchanged. This comparison made no provider calls and does not qualify a different model or an external adapter.
+
+[Runtime comparison audit](https://github.com/celesteanglm/decision-models-skills/blob/8164fd03d33cca9f1f8f645a1a92b96b7cfafa83/reference-upgrade-20261028.json) (SHA-256: 72c938b2555b8898659fbdab9692598e05d5c58afde9700d18e0a2f8b8a2f1bd).

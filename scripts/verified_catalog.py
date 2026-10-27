@@ -28,6 +28,39 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def json_digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
+                                     ensure_ascii=False).encode()).hexdigest()
+
+
+def verify_integration_update(repo, manifest, audits):
+    update = manifest["integration_update"]
+    golden = json.loads((repo / "scripts/reference-contracts.json").read_text())
+    assert update["kind"] == "offline-reference-upgrade" and update["paid_requests"] == 0, "invalid integration update"
+    assert update["previous_runtime_revision"] == manifest["runtime_revision"] == golden["previous_runtime_revision"], "historical runtime differs"
+    assert update["runtime_revision"] == runtime_revision(repo), "runtime changed since integration audit"
+    assert update["golden_sha256"] == json_digest(golden), "integration golden changed"
+    assert update["artifacts_sha256"] == json_digest(manifest["artifacts"]) == json_digest(golden["artifacts"][manifest["id"]]), "integration artifacts differ"
+    assert update["previous_reference_artifacts"] == golden["previous_reference_artifacts"], "historical helpers differ"
+    assert set(update["current_reference_artifacts"]) == set(golden["previous_reference_artifacts"]), "incomplete integration helper set"
+    for relative, digest in update["current_reference_artifacts"].items():
+        path = (repo / relative).resolve()
+        assert path.is_relative_to(repo.resolve()) and sha256(path) == digest, "reference helper changed since integration audit"
+    assert update["payload_and_policy_cases"] == len(golden["contracts"]) == golden["payload_and_policy_cases"], "incomplete integration contracts"
+    assert update["actual_archived_response_replays"] == 2598 and update["deterministic_replays"] == 246, "incomplete integration replays"
+    assert update["evidence_url"].startswith("https://") and re.fullmatch(r"[a-f0-9]{64}", update["evidence_sha256"]), "invalid integration evidence"
+    if update["evidence_sha256"] in audits:
+        proof = audits[update["evidence_sha256"]]
+        assert proof["kind"] == "reference-upgrade-audit" and proof["identical"] is True, "integration behavior differs"
+        for field in ("previous_runtime_revision", "runtime_revision", "previous_reference_artifacts",
+                      "current_reference_artifacts", "payload_and_policy_cases", "actual_archived_response_replays",
+                      "deterministic_replays", "paid_requests", "golden_sha256"):
+            assert proof[field] == update[field], "integration summary differs from raw evidence"
+        assert proof["artifacts"][manifest["id"]] == manifest["artifacts"], "integration proof artifacts differ"
+        assert {Path(item["path"]).name: item["sha256"] for item in proof["receipts"]} == golden["receipt_sha256"], "integration receipt set differs"
+    return update["previous_reference_artifacts"]
+
+
 def runtime_revision(repo):
     digest = hashlib.sha256()
     for path in sorted((Path(repo) / "src").rglob("*.py")):
@@ -157,10 +190,15 @@ def compatibility_markdown(manifest):
         migration = manifest["migration"]
         lines += ["", "## Layout verification", "", "The live results above predate the unified skills directory. An offline check of 936 provider-request and demo-policy contracts, plus 2,808 replays of archived native responses, confirmed identical requests, permissions, numerical gates, and recommendations after the path and naming changes. This migration made no paid requests and is not a new live evaluation.",
                   "", f"[Migration audit]({migration['evidence_url']}) (SHA-256: {migration['evidence_sha256']}) preserves the verification record and original runtime revision."]
+    if manifest.get("integration_update"):
+        update = manifest["integration_update"]
+        lines += ["", "## Integration update", "",
+                  "The current runners add external adapters and structured error handling. An offline comparison against the recorded source snapshot matched 948 request and policy contracts, 2,598 archived native responses, and 246 deterministic outcomes. The original models, test dates, fixtures, and thresholds above remain unchanged. This comparison made no provider calls and does not qualify a different model or an external adapter.",
+                  "", f"[Runtime comparison audit]({update['evidence_url']}) (SHA-256: {update['evidence_sha256']})."]
     return "\n".join(lines) + "\n"
 
 
-def verify_catalog(repo, receipts=(), migration_receipts=()):
+def verify_catalog(repo, receipts=(), migration_receipts=(), upgrade_receipts=()):
     repo = Path(repo)
     entries = {}
     skill_root = repo / "skills"
@@ -168,7 +206,9 @@ def verify_catalog(repo, receipts=(), migration_receipts=()):
     revision = runtime_revision(repo)
     raw = {sha256(path): json.loads(Path(path).read_text()) for path in receipts}
     migrations = {sha256(path): json.loads(Path(path).read_text()) for path in migration_receipts}
+    upgrades = {sha256(path): json.loads(Path(path).read_text()) for path in upgrade_receipts}
     used_migrations = set()
+    used_upgrades = set()
     folders = sorted(p.parent for p in skill_root.glob("*/SKILL.md"))
     names = {p.name for p in folders}
     assert set(SKILLS) <= names, "general skill folders differ"
@@ -191,14 +231,19 @@ def verify_catalog(repo, receipts=(), migration_receipts=()):
         assert manifest["schema_version"] == 1 and manifest["id"] == folder.name and manifest["kind"] == "skills"
         assert manifest["mode"] == "live" and manifest["repetitions"] == 3, "synthetic evidence cannot qualify"
         assert manifest["scope"] == EVIDENCE_SCOPE, "reference evidence cannot qualify instruction-only use"
-        assert manifest["runtime_revision"] == revision, "runtime changed since evaluation"
+        historical_helpers = None
+        if "integration_update" in manifest:
+            historical_helpers = verify_integration_update(repo, manifest, upgrades)
+            used_upgrades.add(manifest["integration_update"]["evidence_sha256"])
+        else:
+            assert manifest["runtime_revision"] == revision, "runtime changed since evaluation"
         if manifest["evidence"]["sha256"] in LAYOUT_ORIGINS:
             assert "migration" in manifest, "missing layout migration"
         if "migration" in manifest:
             migration = manifest["migration"]
             contract_revision = decision_contract(folder)
             assert migration["kind"] == "layout-and-naming-only" and migration["paid_requests"] == 0, "invalid layout migration"
-            assert migration["runtime_revision"] == revision, "migration runtime changed"
+            assert migration["runtime_revision"] == manifest["runtime_revision"], "migration runtime changed"
             assert migration["contract_sha256"] == contract_revision, "migrated decision contract changed"
             assert migration["payload_and_policy_cases"] == 936 and migration["archived_response_replays"] == 2808, "incomplete migration verification"
             assert migration["evidence_url"].startswith("https://") and re.fullmatch(r"[a-f0-9]{64}", migration["evidence_sha256"]), "invalid migration evidence"
@@ -213,12 +258,14 @@ def verify_catalog(repo, receipts=(), migration_receipts=()):
                 assert proof["decision_contracts"][folder.name] == contract_revision, "migration contract differs from raw evidence"
                 assert set(proof["reference_artifacts"]) == REFERENCE_HELPERS, "incomplete migration helper set"
                 for relative, digest in proof["reference_artifacts"].items():
-                    assert relative in REFERENCE_HELPERS and sha256(repo / relative) == digest, "migration helper changed"
+                    observed = historical_helpers.get(relative) if historical_helpers else sha256(repo / relative)
+                    assert relative in REFERENCE_HELPERS and observed == digest, "migration helper changed"
         if "reference_artifacts" in manifest:
             assert set(manifest["reference_artifacts"]) == REFERENCE_HELPERS_BY_MODALITY[modality], "incomplete reference helper set"
         for relative, digest in manifest.get("reference_artifacts", {}).items():
             path = (repo / relative).resolve()
-            assert path.is_relative_to(repo.resolve()) and path.is_file() and sha256(path) == digest, "reference helper changed since evaluation"
+            observed = historical_helpers.get(relative) if historical_helpers else sha256(path)
+            assert path.is_relative_to(repo.resolve()) and path.is_file() and observed == digest, "reference helper changed since evaluation"
         assert manifest["artifacts"] == artifacts(folder), f"unverified artifacts: {folder.name}"
         fixtures = json.loads((folder / "fixtures/acceptance.json").read_text())
         assert len(fixtures) == 12 and Counter(c["category"] for c in fixtures) == {"clear": 8, "ambiguous": 2, "adversarial": 2}
@@ -254,6 +301,7 @@ def verify_catalog(repo, receipts=(), migration_receipts=()):
     expected_digests = {entry["manifest"]["evidence"]["sha256"] for entry in entries.values()}
     assert set(raw) <= expected_digests, "raw receipt not referenced by a published skill"
     assert set(migrations) <= used_migrations, "migration receipt not referenced by a published skill"
+    assert set(upgrades) <= used_upgrades, "integration receipt not referenced by a published skill"
     return {"skills": entries}
 
 
@@ -261,6 +309,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Verify recorded backend results and optional audit receipts.")
     parser.add_argument("--receipt", action="append", default=[], help="optional downloaded raw receipt to audit (repeatable)")
     parser.add_argument("--migration-receipt", action="append", default=[], help="optional downloaded layout audit to verify (repeatable)")
+    parser.add_argument("--upgrade-receipt", action="append", default=[], help="optional downloaded runtime comparison audit (repeatable)")
     args = parser.parse_args()
-    result = verify_catalog(Path(__file__).resolve().parents[1], args.receipt, args.migration_receipt)
+    result = verify_catalog(Path(__file__).resolve().parents[1], args.receipt, args.migration_receipt, args.upgrade_receipt)
     print(f"Verified local summaries for {len(result['skills'])} skills.")

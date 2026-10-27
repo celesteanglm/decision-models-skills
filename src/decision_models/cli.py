@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import sys
 from .contracts import DecisionError
-from .runtime import SKILLS, PROVIDERS, execute
+from .runtime import SKILLS, PROVIDERS, execute, validate_model_selection
 
 
 def read_json(path):
@@ -40,6 +40,7 @@ def main(argv=None):
     use_cases_eval.add_argument("--budget", type=float, default=1)
     use_cases_eval.add_argument("--output", required=True)
     use_cases_eval.add_argument("--rates")
+    use_cases_eval.add_argument("--model", help="explicit model for one provider; required for Sage live mode")
     evaluate = sub.add_parser("evaluate", help="run frozen acceptance fixtures")
     evaluate.add_argument("--repo", required=True)
     evaluate.add_argument("--providers", nargs="+", choices=PROVIDERS, default=list(PROVIDERS))
@@ -49,8 +50,10 @@ def main(argv=None):
     evaluate.add_argument("--output", required=True)
     evaluate.add_argument("--rates", help="reviewed per-million-token rates JSON; required for live mode")
     evaluate.add_argument("--skills", nargs="+", choices=SKILLS, default=list(SKILLS))
+    evaluate.add_argument("--model", help="explicit model for one provider; required for Sage live mode")
     smoke = sub.add_parser("smoke", help="live check of the three primitive mappings")
     smoke.add_argument("--provider", choices=PROVIDERS, required=True)
+    smoke.add_argument("--model")
     report = sub.add_parser("report", help="generate Markdown from evaluation receipts")
     report.add_argument("--input", required=True)
     report.add_argument("--output", required=True)
@@ -59,11 +62,13 @@ def main(argv=None):
         if args.command == "evaluate-use-cases":
             from .use_case_evaluation import evaluate_use_cases, write_use_case_report
             result = evaluate_use_cases(Path(args.repo), args.providers, args.mode, args.repetitions,
-                                      args.budget, Path(args.output), read_json(args.rates) if args.rates else None)
+                                      args.budget, Path(args.output), read_json(args.rates) if args.rates else None,
+                                      model=args.model)
             write_use_case_report(result, Path(args.output).with_suffix(".md"))
             print(json.dumps({"summary": result["summary"], "budget": result["budget"]}, indent=2))
             return 0 if args.mode == "demo" or all(s["status"] == "Working" for s in result["summary"].values()) else 1
         if args.command == "decide":
+            validate_model_selection([args.provider], args.mode, args.model)
             from .use_cases import execute_use_case, load_use_case
             demo = read_json(args.demo_answers) if args.demo_answers else None
             if demo is not None and "answers" in demo:
@@ -73,6 +78,7 @@ def main(argv=None):
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return 0
         if args.command == "run":
+            validate_model_selection([args.provider], args.mode, args.model)
             data = read_json(args.input)
             demo = read_json(args.demo_answers) if args.demo_answers else None
             if demo is not None and "answers" in demo:
@@ -83,14 +89,14 @@ def main(argv=None):
             return 2 if result["result"]["action"] in ("error", "judge_error") else 0
         from .evaluation import evaluate_fixtures, smoke_provider, write_report
         if args.command == "smoke":
-            print(json.dumps(smoke_provider(args.provider), indent=2))
+            print(json.dumps(smoke_provider(args.provider, model=args.model), indent=2))
             return 0
         if args.command == "report":
             write_report(read_json(args.input), Path(args.output))
             return 0
         result = evaluate_fixtures(Path(args.repo), args.providers, args.mode, args.repetitions,
                                    args.budget, Path(args.output), read_json(args.rates) if args.rates else None,
-                                   args.skills)
+                                   args.skills, model=args.model)
         print(json.dumps(result["summary"], indent=2))
         return 0 if all(v["status"] == "Working" for v in result["summary"].values()) else 1
     except DecisionError as exc:

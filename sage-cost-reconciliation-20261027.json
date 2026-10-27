@@ -1,0 +1,55 @@
+{
+  "checked_at": "2026-10-27",
+  "limit_usd": 5,
+  "historical_reconciliation_receipt": "costs.json",
+  "historical_reported_and_estimated_usd": 0.20576051,
+  "runs": [
+    {
+      "receipt": "sage-usecases-live-20261027.json",
+      "fixture_evaluations": 289,
+      "attempts": 277,
+      "provider_reported_usd": 0.00349007,
+      "token_price_estimated_usd": 0.0052527,
+      "charges_recorded": 276,
+      "explicit_validation_failures": 1
+    },
+    {
+      "receipt": "sage-usecases-v14-live-20261027.json",
+      "fixture_evaluations": 468,
+      "attempts": 447,
+      "provider_reported_usd": 0.00349007,
+      "token_price_estimated_usd": 0.0098415,
+      "charges_recorded": 447,
+      "explicit_validation_failures": 0
+    },
+    {
+      "receipt": "sage-published-live-20261027.json",
+      "fixture_evaluations": 216,
+      "attempts": 198,
+      "provider_reported_usd": 0.00159289,
+      "token_price_estimated_usd": 0.00393795,
+      "charges_recorded": 198,
+      "explicit_validation_failures": 0
+    }
+  ],
+  "diagnostic": {
+    "receipt": "sage-validation-probe.json",
+    "status": 422,
+    "attempts": 1,
+    "held_allowance_usd": 0.0006757
+  },
+  "provider_reported_usd": 0.059735036,
+  "token_price_estimated_usd": 0.17363065,
+  "combined_reported_and_estimated_usd": 0.233365686,
+  "held_validation_failure_allowance_usd": 0.0013514,
+  "conservative_total_bound_usd": 0.408347736,
+  "new_api_attempts_including_diagnostic": 923,
+  "unknown_charge_timeouts": 0,
+  "notes": [
+    "Completed successful reservations were retired only after a provider cost or token-usage estimate was recorded for every attempt.",
+    "Token estimates use reviewed prices, are not invoices, and receive a 2x cushion in the total bound.",
+    "Both explicit model-validation rejections retain full reservations; no ambiguous paid timeout was retried.",
+    "The historical raw budget field unreconciled_allowance_usd is unused worst-case reserve, not a count of unknown-charge attempts.",
+    "No failed prototype source is included in the published catalog."
+  ]
+}

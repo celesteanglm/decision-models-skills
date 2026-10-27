@@ -1,0 +1,16 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "flashcards",
+    "probabilities": {
+      "flashcards": 0.97,
+      "quiz": 0.006,
+      "concept_map": 0.006,
+      "summary": 0.006,
+      "chat": 0.006,
+      "review": 0.006
+    },
+    "confidence": 0.95
+  }
+}

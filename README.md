@@ -1,6 +1,6 @@
 # Decision Models Skills
 
-Model-agnostic agent skills for bounded decisions, routing, and evaluation. Choose among six core skills and 18 use-case skills, install or reference the folder, and ask your agent to use it.
+Model-agnostic agent skills for bounded decisions, routing, and evaluation. Choose among six core skills and 20 use-case skills, install or reference the folder, and ask your agent to use it.
 
 ## Use a skill
 
@@ -47,11 +47,13 @@ Each entrypoint explains the needed evidence, decision procedure, result, and re
 | [model-tier-routing](recipes/model-tier-routing/SKILL.md) | Choose among supplied model tiers using task complexity and explicit constraints. | [Results](recipes/model-tier-routing/COMPATIBILITY.md) |
 | [outfit-option-selection](recipes/outfit-option-selection/SKILL.md) | Select a supplied outfit description using explicit weather and occasion constraints. | [Results](recipes/outfit-option-selection/COMPATIBILITY.md) |
 | [page-change-triage](recipes/page-change-triage/SKILL.md) | Compare two supplied page excerpts for a change that matters to the stated monitoring goal. | [Results](recipes/page-change-triage/COMPATIBILITY.md) |
+| [research-enrichment-gate](recipes/research-enrichment-gate/SKILL.md) | Recommend whether supplied research evidence can be reused or needs refreshing. | [Results](recipes/research-enrichment-gate/COMPATIBILITY.md) |
 | [research-source-filter](recipes/research-source-filter/SKILL.md) | Assess whether a source excerpt is useful for a stated research brief before synthesis. | [Results](recipes/research-source-filter/COMPATIBILITY.md) |
 | [retrieved-instruction-screening](recipes/retrieved-instruction-screening/SKILL.md) | Recommend whether retrieved material should be isolated before use as evidence. | [Results](recipes/retrieved-instruction-screening/COMPATIBILITY.md) |
 | [secondhand-listing-fit](recipes/secondhand-listing-fit/SKILL.md) | Compare a used-item listing with explicit purchase criteria and recommend whether it merits attention. | [Results](recipes/secondhand-listing-fit/COMPATIBILITY.md) |
 | [spoken-slide-selection](recipes/spoken-slide-selection/SKILL.md) | Recommend which described slide best matches a short spoken passage. | [Results](recipes/spoken-slide-selection/COMPATIBILITY.md) |
 | [spreadsheet-urgency](recipes/spreadsheet-urgency/SKILL.md) | Classify a row from its stated deadline, status, and impact. | [Results](recipes/spreadsheet-urgency/COMPATIBILITY.md) |
+| [study-tool-selection](recipes/study-tool-selection/SKILL.md) | Distinguish study-tool requests from ordinary chat and recommend one activity. | [Results](recipes/study-tool-selection/COMPATIBILITY.md) |
 | [suspicious-email-escalation](recipes/suspicious-email-escalation/SKILL.md) | Classify email text for fraud or phishing indicators and identify when security review is warranted. | [Results](recipes/suspicious-email-escalation/COMPATIBILITY.md) |
 | [template-field-matching](recipes/template-field-matching/SKILL.md) | Recommend source fields that can populate requested template fields based on names and supplied definitions. | [Results](recipes/template-field-matching/COMPATIBILITY.md) |
 
@@ -85,6 +87,8 @@ The inputs may be supplied naturally; the JSON examples illustrate information t
 ## What has been tested
 
 Each folder's compatibility page records exact models, pass counts, failures, dates, and evidence links for the optional Python reference implementation against native decision APIs. Working labels apply to that evaluated implementation and its frozen artifacts.
+
+The new study-tool and enrichment-gate reference checks qualify on Sage **v1.4** and Jev/OpenRouter; Decisions API did not qualify. Older Sage v1.3 results are historical: the live deployment rejected that model on 2026-10-27. Exact tested versions and qualifications are recorded beside each skill.
 
 Those historical receipts do not benchmark the revised instruction-only skills on an arbitrary agent or model. The instructions are model-agnostic; decision quality still depends on the model, evidence, and task. No listed backend is required to use a skill.
 

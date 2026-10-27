@@ -17,7 +17,7 @@ RECIPE = "model-tier-routing"
 def copy_inputs(root):
     repo = Path(root) / "repo"
     repo.mkdir()
-    for directory in ("src", "skills", "recipes"):
+    for directory in ("src", "skills", "recipes", "scripts"):
         shutil.copytree(REPO / directory, repo / directory)
     shutil.copy2(REPO / "README.md", repo / "README.md")
     return repo
@@ -39,7 +39,7 @@ class VerifiedCatalogTests(unittest.TestCase):
             repo = copy_inputs(root)
             registry = verify_catalog(repo)
             self.assertEqual(len(registry["skills"]), 6)
-            self.assertEqual(len(registry["recipes"]), 18)
+            self.assertEqual(len(registry["recipes"]), len(list((repo / "recipes").glob("*/recipe.json"))))
             self.assertFalse(any((repo / name).exists() for name in ("docs", "research", "reports")))
             self.assertEqual(registry["recipes"][RECIPE]["working_backends"], ["sage"])
 
@@ -93,6 +93,12 @@ class VerifiedCatalogTests(unittest.TestCase):
                     verify_catalog(repo)
 
     def test_rejects_runtime_changes(self):
+        for helpers in ({}, {"scripts/usecase_reference.py": sha256(REPO / "scripts/usecase_reference.py")}):
+            with self.subTest(helpers=helpers), tempfile.TemporaryDirectory() as root:
+                repo = copy_inputs(root)
+                change_manifest(repo, lambda m: m.update(reference_artifacts=helpers))
+                with self.assertRaisesRegex(AssertionError, "incomplete reference helper set"):
+                    verify_catalog(repo)
         with tempfile.TemporaryDirectory() as root:
             repo = copy_inputs(root)
             path = repo / "src/decision_models/recipes.py"

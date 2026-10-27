@@ -1,0 +1,41 @@
+{
+  "skill": "screenshot-action-check",
+  "fixture_revision": "61af95b4b73b95c0ecda982d20e4341e03d8cae826c1c6b5415c10a6c601d68e",
+  "artifacts": {
+    "examples/demo.json": "db529143d40c23993f46eff47618e494c5bc3ea112e40c704e3aedbab67b0a78",
+    "examples/input.json": "600732610f760c9b772d84033596a81a2040d2470bab21e7f2032d9cf27ebfa4",
+    "fixtures/acceptance.json": "42759ad4ad649d2b5f6e5d014fedef3505755601fc51ac140b0abf83be92c263",
+    "image.json": "72dac2e72d2e298bf4c36233d6eaaa1f25e7d0827e19183b1404f83333a6f8ec",
+    "images/frame01.png": "58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69",
+    "images/frame02.png": "629794832b5586d2b82b729048fd69cdd724b9eacbf244537a9a7af100d8fc3a",
+    "images/frame03.png": "17cfe03a0289db2410ab48dd95acaf92f0f4c7024ffaa6bdc825d5e8609f8242",
+    "images/frame04.png": "602b89157793fe5820b4ab0348d4f5365ab9991a3e49688d3dfbb657d6bfb080",
+    "images/frame05.png": "767a181ebe629319395062f54dddda445213f3799e8d96977e8b0adc3abeb2e7",
+    "images/frame06.png": "659e5ddb1e24285bdd12b8664ee884ebe9e81092aa524dbbff55b9778bf0ab32",
+    "images/frame07.png": "cf47c28cdde2dc777bfb7135aa0520cf55d927c29530e61aa1114b8dcd17b569",
+    "images/frame08.png": "f789876087ea75082d7533643cefa306dce0a4ebe4073faf6cb02b3bd691e9a6",
+    "images/frame09.png": "f30a5ea7770dcb60aa3fa9997d31752c00f9544ee9e1cd929ecb59bcec91fe55",
+    "images/frame10.png": "7f81d208d808b8ba4888896259b14355da8ceba929e81fed331a62c676e6697d",
+    "images/frame11.png": "d234a0ae3a0e91b8a28671ce4d7a895a691ccd2b903bcc1b6acfd93566632291",
+    "images/frame12.png": "c467e7e69c933cca3bbec37cfe697a9db0c9d6b0fbdd2ae88dc4e481eab3f33d"
+  },
+  "reference_artifacts": {
+    "scripts/image_reference.py": "316045eb4a83bb718c8be19fe53c5b605378ea74a5c2bf83ade8f1dc059d6f5e",
+    "scripts/evaluate_images.py": "05a7aade07f9d11a82f3cf1dfc3745cd0db8fa92471ced5b206050f4b9ed93ec"
+  },
+  "runtime_revision": "90c3e703d2a656d7aed3087ef4a4f07b130f1c03de7de8af4d72265eaeb823bb",
+  "policy": {
+    "probability_threshold": 0.8,
+    "review_choice": "review"
+  },
+  "provider": "sage",
+  "model": "levanto-sage-v1.4",
+  "latency_mode": "quality",
+  "reasoning": "off",
+  "blind_audit_sha256": "de695d5b19eef611ea8ecf1cf7cff5c542fca16bf4a9767c9302a76d2c95fd05",
+  "historical_bound_usd": 0.410382636,
+  "full_live_reservation_usd": 1.7407104,
+  "expected_labels_sent_to_provider": false,
+  "prompt_revision": 2,
+  "previous_receipt_sha256": "bf771a6dd1bb41da0ae2ff439c8805f0eea6652d0ecb119d4023ca7bd004b17e"
+}

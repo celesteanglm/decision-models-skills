@@ -1,0 +1,221 @@
+{
+  "skill": "screenshot-action-check",
+  "fixtures": {
+    "screenshot-action-check": "61af95b4b73b95c0ecda982d20e4341e03d8cae826c1c6b5415c10a6c601d68e"
+  },
+  "probability_threshold": 0.8,
+  "provider_confidence_available": false,
+  "model": "levanto-sage-v1.4",
+  "tested_formats": [
+    "image/png"
+  ],
+  "fixture_images_and_expectations_changed": false,
+  "threshold_changed": false,
+  "held_out": false,
+  "final_receipt_sha256": "adacc280bda50bc089442168ca2960fdae9af05366effa463b8084c8ea8ab63f",
+  "runs": [
+    {
+      "revision": 1,
+      "receipt": "sage-images-live-20261027-r1.json",
+      "sha256": "bf771a6dd1bb41da0ae2ff439c8805f0eea6652d0ecb119d4023ca7bd004b17e",
+      "status": "Partial",
+      "per_case": {
+        "clear-01": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-02": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-03": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-04": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-05": {
+          "passes": 0,
+          "runs": 3
+        },
+        "clear-06": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-07": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-08": {
+          "passes": 3,
+          "runs": 3
+        },
+        "ambiguous-01": {
+          "passes": 3,
+          "runs": 3
+        },
+        "ambiguous-02": {
+          "passes": 3,
+          "runs": 3
+        },
+        "adversarial-01": {
+          "passes": 3,
+          "runs": 3
+        },
+        "adversarial-02": {
+          "passes": 3,
+          "runs": 3
+        }
+      },
+      "budget": {
+        "limit_usd": 5,
+        "historical_bound_usd": 0.408347736,
+        "reserved_usd": 1.7407104,
+        "provider_reported_usd": 0.0,
+        "token_price_estimated_usd": 0.00101745,
+        "held_attempt_allowance_usd": 0.0,
+        "conservative_total_bound_usd": 0.410382636,
+        "attempts": 33
+      }
+    },
+    {
+      "revision": 2,
+      "receipt": "sage-images-live-20261027-r2.json",
+      "sha256": "c331e16accc1f2e72b6e9e43d8b58cbb0ba1079f6b02038b3f547731ecf86f14",
+      "status": "Partial",
+      "per_case": {
+        "clear-01": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-02": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-03": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-04": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-05": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-06": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-07": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-08": {
+          "passes": 3,
+          "runs": 3
+        },
+        "ambiguous-01": {
+          "passes": 3,
+          "runs": 3
+        },
+        "ambiguous-02": {
+          "passes": 0,
+          "runs": 3
+        },
+        "adversarial-01": {
+          "passes": 3,
+          "runs": 3
+        },
+        "adversarial-02": {
+          "passes": 3,
+          "runs": 3
+        }
+      },
+      "budget": {
+        "limit_usd": 5,
+        "historical_bound_usd": 0.410382636,
+        "reserved_usd": 1.7407104,
+        "provider_reported_usd": 0.0,
+        "token_price_estimated_usd": 0.00104385,
+        "held_attempt_allowance_usd": 0.0,
+        "conservative_total_bound_usd": 0.412470336,
+        "attempts": 33
+      }
+    },
+    {
+      "revision": 3,
+      "receipt": "sage-images-live-20261027-r3.json",
+      "sha256": "adacc280bda50bc089442168ca2960fdae9af05366effa463b8084c8ea8ab63f",
+      "status": "Working",
+      "per_case": {
+        "clear-01": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-02": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-03": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-04": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-05": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-06": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-07": {
+          "passes": 3,
+          "runs": 3
+        },
+        "clear-08": {
+          "passes": 3,
+          "runs": 3
+        },
+        "ambiguous-01": {
+          "passes": 3,
+          "runs": 3
+        },
+        "ambiguous-02": {
+          "passes": 3,
+          "runs": 3
+        },
+        "adversarial-01": {
+          "passes": 3,
+          "runs": 3
+        },
+        "adversarial-02": {
+          "passes": 3,
+          "runs": 3
+        }
+      },
+      "budget": {
+        "limit_usd": 5,
+        "historical_bound_usd": 0.412470336,
+        "reserved_usd": 1.7407104,
+        "provider_reported_usd": 0.0,
+        "token_price_estimated_usd": 0.00107685,
+        "held_attempt_allowance_usd": 0.0,
+        "conservative_total_bound_usd": 0.414624036,
+        "attempts": 33
+      }
+    }
+  ],
+  "notes": [
+    "All three complete runs used the same independently reviewed 12 cases, expected labels, and 0.80 threshold. Only trusted wording changed.",
+    "Preliminary prompts failed clipping or washed-out-preview checks. They are retained without relabelling.",
+    "Repetitions are not independent samples. These reused synthetic development fixtures do not establish production accuracy."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "limit_usd": 5,
+  "previous_combined_reported_and_estimated_usd": 0.233365686,
+  "image_run_reported_and_estimated_usd": 0.00313815,
+  "combined_reported_and_estimated_usd": 0.236503836,
+  "conservative_total_bound_usd": 0.414624036,
+  "new_api_attempts": 99,
+  "unknown_charge_attempts": 0,
+  "notes": [
+    "Includes both preliminary image runs and the final qualified run.",
+    "All 99 image attempts returned native usage. Completed unused reserves were retired; token estimates receive a 2x cushion.",
+    "Estimates are not invoices. PNG has live coverage; JPEG and WebP have offline contracts only."
+  ]
+}

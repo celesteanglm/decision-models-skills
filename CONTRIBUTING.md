@@ -1,10 +1,10 @@
 # Contributing a skill
 
-The public skill is its SKILL.md instructions and supporting local resources. Keep core skills in `skills/` and use-case skills in `recipes/` self-contained when copied or referenced from another project. Do not require a provider, package, script, global command, or repository-root import to use the instructions.
+The public skill is its `SKILL.md` instructions and supporting local resources. Keep every skill self-contained under `skills/` so it can be copied or referenced from another project. Do not require a provider, package, script, global command, or repository-root import to use the instructions.
 
 ## Write the instructions
 
-Describe when to use the skill, the evidence to gather, the decision procedure, the output, and the review or escalation behavior. Accept inputs naturally as well as through illustrative JSON. Put a use-case skill's complete decision menu in SKILL.md so the agent can work without parsing configuration.
+Describe when to use the skill, the evidence to gather, the decision procedure, the output, and the review or escalation behavior. Accept inputs naturally as well as through illustrative JSON. Put a use-case skill's complete decision menu in `SKILL.md` so the agent can work without parsing configuration.
 
 Use the agent's current model by default. If the user requests a configured decision model or tool, preserve that choice and explain missing integration instead of silently substituting. Numerical gates apply only when explicitly requested and supported by actual integration metrics. Do not ask the agent to invent probabilities or present qualitative confidence as calibration.
 
@@ -34,14 +34,17 @@ The package exposes no global console command. Maintainers can invoke its module
 
 ```sh
 python -m decision_models evaluate --repo . --mode demo \
-  --providers jev-openrouter --output reports/demo-core.json
-python -m decision_models evaluate-recipes --repo . --mode demo \
-  --providers sage --output reports/demo-recipes.json
+  --providers jev-openrouter --output reports/demo-general.json
+python -m decision_models evaluate-use-cases --repo . --mode demo \
+  --providers sage --output reports/demo-use-cases.json
+python -m decision_models decide --config skills/study-tool-selection/decision.json \\
+  --provider sage --input skills/study-tool-selection/examples/input.json \\
+  --mode demo --demo-answers skills/study-tool-selection/examples/demo.json
 ```
 
 Synthetic demo answers cannot qualify a backend; core demo evaluation intentionally exits 1 and reports Not tested. The offline suite includes reference implementation tests and demos from copied JSON inputs; those demos do not execute or benchmark the model-agnostic instructions.
 
-Follow [IMPLEMENTATION_CONTRACT.md](IMPLEMENTATION_CONTRACT.md) and [RECIPE_CONTRACT.md](RECIPE_CONTRACT.md) when changing the reference code or configuration. Keep native probabilities and confidence separate, credentials in the environment, and runtime behavior independent of expected fixture labels. Freeze fixture expectations before inference and keep failures.
+Follow [IMPLEMENTATION_CONTRACT.md](IMPLEMENTATION_CONTRACT.md) and [DECISION_CONTRACT.md](DECISION_CONTRACT.md) when changing the reference code or configuration. Keep native probabilities and confidence separate, credentials in the environment, and runtime behavior independent of expected fixture labels. Freeze fixture expectations before inference and keep failures.
 
 For live reference checks, explicitly choose `--mode live`, configure the provider credential, and supply `--rates /path/to/reviewed-rates.json`. The rates object is keyed by provider flag; each entry needs `source`, `checked_at`, `input_per_million`, and `output_per_million`. Review current pricing before a run. `--budget` reserves an allowance capped at US$5. Run offline verification first; stop on unknown-charge timeouts. Live evaluation is manual and never triggered automatically by a push.
 
@@ -55,15 +58,17 @@ Preserve exact raw output at a retained evidence URL before recording a compact 
 
 ```sh
 python -m scripts.publish_compatibility \
-  --kind recipes --receipt reports/new-live-run.json \
+  --receipt reports/new-live-run.json \
   --ids my-qualified-skill \
   --evidence-url https://github.com/OWNER/REPO/blob/COMMIT/run.json
 python scripts/verify.py
 ```
 
-Use `--kind skills` for the core reference workflows. The publisher requires a live receipt for the current checkout, or a scoped receipt whose recorded runtime, helper code, local configuration, examples, and fixtures still match byte-for-byte. Use `--ids` to update only the qualifying folders; failed candidates stay outside the published catalog. It recomputes recorded summaries and does not rewrite SKILL.md. A native-API receipt must never qualify instruction-only use. Each core/reference artifact change requires fresh evidence for its reference label.
+The publisher targets the unified `skills/` collection. It requires a live receipt for the current checkout, or a scoped receipt whose recorded runtime, helper code, local configuration, examples, and fixtures still match byte-for-byte. Use `--ids` to update only selected qualifying folders; omit it to include all qualifying folders. Failed candidates stay outside the published catalog. It recomputes recorded summaries and does not rewrite `SKILL.md`. A native-API receipt must never qualify instruction-only use. Changes to reference artifacts require fresh evidence for their reference labels.
 
 Publishing metadata changes the aggregate source hash. Verify again before subsequent reference evaluations. `python scripts/verified_catalog.py` checks recorded summaries offline; repeat `--receipt /path/to/downloaded-run.json` to audit them against retained raw evidence and checksums. Offline consistency checks do not fetch remote evidence or invoke models.
+
+For the unified layout migration, `--migration-receipt /path/to/downloaded-audit.json` additionally checks the retained offline audit against the local decision contracts, runtime, helper code, and recorded counts. Historical native labels retain their original dates and require this migration metadata. Future changes to decision behavior need fresh live evidence; a folder move alone can be verified with frozen request/policy contracts and archived-response replay.
 
 ## Local working material
 
@@ -72,7 +77,7 @@ Publishing metadata changes the aggregate source hash. Verify again before subse
 For the newer text reference checks, first verify the advertised model at `/v1/models`. The deployment observed on 2026-10-27 accepted `levanto-sage-v1.4` and rejected the historical v1.3 default. Maintainers can reproduce the two new workflows with the evaluated adapter settings:
 
 ```sh
-python -m scripts.evaluate_usecases --candidates recipes \
+python -m scripts.evaluate_usecases --candidates skills \
   --ids study-tool-selection research-enrichment-gate \
   --mode demo --output reports/sage-demo-new.json --historical-bound 0
 ```

@@ -48,23 +48,23 @@ def main():
                 assert receipt["executed_action"] is False
                 demonstrations.append({"skill": skill, "provider": provider,
                                        "action": receipt["result"]["action"]})
-        for folder in sorted((repo / "recipes").iterdir()):
-            if not (folder / "recipe.json").is_file():
+        for folder in sorted((repo / "skills").iterdir()):
+            if not (folder / "decision.json").is_file():
                 continue
             copied = project / ".agents" / "skills" / folder.name
             shutil.copytree(folder, copied)
             for provider in PROVIDERS:
-                if catalog and provider not in catalog["recipes"][folder.name]["working_backends"]:
+                if catalog and provider not in catalog["skills"][folder.name]["working_backends"]:
                     continue
-                command = [sys.executable, "-m", "decision_models", "recipe",
-                           "--recipe", str(copied / "recipe.json"), "--provider", provider,
+                command = [sys.executable, "-m", "decision_models", "decide",
+                           "--config", str(copied / "decision.json"), "--provider", provider,
                            "--mode", "demo", "--input", str(copied / "examples" / "input.json"),
                            "--demo-answers", str(copied / "examples" / "demo.json")]
                 result = subprocess.run(command, cwd=elsewhere, env=env, check=True,
                                         text=True, capture_output=True)
                 receipt = json.loads(result.stdout)
                 assert receipt["source"] == "demo" and receipt["executed_action"] is False
-                demonstrations.append({"recipe": folder.name, "provider": provider,
+                demonstrations.append({"skill": folder.name, "provider": provider,
                                        "action": receipt["result"]["action"]})
     marker.write_text(json.dumps({"passed": True, "source_hash": source_hash(repo),
         "checked_at": datetime.now(timezone.utc).isoformat(), "python": sys.version.split()[0],

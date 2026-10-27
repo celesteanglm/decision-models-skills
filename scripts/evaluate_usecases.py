@@ -11,7 +11,7 @@ import threading
 
 from decision_models.contracts import DecisionError
 from decision_models.evaluation import Budget, acceptance, source_hash, summarize
-from decision_models.recipes import prepare_recipe
+from decision_models.use_cases import prepare_use_case
 from scripts.usecase_reference import execute_custom, read_config, usecase_adapter
 from scripts.verified_catalog import artifacts, runtime_revision
 
@@ -29,7 +29,7 @@ UsecaseBudget = Budget
 def entries(folder):
     result = []
     for path in sorted(Path(folder).iterdir()):
-        if not (path / "SKILL.md").exists():
+        if not (path / "SKILL.md").exists() or not (path / "decision.json").is_file():
             continue
         config = read_config(path)
         cases = json.loads((path / "fixtures/acceptance.json").read_text())
@@ -42,7 +42,7 @@ def entries(folder):
 def payloads(folder, config, data, provider):
     if data.get("permission_granted") is not True:
         return []
-    if prepare_recipe(config, data) is not None:
+    if prepare_use_case(config, data) is not None:
         return []
     adapter = usecase_adapter(provider)
     return [adapter.build_payload(data["state"], [config["question"]], adapter.default_model)]
@@ -101,7 +101,7 @@ def evaluate(repo, candidate_root, output, mode, limit, historical_bound, ids=No
                 if stop:
                     break
                 for repetition in range(1, 4):
-                    row = {"provider": provider, "skill": config["id"], "recipe": config["id"],
+                    row = {"provider": provider, "skill": config["id"],
                            "case_id": case["id"], "category": case["category"], "repetition": repetition,
                            "expected": case["expected"], "safety_violation": False}
                     before = ledger.attempts

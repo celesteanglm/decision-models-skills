@@ -16,11 +16,11 @@ The Python implementation and the six workflow policies in this repository were 
 
 The cited MIT licenses permit reuse subject to their terms. This repository does not incorporate code from those repositories based on the review performed for this release. If future changes copy any material, include that material's original copyright and license notice with the copied files.
 
-## Community recipe inspiration
+## Community skill inspiration
 
-Each use-case skill links its original source in its own SKILL.md and recipe.json. The independent [Jev AI Dev collection](https://jevai.dev/user-cases/) helped discover original posts; its code, prose, and examples were not incorporated. Research notes and engagement rankings are local working material, excluded from the published source tree.
+Each use-case skill links its original source in its own `SKILL.md` and, where present, `decision.json`. The independent [Jev AI Dev collection](https://jevai.dev/user-cases/) helped discover original posts; its code, prose, and examples were not incorporated. Research notes and engagement rankings are local working material, excluded from the published source tree.
 
-Each recipe's implementation, instructions, and synthetic fixtures were authored for this project. Credit is for the demonstrated idea, not a claim of source-code adaptation, endorsement, or reproduced performance. AI Edge is credited for the original research/inbox/content workflow article and Miles Deutscher for sharing it. TypeSafe's official skills and Akshay Pachaar retain their existing credits above. Native adapter tests do not substantiate social-media benchmark claims.
+Each skill's implementation, instructions, and synthetic fixtures were authored for this project. Credit is for the demonstrated idea, not a claim of source-code adaptation, endorsement, or reproduced performance. AI Edge is credited for the original research/inbox/content workflow article and Miles Deutscher for sharing it. TypeSafe's official skills and Akshay Pachaar retain their existing credits above. Native adapter tests do not substantiate social-media benchmark claims.
 
 ## Project license
 
@@ -31,4 +31,4 @@ This repository is distributed under the MIT License. See [`LICENSE`](LICENSE).
 - `study-tool-selection`: inspired by [Leap’s study-tool routing case study](https://levanto.ai/case-study/leap-study-tool-routing). Credit Leap, Alessandro Rutigliano, and the Levanto Team for the application pattern. The skill, bounded menu, and synthetic fixtures are independently authored. It does not reproduce Leap’s dataset, multi-tool implementation, or reported accuracy.
 - `research-enrichment-gate`: inspired by [Capacitr’s decision-gate case study](https://levanto.ai/case-study/capacitr-market-signal-decision-gates). Credit Capacitr, Utkarsh Bhimte, and the Levanto Team. This independently authored, finance-neutral skill recommends whether supplied research evidence needs refreshing; it executes no research or financial action and reproduces no claimed savings.
 
-The source accounts guiding this research were [Marco De Rossi](https://x.com/marco_derossi), [Levanto Labs](https://x.com/levantolabs), and [Big Iron Chris](https://x.com/bigironchris). Source popularity and customer-reported results do not establish this repository’s compatibility labels. Only independently evaluated recipes with at least one Working backend are included.
+The source accounts guiding this research were [Marco De Rossi](https://x.com/marco_derossi), [Levanto Labs](https://x.com/levantolabs), and [Big Iron Chris](https://x.com/bigironchris). Source popularity and customer-reported results do not establish this repository’s compatibility labels. Only independently evaluated use-case skills with at least one Working backend are included.

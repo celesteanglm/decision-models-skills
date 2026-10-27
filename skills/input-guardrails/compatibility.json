@@ -6,14 +6,14 @@
   "tested_at": "2026-10-08T11:20:54.775708+00:00",
   "repetitions": 3,
   "fixture_revision": "1fa615008af567cd825c5cae1f19d8ac8eb47416483908c3f9ba4fcd8e9345b4",
-  "runtime_revision": "65c5f5661fc5be6f5984dc757ea57fe34f600b65c32277fc2cc6ffef6f80aa3b",
+  "runtime_revision": "90c3e703d2a656d7aed3087ef4a4f07b130f1c03de7de8af4d72265eaeb823bb",
   "artifacts": {
     "examples/demo.json": "b329338764581dad0d23e0f6508dac4748ba0a9b8cff5cd65a35de4fdaa39605",
     "examples/input.json": "a1cc6b74c4e5d8db42a05969a4289549e026378d9a9a35b90dd9a85492c9e793",
     "fixtures/acceptance.json": "bf38c07ee646ffccfd81c27d3e3601b669f6108d947d8805644d1c48a9d07515"
   },
   "evidence": {
-    "url": "https://github.com/celesteanglm/decision-models-skills/blob/115b4881a7ea3f7194bc838cd3395d74e94c2c82/reports/community-core-regression.json",
+    "url": "https://github.com/celesteanglm/decision-models-skills/blob/7b0e764a4e15d43be4e252365780b2393fdfa7f6/general-skills-regression.json",
     "sha256": "217f4374ee1a7ef7097129a726076206e379fe9815e17637d2c79df3a0015c59",
     "source_hash": "e6115d0899d71d4c653e88d391ecf5d7f60ce7c94a2657de0dbc0e80abf08674"
   },
@@ -318,5 +318,17 @@
   "scope": {
     "reference_implementation": "python-native-apis",
     "instruction_only": "Not evaluated"
+  },
+  "migration": {
+    "kind": "layout-and-naming-only",
+    "previous_source_revision": "a691b8b7395798eebe1558d1ba0bc6ecf20accaa",
+    "previous_runtime_revision": "65c5f5661fc5be6f5984dc757ea57fe34f600b65c32277fc2cc6ffef6f80aa3b",
+    "runtime_revision": "90c3e703d2a656d7aed3087ef4a4f07b130f1c03de7de8af4d72265eaeb823bb",
+    "contract_sha256": "fcaa8fb744078e63fbbb8b6706951f46833cc48e4b796be7dbbcf628b471192c",
+    "payload_and_policy_cases": 936,
+    "archived_response_replays": 2808,
+    "paid_requests": 0,
+    "evidence_url": "https://github.com/celesteanglm/decision-models-skills/blob/7b0e764a4e15d43be4e252365780b2393fdfa7f6/unified-layout-audit.json",
+    "evidence_sha256": "69a859f7e0af3cd74011e50e4c806ec74f983458ed1c32fb978b3c8ef1a4fecc"
   }
 }

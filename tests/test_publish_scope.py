@@ -23,7 +23,7 @@ EVIDENCE_URL = "https://example.invalid/retained/synthetic-receipt.json"
 def copy_repo(root):
     repo = Path(root) / "repo"
     repo.mkdir()
-    for directory in ("src", "skills", "recipes", "scripts"):
+    for directory in ("src", "skills", "scripts"):
         shutil.copytree(REPO / directory, repo / directory)
     shutil.copy2(REPO / "README.md", repo / "README.md")
     return repo
@@ -35,7 +35,7 @@ def fixture_revision(folder):
 
 
 def receipt_for(repo, item_id=PUBLISHED, *, fail_clear=False):
-    folder = repo / "recipes" / item_id
+    folder = repo / "skills" / item_id
     fixtures = json.loads((folder / "fixtures/acceptance.json").read_text())
     revision = fixture_revision(folder)
     rows = []
@@ -72,7 +72,7 @@ def receipt_for(repo, item_id=PUBLISHED, *, fail_clear=False):
 
 
 def build(repo, receipt):
-    folder = repo / "recipes" / PUBLISHED
+    folder = repo / "skills" / PUBLISHED
     return build_manifest(repo, folder, receipt, "a" * 64, EVIDENCE_URL)
 
 
@@ -96,9 +96,9 @@ class PublishScopeTests(unittest.TestCase):
                     build(repo, receipt)
         mutations = {
             "helper": (HELPERS[0], "\n# helper drift\n", "reference helper changed"),
-            "configuration": (f"recipes/{PUBLISHED}/recipe.json", " ", "scoped artifacts changed"),
-            "fixtures": (f"recipes/{PUBLISHED}/fixtures/acceptance.json", None, "fixtures differ from evaluated cases"),
-            "runtime": ("src/decision_models/recipes.py", "\n# runtime drift\n", "reference runtime changed"),
+            "configuration": (f"skills/{PUBLISHED}/decision.json", " ", "scoped artifacts changed"),
+            "fixtures": (f"skills/{PUBLISHED}/fixtures/acceptance.json", None, "fixtures differ from evaluated cases"),
+            "runtime": ("src/decision_models/use_cases.py", "\n# runtime drift\n", "reference runtime changed"),
         }
         for name, (relative, suffix, message) in mutations.items():
             with self.subTest(file=name), tempfile.TemporaryDirectory() as root:
@@ -123,12 +123,12 @@ class PublishScopeTests(unittest.TestCase):
             before = {
                 relative: (repo / relative).read_bytes()
                 for relative in (
-                    f"recipes/{UNSELECTED}/compatibility.json",
-                    f"recipes/{UNSELECTED}/COMPATIBILITY.md",
+                    f"skills/{UNSELECTED}/compatibility.json",
+                    f"skills/{UNSELECTED}/COMPATIBILITY.md",
                 )
             }
             arguments = [
-                "publish_compatibility.py", "--repo", str(repo), "--kind", "recipes",
+                "publish_compatibility.py", "--repo", str(repo),
                 "--receipt", str(receipt_path), "--evidence-url", EVIDENCE_URL,
                 "--ids", PUBLISHED,
             ]
@@ -136,7 +136,7 @@ class PublishScopeTests(unittest.TestCase):
                 publish_main()
             for relative, original in before.items():
                 self.assertEqual((repo / relative).read_bytes(), original)
-            published = json.loads((repo / "recipes" / PUBLISHED / "compatibility.json").read_text())
+            published = json.loads((repo / "skills" / PUBLISHED / "compatibility.json").read_text())
             self.assertEqual(published["id"], PUBLISHED)
             self.assertEqual(set(published["reference_artifacts"]), set(HELPERS))
 

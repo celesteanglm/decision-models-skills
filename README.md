@@ -4,7 +4,7 @@ Model-agnostic agent skills for bounded decisions, routing, and evaluation. Choo
 
 ## Use a skill
 
-Copy a folder from `skills/` or `recipes/` into your agent's supported skill directory, or point the agent at its `SKILL.md`. For example:
+Copy a folder from `skills/` into your agent's supported skill directory, or point the agent at its `SKILL.md`. For example:
 
 > Use the email-queue-routing skill at /path/to/email-queue-routing/SKILL.md. Recommend a queue for this email: “Please explain the duplicate charge on my latest invoice.”
 
@@ -17,9 +17,9 @@ Using these instructions requires no Python installation, API key, package insta
 Everything listed below is an installable skill. The two groups differ in scope, not format or installation:
 
 - **General skills** in `skills/` describe reusable decision procedures. Use model routing, for example, when you need to choose a model for a task in your own application.
-- **Use-case skills** in `recipes/` apply a decision procedure to a specific task. Study-tool selection, for example, chooses among flashcards, quizzes, summaries, and other study activities.
+- **Use-case skills** in `skills/` apply a decision procedure to a specific task. Study-tool selection, for example, chooses among flashcards, quizzes, summaries, and other study activities.
 
-The folder name `recipes/` means use-case skills; it does not introduce a second kind of agent feature. Both groups have self-contained `SKILL.md` instructions, local examples, and compatibility evidence. A use-case skill's `recipe.json` is optional configuration for the Python reference implementation, not a requirement for using the skill.
+Both groups live under `skills/` and have self-contained `SKILL.md` instructions, local examples, and compatibility evidence. A use-case skill may also include `decision.json` for the optional Python reference implementation; it is not required to use the skill.
 
 Each entrypoint explains the needed evidence, decision procedure, result, and review or escalation behavior. The result is a recommendation; executing an action is a separate request and authorization decision.
 
@@ -38,26 +38,26 @@ Each entrypoint explains the needed evidence, decision procedure, result, and re
 
 | Skill | Use it to | Recorded reference checks |
 |---|---|---|
-| [ad-funnel-classification](recipes/ad-funnel-classification/SKILL.md) | Classify ad copy by the customer-journey stage suggested by its text. | [Results](recipes/ad-funnel-classification/COMPATIBILITY.md) |
-| [agent-workflow-routing](recipes/agent-workflow-routing/SKILL.md) | Recommend a configured workflow from an incoming customer request. | [Results](recipes/agent-workflow-routing/COMPATIBILITY.md) |
-| [brand-news-matching](recipes/brand-news-matching/SKILL.md) | Classify whether a news item is relevant to a supplied brand brief. | [Results](recipes/brand-news-matching/COMPATIBILITY.md) |
-| [browser-action-selection](recipes/browser-action-selection/SKILL.md) | Choose a bounded browser step from the current page and task evidence. | [Results](recipes/browser-action-selection/COMPATIBILITY.md) |
-| [content-revision-gate](recipes/content-revision-gate/SKILL.md) | Assess a draft’s clarity and specificity and recommend whether it needs focused revision. | [Results](recipes/content-revision-gate/COMPATIBILITY.md) |
-| [draft-quality-triage](recipes/draft-quality-triage/SKILL.md) | Classify a draft against its stated goal and available feedback. | [Results](recipes/draft-quality-triage/COMPATIBILITY.md) |
-| [email-queue-routing](recipes/email-queue-routing/SKILL.md) | Recommend a handling queue for one email using its request and context. | [Results](recipes/email-queue-routing/COMPATIBILITY.md) |
-| [invoice-file-triage](recipes/invoice-file-triage/SKILL.md) | Recommend whether a file appears to be an invoice and has enough metadata for a safe filing review. | [Results](recipes/invoice-file-triage/COMPATIBILITY.md) |
-| [model-tier-routing](recipes/model-tier-routing/SKILL.md) | Choose among supplied model tiers using task complexity and explicit constraints. | [Results](recipes/model-tier-routing/COMPATIBILITY.md) |
-| [outfit-option-selection](recipes/outfit-option-selection/SKILL.md) | Select a supplied outfit description using explicit weather and occasion constraints. | [Results](recipes/outfit-option-selection/COMPATIBILITY.md) |
-| [page-change-triage](recipes/page-change-triage/SKILL.md) | Compare two supplied page excerpts for a change that matters to the stated monitoring goal. | [Results](recipes/page-change-triage/COMPATIBILITY.md) |
-| [research-enrichment-gate](recipes/research-enrichment-gate/SKILL.md) | Recommend whether supplied research evidence can be reused or needs refreshing. | [Results](recipes/research-enrichment-gate/COMPATIBILITY.md) |
-| [research-source-filter](recipes/research-source-filter/SKILL.md) | Assess whether a source excerpt is useful for a stated research brief before synthesis. | [Results](recipes/research-source-filter/COMPATIBILITY.md) |
-| [retrieved-instruction-screening](recipes/retrieved-instruction-screening/SKILL.md) | Recommend whether retrieved material should be isolated before use as evidence. | [Results](recipes/retrieved-instruction-screening/COMPATIBILITY.md) |
-| [secondhand-listing-fit](recipes/secondhand-listing-fit/SKILL.md) | Compare a used-item listing with explicit purchase criteria and recommend whether it merits attention. | [Results](recipes/secondhand-listing-fit/COMPATIBILITY.md) |
-| [spoken-slide-selection](recipes/spoken-slide-selection/SKILL.md) | Recommend which described slide best matches a short spoken passage. | [Results](recipes/spoken-slide-selection/COMPATIBILITY.md) |
-| [spreadsheet-urgency](recipes/spreadsheet-urgency/SKILL.md) | Classify a row from its stated deadline, status, and impact. | [Results](recipes/spreadsheet-urgency/COMPATIBILITY.md) |
-| [study-tool-selection](recipes/study-tool-selection/SKILL.md) | Distinguish study-tool requests from ordinary chat and recommend one activity. | [Results](recipes/study-tool-selection/COMPATIBILITY.md) |
-| [suspicious-email-escalation](recipes/suspicious-email-escalation/SKILL.md) | Classify email text for fraud or phishing indicators and identify when security review is warranted. | [Results](recipes/suspicious-email-escalation/COMPATIBILITY.md) |
-| [template-field-matching](recipes/template-field-matching/SKILL.md) | Recommend source fields that can populate requested template fields based on names and supplied definitions. | [Results](recipes/template-field-matching/COMPATIBILITY.md) |
+| [ad-funnel-classification](skills/ad-funnel-classification/SKILL.md) | Classify ad copy by the customer-journey stage suggested by its text. | [Results](skills/ad-funnel-classification/COMPATIBILITY.md) |
+| [agent-workflow-routing](skills/agent-workflow-routing/SKILL.md) | Recommend a configured workflow from an incoming customer request. | [Results](skills/agent-workflow-routing/COMPATIBILITY.md) |
+| [brand-news-matching](skills/brand-news-matching/SKILL.md) | Classify whether a news item is relevant to a supplied brand brief. | [Results](skills/brand-news-matching/COMPATIBILITY.md) |
+| [browser-action-selection](skills/browser-action-selection/SKILL.md) | Choose a bounded browser step from the current page and task evidence. | [Results](skills/browser-action-selection/COMPATIBILITY.md) |
+| [content-revision-gate](skills/content-revision-gate/SKILL.md) | Assess a draft’s clarity and specificity and recommend whether it needs focused revision. | [Results](skills/content-revision-gate/COMPATIBILITY.md) |
+| [draft-quality-triage](skills/draft-quality-triage/SKILL.md) | Classify a draft against its stated goal and available feedback. | [Results](skills/draft-quality-triage/COMPATIBILITY.md) |
+| [email-queue-routing](skills/email-queue-routing/SKILL.md) | Recommend a handling queue for one email using its request and context. | [Results](skills/email-queue-routing/COMPATIBILITY.md) |
+| [invoice-file-triage](skills/invoice-file-triage/SKILL.md) | Recommend whether a file appears to be an invoice and has enough metadata for a safe filing review. | [Results](skills/invoice-file-triage/COMPATIBILITY.md) |
+| [model-tier-routing](skills/model-tier-routing/SKILL.md) | Choose among supplied model tiers using task complexity and explicit constraints. | [Results](skills/model-tier-routing/COMPATIBILITY.md) |
+| [outfit-option-selection](skills/outfit-option-selection/SKILL.md) | Select a supplied outfit description using explicit weather and occasion constraints. | [Results](skills/outfit-option-selection/COMPATIBILITY.md) |
+| [page-change-triage](skills/page-change-triage/SKILL.md) | Compare two supplied page excerpts for a change that matters to the stated monitoring goal. | [Results](skills/page-change-triage/COMPATIBILITY.md) |
+| [research-enrichment-gate](skills/research-enrichment-gate/SKILL.md) | Recommend whether supplied research evidence can be reused or needs refreshing. | [Results](skills/research-enrichment-gate/COMPATIBILITY.md) |
+| [research-source-filter](skills/research-source-filter/SKILL.md) | Assess whether a source excerpt is useful for a stated research brief before synthesis. | [Results](skills/research-source-filter/COMPATIBILITY.md) |
+| [retrieved-instruction-screening](skills/retrieved-instruction-screening/SKILL.md) | Recommend whether retrieved material should be isolated before use as evidence. | [Results](skills/retrieved-instruction-screening/COMPATIBILITY.md) |
+| [secondhand-listing-fit](skills/secondhand-listing-fit/SKILL.md) | Compare a used-item listing with explicit purchase criteria and recommend whether it merits attention. | [Results](skills/secondhand-listing-fit/COMPATIBILITY.md) |
+| [spoken-slide-selection](skills/spoken-slide-selection/SKILL.md) | Recommend which described slide best matches a short spoken passage. | [Results](skills/spoken-slide-selection/COMPATIBILITY.md) |
+| [spreadsheet-urgency](skills/spreadsheet-urgency/SKILL.md) | Classify a row from its stated deadline, status, and impact. | [Results](skills/spreadsheet-urgency/COMPATIBILITY.md) |
+| [study-tool-selection](skills/study-tool-selection/SKILL.md) | Distinguish study-tool requests from ordinary chat and recommend one activity. | [Results](skills/study-tool-selection/COMPATIBILITY.md) |
+| [suspicious-email-escalation](skills/suspicious-email-escalation/SKILL.md) | Classify email text for fraud or phishing indicators and identify when security review is warranted. | [Results](skills/suspicious-email-escalation/COMPATIBILITY.md) |
+| [template-field-matching](skills/template-field-matching/SKILL.md) | Recommend source fields that can populate requested template fields based on names and supplied definitions. | [Results](skills/template-field-matching/COMPATIBILITY.md) |
 
 
 ## Plug in a model
@@ -81,7 +81,7 @@ For example:
 ├── compatibility.json       Machine-readable reference evidence
 ├── examples/                Illustrative inputs and synthetic reference answers
 ├── fixtures/acceptance.json Frozen reference-implementation evaluation cases
-└── recipe.json              Optional reference configuration (recipes only)
+└── decision.json              Optional reference configuration (where applicable)
 ```
 
 The inputs may be supplied naturally; the JSON examples illustrate information to provide, not a required transport format. Expected fixture labels and synthetic demo answers are maintainer evaluation material, not evidence for a live decision.
@@ -94,10 +94,12 @@ The new study-tool and enrichment-gate reference checks qualify on Sage **v1.4**
 
 Those historical receipts do not benchmark the revised instruction-only skills on an arbitrary agent or model. The instructions are model-agnostic; decision quality still depends on the model, evidence, and task. No listed backend is required to use a skill.
 
+The unified directory layout was checked offline against 936 frozen provider-request and demo-policy contracts, plus 2,808 replays of archived native responses. Each compatibility page links the migration audit. This preserves the recorded reference results across naming changes; it is not a new live evaluation.
+
 ## Maintain the reference implementation
 
 `src/decision_models/` contains optional Python code used to reproduce API contracts, numerical policies, and reference evaluation. It is maintainer tooling; agents using the Markdown skills do not install or import it. The package exposes no global console command.
 
-See [Contributing](CONTRIBUTING.md) for folder validation and optional Python checks, [Recipe contract](RECIPE_CONTRACT.md) for reference configuration, [Implementation contract](IMPLEMENTATION_CONTRACT.md) for the optional adapters, and [Attribution](ATTRIBUTION.md) for original sources.
+See [Contributing](CONTRIBUTING.md) for folder validation and optional Python checks, [Decision contract](DECISION_CONTRACT.md) for reference configuration, [Implementation contract](IMPLEMENTATION_CONTRACT.md) for the optional adapters, and [Attribution](ATTRIBUTION.md) for original sources.
 
-Install and contribute directly from `main`; GitHub Releases and version tags are not required. Working docs and research stay local and ignored. Compact reference evidence stays beside each skill. Raw test outputs stay in ignored `reports/`, retained CI artifacts, or the separate `chore/test-evidence` audit branch. Public audit links use exact Git commit IDs so the recorded bytes can be checked without a release.
+Compact reference evidence stays beside each skill. Raw test outputs stay in ignored `reports/` or retained CI artifacts.

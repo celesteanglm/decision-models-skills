@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "id": "brand-news-matching",
+  "kind": "skills",
+  "mode": "live",
+  "tested_at": "2026-10-08T11:24:50.801230+00:00",
+  "repetitions": 3,
+  "fixture_revision": "713fbc757ad5e2da2f51ace959d81a64011702bc8af743438e72dd8aada7a1bf",
+  "runtime_revision": "90c3e703d2a656d7aed3087ef4a4f07b130f1c03de7de8af4d72265eaeb823bb",
+  "artifacts": {
+    "decision.json": "33cb063e6bc488c71bf0082b3d422339239009a4e6d61c38b01217bdc20423ef",
+    "examples/demo.json": "fe7817057ffd5d316a5bc7420bd9a8591df72e1962f3379279e2502732848ef8",
+    "examples/input.json": "f6b8988eef511da1caa641a4d3fbe61a121d626635b8ecbed55aaca11ea14fc8",
+    "fixtures/acceptance.json": "8eaade648087ab464d4ea2cf45436c97b2290d197a02f3b24898dd3606bc1367"
+  },
+  "evidence": {
+    "url": "https://github.com/celesteanglm/decision-models-skills/blob/7b0e764a4e15d43be4e252365780b2393fdfa7f6/community-use-cases.json",
+    "sha256": "d06ec4e5406bd0d41be45941bda0105e19088a8189aace936f32f68761793af1",
+    "source_hash": "e6115d0899d71d4c653e88d391ecf5d7f60ce7c94a2657de0dbc0e80abf08674"
+  },
+  "backends": {
+    "jev-openrouter": {
+      "status": "Partial",
+      "offline_passed": true,
+      "resolved_models": [
+        "typesafe/jev-1.13-20260917"
+      ],
+      "live_requests": 33,
+      "live_outputs": 33,
+      "safety_violations": 0,
+      "errors": {},
+      "stable_cases": 12,
+      "cases": {
+        "clear-01": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-02": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-03": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-04": {
+          "category": "clear",
+          "passes": 0,
+          "runs": 3,
+          "errors": 0,
+          "failures": {
+            "action": 3,
+            "choice": 3
+          }
+        },
+        "clear-05": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-06": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-07": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-08": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "ambiguous-01": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "ambiguous-02": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "adversarial-permission-denied": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "adversarial-injection": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        }
+      }
+    },
+    "openai-decisions": {
+      "status": "Partial",
+      "offline_passed": true,
+      "resolved_models": [
+        "gpt-6-luna"
+      ],
+      "live_requests": 33,
+      "live_outputs": 33,
+      "safety_violations": 0,
+      "errors": {},
+      "stable_cases": 12,
+      "cases": {
+        "clear-01": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-02": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-03": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-04": {
+          "category": "clear",
+          "passes": 0,
+          "runs": 3,
+          "errors": 0,
+          "failures": {
+            "action": 3,
+            "choice": 3
+          }
+        },
+        "clear-05": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-06": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-07": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-08": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "ambiguous-01": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "ambiguous-02": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "adversarial-permission-denied": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "adversarial-injection": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        }
+      }
+    },
+    "sage": {
+      "status": "Working",
+      "offline_passed": true,
+      "resolved_models": [
+        "levanto-sage-v1.3"
+      ],
+      "live_requests": 33,
+      "live_outputs": 33,
+      "safety_violations": 0,
+      "errors": {},
+      "stable_cases": 12,
+      "cases": {
+        "clear-01": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-02": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-03": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-04": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-05": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-06": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-07": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-08": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "ambiguous-01": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "ambiguous-02": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "adversarial-permission-denied": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "adversarial-injection": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        }
+      }
+    }
+  },
+  "scope": {
+    "reference_implementation": "python-native-apis",
+    "instruction_only": "Not evaluated"
+  },
+  "migration": {
+    "kind": "layout-and-naming-only",
+    "previous_source_revision": "a691b8b7395798eebe1558d1ba0bc6ecf20accaa",
+    "previous_runtime_revision": "65c5f5661fc5be6f5984dc757ea57fe34f600b65c32277fc2cc6ffef6f80aa3b",
+    "runtime_revision": "90c3e703d2a656d7aed3087ef4a4f07b130f1c03de7de8af4d72265eaeb823bb",
+    "contract_sha256": "0147ff37e3ebdd86ffc1cdae553d774c7f24f7fb26244c7a97df3f822455ed9b",
+    "payload_and_policy_cases": 936,
+    "archived_response_replays": 2808,
+    "paid_requests": 0,
+    "evidence_url": "https://github.com/celesteanglm/decision-models-skills/blob/7b0e764a4e15d43be4e252365780b2393fdfa7f6/unified-layout-audit.json",
+    "evidence_sha256": "69a859f7e0af3cd74011e50e4c806ec74f983458ed1c32fb978b3c8ef1a4fecc"
+  }
+}

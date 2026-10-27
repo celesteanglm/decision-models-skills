@@ -46,7 +46,6 @@ def write_manifest(folder, manifest):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--kind", choices=("skills", "recipes"), required=True)
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--ids", nargs="+", help="publish only specified qualifying folders")
     parser.add_argument("--evidence-url", required=True, help="retained HTTPS audit URL, such as an immutable Git commit or CI artifact")
@@ -56,7 +55,7 @@ def main():
     # Check before writing metadata, which itself participates in source_hash.
     assert receipt["source_hash"] == source_hash(args.repo) or "evaluated_artifacts" in receipt, "receipt is not for this checkout"
     receipt_hash = sha256(args.receipt)
-    folders = sorted(p.parent for p in (args.repo / args.kind).glob("*/SKILL.md"))
+    folders = sorted(p.parent for p in (args.repo / "skills").glob("*/SKILL.md"))
     if args.ids:
         assert set(args.ids) <= {p.name for p in folders}, "unknown publication folder"
         folders = [p for p in folders if p.name in args.ids]

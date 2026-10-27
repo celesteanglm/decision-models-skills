@@ -170,7 +170,7 @@ def summarize(rows, providers, skills, repetitions, mode, offline_passed):
 
 def source_hash(repo):
     digest = hashlib.sha256()
-    for path in sorted(list((repo/"src").rglob("*.py")) + list((repo/"skills").rglob("*.json")) + list((repo/"recipes").rglob("*.json"))):
+    for path in sorted(list((repo/"src").rglob("*.py")) + list((repo/"skills").rglob("*.json"))):
         digest.update(str(path.relative_to(repo)).encode())
         digest.update(path.read_bytes())
     return digest.hexdigest()

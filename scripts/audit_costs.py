@@ -24,7 +24,7 @@ def main():
         return "token_price_estimated_usd", estimate, max(0, floor - output)
 
     retained = ["baseline.json", "v2.json", "v3.json", "v4.json", "live.json", "jev-sage-retest.json"]
-    retained.extend(p.name for p in (reports / "community-recipes.json", reports / "community-core-regression.json") if p.exists())
+    retained.extend(p.name for p in (reports / "community-use-cases.json", reports / "general-skills-regression.json") if p.exists())
     for filename in retained:
         receipt = json.loads((reports / filename).read_text())
         record = {"receipt": filename, "source_hash": receipt["source_hash"],

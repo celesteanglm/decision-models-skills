@@ -22,8 +22,7 @@ def verify_folder(folder):
 
 
 def verify_skills(repo):
-    folders = sorted(p.parent for kind in ("skills", "recipes")
-                     for p in (Path(repo) / kind).glob("*/SKILL.md"))
+    folders = sorted(p.parent for p in (Path(repo) / "skills").glob("*/SKILL.md"))
     assert folders, "no skills found"
     return [verify_folder(folder) for folder in folders]
 

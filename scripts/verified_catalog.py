@@ -14,6 +14,11 @@ SLUGS = {"jev-openrouter": "Jev%20%2F%20OpenRouter", "openai-decisions": "Decisi
 NAMES = {"jev-openrouter": "Jev / OpenRouter", "openai-decisions": "Decisions API", "sage": "Sage"}
 EVIDENCE_SCOPE = {"reference_implementation": "python-native-apis", "instruction_only": "Not evaluated"}
 REFERENCE_HELPERS = {"scripts/usecase_reference.py", "scripts/evaluate_usecases.py"}
+LAYOUT_ORIGINS = {
+    "217f4374ee1a7ef7097129a726076206e379fe9815e17637d2c79df3a0015c59",
+    "d06ec4e5406bd0d41be45941bda0105e19088a8189aace936f32f68761793af1",
+    "1e870cc4c0e1bfc75e94e103f856bde5935fdbb73bd1b20401d189a5a8c361ff",
+}
 
 
 def sha256(path):
@@ -31,6 +36,17 @@ def runtime_revision(repo):
 def artifacts(folder):
     return {str(path.relative_to(folder)): sha256(path)
             for path in sorted(folder.rglob("*.json")) if path.name != "compatibility.json"}
+
+
+def decision_contract(folder):
+    """Fields that affect requests, permission/evidence gates, or recommendations."""
+    folder = Path(folder)
+    value = {"fixtures": json.loads((folder / "fixtures/acceptance.json").read_text()),
+             "examples": {p.name: json.loads(p.read_text()) for p in sorted((folder / "examples").glob("*.json"))}}
+    if (folder / "decision.json").is_file():
+        config = json.loads((folder / "decision.json").read_text())
+        value["decision"] = {k: config[k] for k in ("id", "required_state_fields", "question", "policy")}
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
 
 
 def badge(provider):
@@ -121,23 +137,27 @@ def compatibility_markdown(manifest):
               f"Fixture revision: {manifest['fixture_revision']}.",
               f"Runtime revision: {manifest['runtime_revision']}."]
     if manifest.get("reference_artifacts"):
-        lines += ["", "## Recorded adapter configuration", "", "The additional reference-helper hashes in compatibility.json bind this result to the evaluated adapter settings. The new Sage checks explicitly selected v1.4 after the deployment rejected the historical v1.3 default. To reproduce an individual Sage case with the optional Python package, pass `--model levanto-sage-v1.4` to `python -m decision_models recipe`. The SKILL.md instructions require no Python package or vendor runtime."]
+        lines += ["", "## Recorded adapter configuration", "", "The additional reference-helper hashes in compatibility.json bind this result to the evaluated adapter settings. The new Sage checks explicitly selected v1.4 after the deployment rejected the historical v1.3 default. To reproduce an individual Sage case with the optional Python package, pass `--model levanto-sage-v1.4` to `python -m decision_models decide --config decision.json`. The SKILL.md instructions require no Python package or vendor runtime."]
+    if manifest.get("migration"):
+        migration = manifest["migration"]
+        lines += ["", "## Layout verification", "", "The live results above predate the unified skills directory. An offline check of 936 provider-request and demo-policy contracts, plus 2,808 replays of archived native responses, confirmed identical requests, permissions, numerical gates, and recommendations after the path and naming changes. This migration made no paid requests and is not a new live evaluation.",
+                  "", f"[Migration audit]({migration['evidence_url']}) (SHA-256: {migration['evidence_sha256']}) preserves the verification record and original runtime revision."]
     return "\n".join(lines) + "\n"
 
 
-def verify_catalog(repo, receipts=()):
+def verify_catalog(repo, receipts=(), migration_receipts=()):
     """Offline consistency checks; optionally audit against downloaded raw runs."""
     repo = Path(repo)
-    registry = {"skills": {}, "recipes": {}}
+    registry = {"skills": {}}
     revision = runtime_revision(repo)
     raw = {sha256(path): json.loads(Path(path).read_text()) for path in receipts}
+    migrations = {sha256(path): json.loads(Path(path).read_text()) for path in migration_receipts}
+    used_migrations = set()
     for kind in registry:
         folders = sorted(p.parent for p in (repo / kind).glob("*/SKILL.md"))
-        if kind == "skills":
-            assert {p.name for p in folders} == set(SKILLS), "core skill folders differ"
-        else:
-            assert folders, "no use-case skills"
-            assert {p.name for p in folders} == {p.parent.name for p in (repo / kind).glob("*/recipe.json")}, "recipe folders differ"
+        names = {p.name for p in folders}
+        assert set(SKILLS) <= names, "general skill folders differ"
+        assert names - set(SKILLS) == {p.parent.name for p in (repo / kind).glob("*/decision.json")}, "decision configuration folders differ"
         assert {p.name for p in folders} == {p.parent.name for p in (repo / kind).glob("*/compatibility.json")}, "compatibility folders differ"
         for folder in folders:
             manifest = json.loads((folder / "compatibility.json").read_text())
@@ -145,6 +165,26 @@ def verify_catalog(repo, receipts=()):
             assert manifest["mode"] == "live" and manifest["repetitions"] == 3, "synthetic evidence cannot qualify"
             assert manifest["scope"] == EVIDENCE_SCOPE, "reference evidence cannot qualify instruction-only use"
             assert manifest["runtime_revision"] == revision, "runtime changed since evaluation"
+            if manifest["evidence"]["sha256"] in LAYOUT_ORIGINS:
+                assert "migration" in manifest, "missing layout migration"
+            if "migration" in manifest:
+                migration = manifest["migration"]
+                assert migration["kind"] == "layout-and-naming-only" and migration["paid_requests"] == 0, "invalid layout migration"
+                assert migration["runtime_revision"] == revision, "migration runtime changed"
+                assert migration["contract_sha256"] == decision_contract(folder), "migrated decision contract changed"
+                assert migration["payload_and_policy_cases"] == 936 and migration["archived_response_replays"] == 2808, "incomplete migration verification"
+                assert migration["evidence_url"].startswith("https://") and re.fullmatch(r"[a-f0-9]{64}", migration["evidence_sha256"]), "invalid migration evidence"
+                assert re.fullmatch(r"[a-f0-9]{64}", migration["previous_runtime_revision"]), "missing historical runtime revision"
+                proof_hash = migration["evidence_sha256"]
+                used_migrations.add(proof_hash)
+                if proof_hash in migrations:
+                    proof = migrations[proof_hash]
+                    for field in ("kind", "previous_runtime_revision", "runtime_revision", "payload_and_policy_cases", "archived_response_replays", "paid_requests"):
+                        assert proof[field] == migration[field], "migration summary differs from raw evidence"
+                    assert proof["identical"] is True and proof["skill_count"] == len(folders), "incomplete migration evidence"
+                    assert proof["decision_contracts"][folder.name] == decision_contract(folder), "migration contract differs from raw evidence"
+                    for relative, digest in proof["reference_artifacts"].items():
+                        assert relative in REFERENCE_HELPERS and sha256(repo / relative) == digest, "migration helper changed"
             if "reference_artifacts" in manifest:
                 assert set(manifest["reference_artifacts"]) == REFERENCE_HELPERS, "incomplete reference helper set"
             for relative, digest in manifest.get("reference_artifacts", {}).items():
@@ -180,12 +220,14 @@ def verify_catalog(repo, receipts=()):
         assert set(listed) == set(registry[kind]) and len(listed) == len(set(listed)), "README catalog differs from installed folders"
     expected_digests = {entry["manifest"]["evidence"]["sha256"] for entries in registry.values() for entry in entries.values()}
     assert set(raw) <= expected_digests, "raw receipt not referenced by a published skill"
+    assert set(migrations) <= used_migrations, "migration receipt not referenced by a published skill"
     return registry
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--receipt", action="append", default=[], help="optional downloaded raw receipt to audit (repeatable)")
+    parser.add_argument("--migration-receipt", action="append", default=[], help="optional downloaded layout audit to verify (repeatable)")
     args = parser.parse_args()
-    result = verify_catalog(Path(__file__).resolve().parents[1], args.receipt)
-    print(f"Verified local summaries for {len(result['recipes'])} use-case skills and {len(result['skills'])} core skills.")
+    result = verify_catalog(Path(__file__).resolve().parents[1], args.receipt, args.migration_receipt)
+    print(f"Verified local summaries for {len(result['skills'])} skills.")

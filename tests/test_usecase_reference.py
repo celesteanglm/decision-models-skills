@@ -17,7 +17,7 @@ def canonical_config():
         "id": "offline-study-selection",
         "title": "Choose a study action",
         "description": "A bounded synthetic choice.",
-        "inspiration": "Test-only canonical recipe.",
+        "inspiration": "Test-only canonical use_case.",
         "limitations": "No action is performed.",
         "source_urls": ["https://example.invalid/source"],
         "required_state_fields": ["content"],
@@ -60,10 +60,10 @@ def sage_raw(*, model="levanto-sage-v1.4", choice="select", confidence=0.9,
 class CanonicalReferenceTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.folder = Path(self.temp.name) / "recipe"
+        self.folder = Path(self.temp.name) / "skill"
         self.folder.mkdir()
         self.config = canonical_config()
-        (self.folder / "recipe.json").write_text(json.dumps(self.config), encoding="utf-8")
+        (self.folder / "decision.json").write_text(json.dumps(self.config), encoding="utf-8")
 
     def tearDown(self):
         self.temp.cleanup()
@@ -174,9 +174,9 @@ class CanonicalReferenceTests(unittest.TestCase):
                     mode="live", transport=lambda *args: malformed)
         self.assertEqual(caught.exception.code, "invalid_response")
 
-    def test_read_config_uses_only_temporary_canonical_recipe(self):
+    def test_read_config_uses_only_temporary_canonical_use_case(self):
         self.assertEqual(read_config(self.folder), self.config)
-        self.assertTrue((self.folder / "recipe.json").is_file())
+        self.assertTrue((self.folder / "decision.json").is_file())
         self.assertFalse((self.folder / "reference.json").exists())
 
 

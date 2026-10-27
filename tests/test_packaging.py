@@ -8,6 +8,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from decision_models.runtime import SKILLS
+
 
 REPO = Path(__file__).resolve().parents[1]
 class PackagingTests(unittest.TestCase):
@@ -36,9 +38,8 @@ class PackagingTests(unittest.TestCase):
     def test_optional_reference_implementation_accepts_copied_core_inputs(self):
         with tempfile.TemporaryDirectory(prefix="skill-copy-") as temp:
             root = Path(temp)
-            for source in sorted((REPO / "skills").iterdir()):
-                if not source.is_dir():
-                    continue
+            for skill in SKILLS:
+                source = REPO / "skills" / skill
                 skill_copy = root / source.name
                 shutil.copytree(source, skill_copy)
                 with self.subTest(skill=source.name):

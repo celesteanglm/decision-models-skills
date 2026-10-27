@@ -35,4 +35,16 @@ Independent fixture review may establish a narrowly allowed list of safe ambiguo
 
 ## Recorded reference labels
 
+Image-specific configuration is described below. Text schema version 1 and its recorded policies remain unchanged.
+
 Qualify a reference backend only when it meets the frozen Working criteria. Show positive Working badges on the local compatibility page only for those backends; Partial, Blocked, and Not tested do not qualify. Each copied folder must include `COMPATIBILITY.md` and `compatibility.json` with exact tested models, pass counts, failure reasons, tested runtime/configuration/fixture hashes, and a link and checksum for retained raw evidence. `scripts/verified_catalog.py` checks local summaries, labels, inclusion, and unchanged evaluated artifacts offline; its optional `--receipt` audits a downloaded raw run. Raw test runs belong in ignored local output or CI artifacts, rather than the source tree. Adapter availability and a successful reference demo do not establish instruction-only model compatibility. Keep the reference scope explicit in compatibility.json; never transfer its labels to the agent using SKILL.md.
+
+## Image schema version 2
+
+`image.json` uses `schema_version: 2` and `input_modality: image`. It is separate from `decision.json` so text-only integrations cannot silently treat a filename as visual evidence. It contains the same attribution and canonical choice fields, required state fields `content` and `image`, and a policy with `probability_threshold` and mandatory `review_choice: review`. The image helper accepts up to 20 choices, including review.
+
+Image input is `{"state": {"content": "Inspect the CONTINUE button.", "image": "images/frame01.png"}, "permission_granted": true}`. Paths resolve under the copied skill folder unless the caller supplies an explicit asset root. Expected labels, case IDs, filenames, and demonstration answers never enter the provider request. Only image pixels and task text enter native content.
+
+The screenshot reference freezes the selected-option probability threshold at 0.80. Its Sage image response has no separate confidence metric. The policy returns review for a selected review choice, insufficient probability, refusal, or missing evidence. Permission denial returns deny before file access. The result always has `executed_action: false`.
+
+Use the same 12-case, three-repetition qualification rules as text skills. Record actual live image formats separately from offline format handling. Hash local image assets in the compatibility manifest. If prompt revisions reuse the evaluation fixtures, record the development history and disclose that these are development results rather than held-out accuracy estimates.

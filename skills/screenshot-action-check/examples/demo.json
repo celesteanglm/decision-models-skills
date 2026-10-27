@@ -1,0 +1,12 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "visible",
+    "probabilities": {
+      "visible": 0.92,
+      "not_visible": 0.04,
+      "review": 0.04
+    }
+  }
+}

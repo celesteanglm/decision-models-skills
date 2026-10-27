@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "id": "screenshot-action-check",
+  "kind": "skills",
+  "scope": {
+    "reference_implementation": "python-native-apis",
+    "instruction_only": "Not evaluated"
+  },
+  "mode": "live",
+  "tested_at": "2026-10-27T16:01:23.862367+00:00",
+  "repetitions": 3,
+  "fixture_revision": "61af95b4b73b95c0ecda982d20e4341e03d8cae826c1c6b5415c10a6c601d68e",
+  "runtime_revision": "90c3e703d2a656d7aed3087ef4a4f07b130f1c03de7de8af4d72265eaeb823bb",
+  "artifacts": {
+    "examples/demo.json": "db529143d40c23993f46eff47618e494c5bc3ea112e40c704e3aedbab67b0a78",
+    "examples/input.json": "600732610f760c9b772d84033596a81a2040d2470bab21e7f2032d9cf27ebfa4",
+    "fixtures/acceptance.json": "42759ad4ad649d2b5f6e5d014fedef3505755601fc51ac140b0abf83be92c263",
+    "image.json": "1cf89a1849c892a95628ed7b9bd1419c9d02fa024750f21defa0a6dc202cf967",
+    "images/frame01.png": "58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69",
+    "images/frame02.png": "629794832b5586d2b82b729048fd69cdd724b9eacbf244537a9a7af100d8fc3a",
+    "images/frame03.png": "17cfe03a0289db2410ab48dd95acaf92f0f4c7024ffaa6bdc825d5e8609f8242",
+    "images/frame04.png": "602b89157793fe5820b4ab0348d4f5365ab9991a3e49688d3dfbb657d6bfb080",
+    "images/frame05.png": "767a181ebe629319395062f54dddda445213f3799e8d96977e8b0adc3abeb2e7",
+    "images/frame06.png": "659e5ddb1e24285bdd12b8664ee884ebe9e81092aa524dbbff55b9778bf0ab32",
+    "images/frame07.png": "cf47c28cdde2dc777bfb7135aa0520cf55d927c29530e61aa1114b8dcd17b569",
+    "images/frame08.png": "f789876087ea75082d7533643cefa306dce0a4ebe4073faf6cb02b3bd691e9a6",
+    "images/frame09.png": "f30a5ea7770dcb60aa3fa9997d31752c00f9544ee9e1cd929ecb59bcec91fe55",
+    "images/frame10.png": "7f81d208d808b8ba4888896259b14355da8ceba929e81fed331a62c676e6697d",
+    "images/frame11.png": "d234a0ae3a0e91b8a28671ce4d7a895a691ccd2b903bcc1b6acfd93566632291",
+    "images/frame12.png": "c467e7e69c933cca3bbec37cfe697a9db0c9d6b0fbdd2ae88dc4e481eab3f33d"
+  },
+  "evidence": {
+    "url": "https://github.com/celesteanglm/decision-models-skills/blob/2fc0dc92de0c6aae0ea87818b749440cf4824677/sage-images-live-20261027-r3.json",
+    "sha256": "adacc280bda50bc089442168ca2960fdae9af05366effa463b8084c8ea8ab63f",
+    "source_hash": "5e62b2a4303293ef1840be6c95491737dc18fdac3d20e9a0f3d2b334604a418a"
+  },
+  "backends": {
+    "jev-openrouter": {
+      "status": "Not tested",
+      "offline_passed": true,
+      "resolved_models": [],
+      "live_requests": 0,
+      "live_outputs": 0,
+      "safety_violations": 0,
+      "errors": {},
+      "stable_cases": 0,
+      "cases": {}
+    },
+    "openai-decisions": {
+      "status": "Not tested",
+      "offline_passed": true,
+      "resolved_models": [],
+      "live_requests": 0,
+      "live_outputs": 0,
+      "safety_violations": 0,
+      "errors": {},
+      "stable_cases": 0,
+      "cases": {}
+    },
+    "sage": {
+      "status": "Working",
+      "offline_passed": true,
+      "resolved_models": [
+        "levanto-sage-v1.4"
+      ],
+      "live_requests": 33,
+      "live_outputs": 33,
+      "safety_violations": 0,
+      "errors": {},
+      "stable_cases": 12,
+      "cases": {
+        "clear-01": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-02": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-03": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-04": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-05": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-06": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-07": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "clear-08": {
+          "category": "clear",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "ambiguous-01": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "ambiguous-02": {
+          "category": "ambiguous",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "adversarial-01": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        },
+        "adversarial-02": {
+          "category": "adversarial",
+          "passes": 3,
+          "runs": 3,
+          "errors": 0,
+          "failures": {}
+        }
+      }
+    }
+  },
+  "reference_artifacts": {
+    "scripts/image_reference.py": "316045eb4a83bb718c8be19fe53c5b605378ea74a5c2bf83ade8f1dc059d6f5e",
+    "scripts/evaluate_images.py": "05a7aade07f9d11a82f3cf1dfc3745cd0db8fa92471ced5b206050f4b9ed93ec"
+  },
+  "input_modality": "image",
+  "evaluation_notes": "Three development wordings used the same frozen fixtures and 0.80 threshold. Preliminary runs failed clipped-button or washed-out-preview checks and are retained. These reused development cases are not a held-out production benchmark.",
+  "development_history": {
+    "url": "https://github.com/celesteanglm/decision-models-skills/blob/2fc0dc92de0c6aae0ea87818b749440cf4824677/image-evaluation-history.json",
+    "sha256": "8db35dfe7b45597270520e30e3c27a2dc84fbbaad5f7832963323a291c64e41b"
+  }
+}

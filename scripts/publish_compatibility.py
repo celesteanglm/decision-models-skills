@@ -6,11 +6,11 @@ from pathlib import Path
 from decision_models.evaluation import source_hash
 from scripts.verified_catalog import (
     artifacts, backend_results, compatibility_markdown,
-    EVIDENCE_SCOPE, LAYOUT_ORIGINS, REFERENCE_HELPERS, runtime_revision, sha256,
+    EVIDENCE_SCOPE, LAYOUT_ORIGINS, REFERENCE_HELPERS_BY_MODALITY, runtime_revision, sha256,
 )
 
 
-def build_manifest(repo, folder, receipt, receipt_hash, evidence_url):
+def build_manifest(repo, folder, receipt, receipt_hash, evidence_url, *, history_url=None, history_hash=None):
     assert receipt["mode"] == "live" and receipt["repetitions"] == 3, "live evidence required"
     assert receipt_hash not in LAYOUT_ORIGINS, "historical receipts require the recorded layout migration"
     fixtures = json.loads((folder / "fixtures/acceptance.json").read_text())
@@ -19,7 +19,9 @@ def build_manifest(repo, folder, receipt, receipt_hash, evidence_url):
     backends = backend_results(receipt, folder.name)
     assert any(b["status"] == "Working" for b in backends.values()), "no Working backend"
     if "evaluated_artifacts" in receipt:
-        assert set(receipt.get("reference_artifacts", {})) == REFERENCE_HELPERS, "incomplete reference helper set"
+        modality = receipt.get("input_modality", "text")
+        assert modality in REFERENCE_HELPERS_BY_MODALITY, "unknown input modality"
+        assert set(receipt.get("reference_artifacts", {})) == REFERENCE_HELPERS_BY_MODALITY[modality], "incomplete reference helper set"
         assert receipt["runtime_revision"] == runtime_revision(repo), "reference runtime changed"
         assert receipt["evaluated_artifacts"][folder.name] == artifacts(folder), "scoped artifacts changed"
         for relative, digest in receipt["reference_artifacts"].items():
@@ -35,6 +37,13 @@ def build_manifest(repo, folder, receipt, receipt_hash, evidence_url):
     }
     if "reference_artifacts" in receipt:
         result["reference_artifacts"] = receipt["reference_artifacts"]
+    if receipt.get("input_modality") == "image":
+        result["input_modality"] = "image"
+        notes = json.loads((folder / "image.json").read_text()).get("evaluation_notes")
+        if notes:
+            assert history_url and history_url.startswith("https://") and history_hash, "development history is required"
+            result["evaluation_notes"] = notes
+            result["development_history"] = {"url": history_url, "sha256": history_hash}
     return result
 
 
@@ -49,16 +58,26 @@ def main():
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--ids", nargs="+", help="publish only specified qualifying folders")
     parser.add_argument("--evidence-url", required=True, help="retained HTTPS audit URL, such as an immutable Git commit or CI artifact")
+    parser.add_argument("--history-receipt", type=Path, help="retained development history for revised image instructions")
+    parser.add_argument("--history-url", help="immutable HTTPS location of the development history")
     args = parser.parse_args()
     assert args.evidence_url.startswith("https://"), "HTTPS evidence URL required"
     receipt = json.loads(args.receipt.read_text())
     assert receipt["source_hash"] == source_hash(args.repo) or "evaluated_artifacts" in receipt, "receipt is not for this checkout"
     receipt_hash = sha256(args.receipt)
+    assert bool(args.history_receipt) == bool(args.history_url), "history receipt and URL must be supplied together"
+    history_hash = None
+    if args.history_receipt:
+        history = json.loads(args.history_receipt.read_text())
+        assert history["final_receipt_sha256"] == receipt_hash, "history refers to another final evaluation"
+        assert history["fixtures"] == receipt["fixtures"], "history fixtures differ"
+        history_hash = sha256(args.history_receipt)
     folders = sorted(p.parent for p in (args.repo / "skills").glob("*/SKILL.md"))
     if args.ids:
         assert set(args.ids) <= {p.name for p in folders}, "unknown publication folder"
         folders = [p for p in folders if p.name in args.ids]
-    pending = [(folder, build_manifest(args.repo, folder, receipt, receipt_hash, args.evidence_url)) for folder in folders]
+    pending = [(folder, build_manifest(args.repo, folder, receipt, receipt_hash, args.evidence_url,
+                history_url=args.history_url, history_hash=history_hash)) for folder in folders]
     for folder, manifest in pending:
         write_manifest(folder, manifest)
     print(f"Published {len(pending)} local compatibility summaries. Run offline verification again.")

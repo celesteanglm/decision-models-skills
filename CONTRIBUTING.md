@@ -37,8 +37,8 @@ python -m decision_models evaluate --repo . --mode demo \
   --providers jev-openrouter --output reports/demo-general.json
 python -m decision_models evaluate-use-cases --repo . --mode demo \
   --providers sage --output reports/demo-use-cases.json
-python -m decision_models decide --config skills/study-tool-selection/decision.json \\
-  --provider sage --input skills/study-tool-selection/examples/input.json \\
+python -m decision_models decide --config skills/study-tool-selection/decision.json \
+  --provider sage --input skills/study-tool-selection/examples/input.json \
   --mode demo --demo-answers skills/study-tool-selection/examples/demo.json
 ```
 
@@ -83,3 +83,20 @@ python -m scripts.evaluate_usecases --candidates skills \
 ```
 
 For live mode, review `RATES` against current provider pricing, supply a reconciled cumulative `--historical-bound`, and reserve full coverage under the authorized total budget. The module is optional maintainer tooling; the skills themselves need no package or command. Never use a synthetic demo to qualify a backend.
+
+## Add an image skill
+
+Keep the full visual decision procedure in `SKILL.md`. Use `image.json` with schema version 2 for optional reference evaluation, and keep image assets under `images/`. See [the image configuration contract](DECISION_CONTRACT.md#image-schema-version-2). The catalog records asset hashes alongside fixture and helper hashes. A change to any evaluated asset or decision rule needs fresh evidence.
+
+The bundled image helper calls Sage with native pixels. Other vision models can follow the Markdown instructions through their own integrations, but need separate evaluation before receiving a Working label. The current Sage image Choice response supplies probabilities without separate confidence. Never invent confidence or reuse another backend's threshold.
+
+Run the copied-folder demo described in the README, then evaluate all frozen cases offline:
+
+```sh
+python -m scripts.evaluate_images --folder skills/screenshot-action-check \
+  --mode demo --output reports/image-demo.json --historical-bound 0
+```
+
+For paid evaluation, review `RATES` in `scripts/evaluate_images.py`, set `SAGE_API_KEY`, select `--mode live`, and supply the reconciled cumulative cost bound in `--historical-bound`. The evaluator reserves full coverage within a total capped at US$5. It stops on service errors and unknown-charge timeouts without retrying.
+
+Retain failed development runs before revising a prompt. Freeze each revision before evaluation, keep expected outcomes outside requests, and describe reused development fixtures honestly. If `image.json` includes `evaluation_notes`, publication also requires `--history-receipt` and `--history-url`. The history must identify the final receipt and unchanged fixture revision. Retain the history at an immutable evidence URL before publishing the skill.

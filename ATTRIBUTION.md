@@ -32,3 +32,9 @@ This repository is distributed under the MIT License. See [`LICENSE`](LICENSE).
 - `research-enrichment-gate`: inspired by [Capacitr’s decision-gate case study](https://levanto.ai/case-study/capacitr-market-signal-decision-gates). Credit Capacitr, Utkarsh Bhimte, and the Levanto Team. This independently authored, finance-neutral skill recommends whether supplied research evidence needs refreshing; it executes no research or financial action and reproduces no claimed savings.
 
 The source accounts guiding this research were [Marco De Rossi](https://x.com/marco_derossi), [Levanto Labs](https://x.com/levantolabs), and [Big Iron Chris](https://x.com/bigironchris). Source popularity and customer-reported results do not establish this repository’s compatibility labels. Only independently evaluated use-case skills with at least one Working backend are included.
+
+## Image input and screenshot inspection
+
+`screenshot-action-check` draws on [Levanto's image API documentation](https://docs.levanto.ai/decision-model/images) and [Austin Griffith's Sage Wisdom image-inspection gallery](https://github.com/austintgriffith/sage-wisdom). Credit Levanto for the image interface and Austin Griffith for the application examples. The adapter, instructions, image renderer, synthetic screenshots, and fixtures are independently authored. No code, prose, images, or performance claims were copied from Sage Wisdom.
+
+The retained development history includes two Partial evaluations before the final Working configuration. All three used the same synthetic development fixtures and threshold. The final result is not a held-out benchmark or a reproduction of either source's performance.

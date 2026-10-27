@@ -20,7 +20,9 @@ def digest(value):
 class LayoutContractTests(unittest.TestCase):
     def test_frozen_examples_fixtures_and_decision_contracts_are_unchanged(self):
         folders = {p.parent.name: p.parent for p in (REPO / 'skills').glob('*/SKILL.md')}
-        self.assertEqual(set(folders), set(GOLDEN['artifact_contracts']))
+        # These hashes freeze the 26 original text skills. New modalities are
+        # additive and receive their own contracts rather than rewriting this set.
+        self.assertTrue(set(GOLDEN['artifact_contracts']) <= set(folders))
         for skill, expected in GOLDEN['artifact_contracts'].items():
             with self.subTest(skill=skill):
                 folder = folders[skill]
@@ -34,6 +36,7 @@ class LayoutContractTests(unittest.TestCase):
                 self.assertEqual(observed, expected)
 
     def test_native_requests_and_policy_outcomes_match_pre_move_golden_hashes(self):
+        # Preserve all original 936 contracts exactly; later skills add separate coverage.
         self.assertEqual(len(GOLDEN['contracts']), 26 * 3 * 12)
         expected = {(skill, provider, case['id'])
                     for skill in GOLDEN['artifact_contracts']

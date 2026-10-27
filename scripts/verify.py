@@ -33,14 +33,20 @@ def main():
             copied = project / ".agents" / "skills" / skill
             shutil.copytree(repo / "skills" / skill, copied)
             config = copied / "decision.json"
-            invocation = (["decide", "--config", str(config)] if config.is_file()
-                          else ["run", skill])
-            expected_sources = {"demo"} if config.is_file() else {"demo", "deterministic"}
+            if (copied / "image.json").is_file():
+                invocation = [str(repo / "scripts/image_reference.py"), "--folder", str(copied)]
+                prefix, expected_sources = [sys.executable], {"demo"}
+            else:
+                invocation = (["decide", "--config", str(config)] if config.is_file()
+                              else ["run", skill])
+                prefix = [sys.executable, "-m", "decision_models"]
+                expected_sources = {"demo"} if config.is_file() else {"demo", "deterministic"}
             for provider in entry["working_backends"]:
-                command = [sys.executable, "-m", "decision_models", *invocation,
-                           "--provider", provider, "--mode", "demo",
+                command = [*prefix, *invocation, "--mode", "demo",
                            "--input", str(copied / "examples" / "input.json"),
                            "--demo-answers", str(copied / "examples" / "demo.json")]
+                if not (copied / "image.json").is_file():
+                    command += ["--provider", provider]
                 result = subprocess.run(command, cwd=elsewhere, env=env, check=True,
                                         text=True, capture_output=True)
                 receipt = json.loads(result.stdout)

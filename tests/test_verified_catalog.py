@@ -6,6 +6,7 @@ import tempfile
 import unittest
 
 from scripts.publish_compatibility import build_manifest
+from decision_models.runtime import SKILLS
 from scripts.verified_catalog import (
     compatibility_markdown, PROVIDERS, qualification, sha256, verify_catalog,
 )
@@ -39,10 +40,23 @@ class VerifiedCatalogTests(unittest.TestCase):
             repo = copy_inputs(root)
             registry = verify_catalog(repo)
             self.assertEqual(set(registry), {"skills"})
-            self.assertEqual(len(registry["skills"]), 26)
+            text_configs = list((repo / "skills").glob("*/decision.json"))
+            image_configs = list((repo / "skills").glob("*/image.json"))
+            self.assertEqual(len(text_configs), 20)
+            self.assertEqual(len(image_configs), 1)
+            self.assertEqual(len(registry["skills"]), len(SKILLS) + len(text_configs) + len(image_configs))
             self.assertEqual(len(list((repo / "skills").glob("*/decision.json"))), 20)
+            self.assertIn("screenshot-action-check", registry["skills"])
             self.assertFalse(any((repo / name).exists() for name in ("docs", "research", "reports")))
             self.assertEqual(registry["skills"][USE_CASE]["working_backends"], ["sage"])
+
+    def test_rejects_corrupted_image_asset_after_copying_skill_catalog(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            image = repo / "skills" / "screenshot-action-check" / "images" / "frame01.png"
+            image.write_bytes(image.read_bytes() + b"corruption")
+            with self.assertRaisesRegex(AssertionError, "unverified artifacts: screenshot-action-check"):
+                verify_catalog(repo)
 
     def test_every_status_is_derived_from_recorded_acceptance_counts(self):
         registry = verify_catalog(REPO)
@@ -172,8 +186,11 @@ class VerifiedCatalogTests(unittest.TestCase):
                 proof = {field: migration[field] for field in (
                     "kind", "previous_runtime_revision", "runtime_revision",
                     "payload_and_policy_cases", "archived_response_replays", "paid_requests")}
-                proof.update(identical=True, skill_count=26,
-                             decision_contracts={USE_CASE: migration["contract_sha256"]},
+                contracts = {p.parent.name: json.loads(p.read_text())["migration"]["contract_sha256"]
+                             for p in (repo / "skills").glob("*/compatibility.json")
+                             if "migration" in json.loads(p.read_text())}
+                proof.update(identical=True, skill_count=len(contracts),
+                             decision_contracts=contracts,
                              reference_artifacts=helpers)
                 path = Path(root) / "migration.json"
                 path.write_text(json.dumps(proof))

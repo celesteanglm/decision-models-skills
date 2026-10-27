@@ -13,6 +13,10 @@ SLUGS = {"jev-openrouter": "Jev%20%2F%20OpenRouter", "openai-decisions": "Decisi
 NAMES = {"jev-openrouter": "Jev / OpenRouter", "openai-decisions": "Decisions API", "sage": "Sage"}
 EVIDENCE_SCOPE = {"reference_implementation": "python-native-apis", "instruction_only": "Not evaluated"}
 REFERENCE_HELPERS = {"scripts/usecase_reference.py", "scripts/evaluate_usecases.py"}
+REFERENCE_HELPERS_BY_MODALITY = {
+    "text": REFERENCE_HELPERS,
+    "image": {"scripts/image_reference.py", "scripts/evaluate_images.py"},
+}
 LAYOUT_ORIGINS = {
     "217f4374ee1a7ef7097129a726076206e379fe9815e17637d2c79df3a0015c59",
     "d06ec4e5406bd0d41be45941bda0105e19088a8189aace936f32f68761793af1",
@@ -33,8 +37,11 @@ def runtime_revision(repo):
 
 
 def artifacts(folder):
+    paths = set(folder.rglob("*.json"))
+    paths.update(p for p in (folder / "images").rglob("*") if p.is_file())
+    assert all(p.resolve().is_relative_to(folder.resolve()) for p in paths), "asset escapes skill folder"
     return {str(path.relative_to(folder)): sha256(path)
-            for path in sorted(folder.rglob("*.json")) if path.name != "compatibility.json"}
+            for path in sorted(paths) if path.name != "compatibility.json"}
 
 
 def decision_contract(folder):
@@ -124,7 +131,10 @@ def compatibility_markdown(manifest):
                   for case_id, case in backend["cases"].items() if case["passes"] != case["runs"]]
         if failed or backend["status"] != "Working":
             failures = True
-            lines.append(f"- **{NAMES[provider]} ({backend['status']}):** " + ("; ".join(failed) or "See the recorded service errors or incomplete coverage in compatibility.json."))
+            detail = "; ".join(failed) or "See the recorded service errors or incomplete coverage in compatibility.json."
+            if backend["status"] == "Not tested":
+                detail = "No evaluation results are recorded for this backend."
+            lines.append(f"- **{NAMES[provider]} ({backend['status']}):** " + detail)
     if not failures:
         lines.append("All recorded checks passed on the listed backends.")
     evidence = manifest["evidence"]
@@ -133,7 +143,15 @@ def compatibility_markdown(manifest):
               "", f"Receipt SHA-256: {evidence['sha256']}.",
               f"Fixture revision: {manifest['fixture_revision']}.",
               f"Runtime revision: {manifest['runtime_revision']}."]
-    if manifest.get("reference_artifacts"):
+    if manifest.get("input_modality") == "image":
+        lines += ["", "## Image reference scope", "", "This run sent actual local PNG pixels to Sage's public image API. JPEG and WebP input handling has offline contract coverage; those formats were not qualified by this live run. Other backends have no image results here and receive no Working label.",
+                  "", "This image Choice API reports native selected-option probability without a separate confidence value. The frozen workflow uses a probability threshold of 0.80 and records confidence as unavailable. It recommends visibility only; it does not test enabled state, clickability, or application behavior.",
+                  "", "The optional image runner reads image.json. The text runner rejects that schema rather than sending an image filename as text. No Python package or command is needed to follow the SKILL.md instructions with a vision-capable agent."]
+        if manifest.get("development_history"):
+            history = manifest["development_history"]
+            lines += ["", "## Development runs", "", manifest["evaluation_notes"],
+                      "", f"[Earlier results and frozen prompt revisions]({history['url']}) (SHA-256: {history['sha256']}). The first two runs were Partial; only the final configuration qualifies as Working."]
+    elif manifest.get("reference_artifacts"):
         lines += ["", "## Recorded adapter configuration", "", "The additional reference-helper hashes in compatibility.json bind this result to the evaluated adapter settings. The new Sage checks explicitly selected v1.4 after the deployment rejected the historical v1.3 default. To reproduce an individual Sage case with the optional Python package, pass `--model levanto-sage-v1.4` to `python -m decision_models decide --config decision.json`. The SKILL.md instructions require no Python package or vendor runtime."]
     if manifest.get("migration"):
         migration = manifest["migration"]
@@ -154,10 +172,22 @@ def verify_catalog(repo, receipts=(), migration_receipts=()):
     folders = sorted(p.parent for p in skill_root.glob("*/SKILL.md"))
     names = {p.name for p in folders}
     assert set(SKILLS) <= names, "general skill folders differ"
-    assert names - set(SKILLS) == {p.parent.name for p in skill_root.glob("*/decision.json")}, "decision configuration folders differ"
+    configured = {p.parent.name for pattern in ("*/decision.json", "*/image.json") for p in skill_root.glob(pattern)}
+    assert names - set(SKILLS) == configured, "decision configuration folders differ"
     assert {p.name for p in folders} == {p.parent.name for p in skill_root.glob("*/compatibility.json")}, "compatibility folders differ"
     for folder in folders:
         manifest = json.loads((folder / "compatibility.json").read_text())
+        modality = manifest.get("input_modality", "text")
+        assert modality in REFERENCE_HELPERS_BY_MODALITY, "unknown input modality"
+        assert (folder / "image.json").is_file() == (modality == "image"), "image configuration differs"
+        if modality == "image":
+            image_config = json.loads((folder / "image.json").read_text())
+            assert image_config["schema_version"] == 2 and image_config["input_modality"] == "image", "invalid image configuration"
+            assert not (folder / "decision.json").exists(), "multiple reference configurations"
+            if image_config.get("evaluation_notes"):
+                assert manifest.get("evaluation_notes") == image_config["evaluation_notes"], "development notes differ"
+                history = manifest["development_history"]
+                assert history["url"].startswith("https://") and re.fullmatch(r"[a-f0-9]{64}", history["sha256"]), "invalid development history"
         assert manifest["schema_version"] == 1 and manifest["id"] == folder.name and manifest["kind"] == "skills"
         assert manifest["mode"] == "live" and manifest["repetitions"] == 3, "synthetic evidence cannot qualify"
         assert manifest["scope"] == EVIDENCE_SCOPE, "reference evidence cannot qualify instruction-only use"
@@ -179,13 +209,13 @@ def verify_catalog(repo, receipts=(), migration_receipts=()):
                 proof = migrations[proof_hash]
                 for field in ("kind", "previous_runtime_revision", "runtime_revision", "payload_and_policy_cases", "archived_response_replays", "paid_requests"):
                     assert proof[field] == migration[field], "migration summary differs from raw evidence"
-                assert proof["identical"] is True and proof["skill_count"] == len(folders), "incomplete migration evidence"
+                assert proof["identical"] is True and proof["skill_count"] == len(proof["decision_contracts"]), "incomplete migration evidence"
                 assert proof["decision_contracts"][folder.name] == contract_revision, "migration contract differs from raw evidence"
                 assert set(proof["reference_artifacts"]) == REFERENCE_HELPERS, "incomplete migration helper set"
                 for relative, digest in proof["reference_artifacts"].items():
                     assert relative in REFERENCE_HELPERS and sha256(repo / relative) == digest, "migration helper changed"
         if "reference_artifacts" in manifest:
-            assert set(manifest["reference_artifacts"]) == REFERENCE_HELPERS, "incomplete reference helper set"
+            assert set(manifest["reference_artifacts"]) == REFERENCE_HELPERS_BY_MODALITY[modality], "incomplete reference helper set"
         for relative, digest in manifest.get("reference_artifacts", {}).items():
             path = (repo / relative).resolve()
             assert path.is_relative_to(repo.resolve()) and path.is_file() and sha256(path) == digest, "reference helper changed since evaluation"
@@ -202,6 +232,8 @@ def verify_catalog(repo, receipts=(), migration_receipts=()):
         assert statuses == {p: manifest["backends"][p]["status"] for p in PROVIDERS}, "unsupported status"
         working = [p for p in PROVIDERS if statuses[p] == "Working"]
         assert working, f"{folder.name} has no Working backend"
+        if modality == "image":
+            assert working == ["sage"], "image backend has no evaluated adapter"
         if evidence["sha256"] in raw:
             receipt = raw[evidence["sha256"]]
             assert receipt["source_hash"] == evidence["source_hash"]
@@ -215,7 +247,9 @@ def verify_catalog(repo, receipts=(), migration_receipts=()):
         assert (folder / "COMPATIBILITY.md").read_text() == compatibility_markdown(manifest), f"stale compatibility page: {folder.name}"
         assert f"](skills/{folder.name}/SKILL.md)" in readme, f"skill missing from README: {folder.name}"
         entries[folder.name] = {"working_backends": working, "statuses": statuses, "manifest": manifest}
-    listed = re.findall(r"\]\(skills/([^/]+)/SKILL\.md\)", readme)
+    linked = re.findall(r"\]\(skills/([^/]+)/SKILL\.md\)", readme)
+    assert set(linked) <= set(entries), "README links to an unknown skill"
+    listed = re.findall(r"^\|\s*\[[^\]]+\]\(skills/([^/]+)/SKILL\.md\)\s*\|", readme, re.MULTILINE)
     assert set(listed) == set(entries) and len(listed) == len(set(listed)), "README catalog differs from installed folders"
     expected_digests = {entry["manifest"]["evidence"]["sha256"] for entry in entries.values()}
     assert set(raw) <= expected_digests, "raw receipt not referenced by a published skill"

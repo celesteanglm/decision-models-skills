@@ -49,7 +49,7 @@ def main():
     parser.add_argument("--kind", choices=("skills", "recipes"), required=True)
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--ids", nargs="+", help="publish only specified qualifying folders")
-    parser.add_argument("--evidence-url", required=True, help="retained HTTPS CI artifact or versioned release asset")
+    parser.add_argument("--evidence-url", required=True, help="retained HTTPS audit URL, such as an immutable Git commit or CI artifact")
     args = parser.parse_args()
     assert args.evidence_url.startswith("https://"), "HTTPS evidence URL required"
     receipt = json.loads(args.receipt.read_text())

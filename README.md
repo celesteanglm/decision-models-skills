@@ -1,6 +1,6 @@
 # Decision Models Skills
 
-Model-agnostic agent skills for bounded decisions, routing, and evaluation. Choose among six core skills and 20 use-case skills, install or reference the folder, and ask your agent to use it.
+Model-agnostic agent skills for bounded decisions, routing, and evaluation. Choose among six general skills and 20 use-case skills, install or reference the folder, and ask your agent to use it.
 
 ## Use a skill
 
@@ -14,14 +14,16 @@ Using these instructions requires no Python installation, API key, package insta
 
 ## Choose a skill
 
-Both categories use the same `SKILL.md` format:
+Everything listed below is an installable skill. The two groups differ in scope, not format or installation:
 
-- **Core skills** in `skills/` describe reusable decision procedures.
-- **Use-case skills (recipes)** in `recipes/` include a task-specific decision menu and examples. Their `recipe.json` is optional reference configuration.
+- **General skills** in `skills/` describe reusable decision procedures. Use model routing, for example, when you need to choose a model for a task in your own application.
+- **Use-case skills** in `recipes/` apply a decision procedure to a specific task. Study-tool selection, for example, chooses among flashcards, quizzes, summaries, and other study activities.
+
+The folder name `recipes/` means use-case skills; it does not introduce a second kind of agent feature. Both groups have self-contained `SKILL.md` instructions, local examples, and compatibility evidence. A use-case skill's `recipe.json` is optional configuration for the Python reference implementation, not a requirement for using the skill.
 
 Each entrypoint explains the needed evidence, decision procedure, result, and review or escalation behavior. The result is a recommendation; executing an action is a separate request and authorization decision.
 
-### Core skills
+### General skills
 
 | Skill | Use it to | Recorded reference checks |
 |---|---|---|
@@ -32,7 +34,7 @@ Each entrypoint explains the needed evidence, decision procedure, result, and re
 | [confidence-gates](skills/confidence-gates/SKILL.md) | Escalate decisions when confidence is insufficient. | [Results](skills/confidence-gates/COMPATIBILITY.md) |
 | [output-evaluation](skills/output-evaluation/SKILL.md) | Evaluate supplied output against defined criteria. | [Results](skills/output-evaluation/COMPATIBILITY.md) |
 
-### Use-case skills (recipes)
+### Use-case skills
 
 | Skill | Use it to | Recorded reference checks |
 |---|---|---|
@@ -98,4 +100,4 @@ Those historical receipts do not benchmark the revised instruction-only skills o
 
 See [Contributing](CONTRIBUTING.md) for folder validation and optional Python checks, [Recipe contract](RECIPE_CONTRACT.md) for reference configuration, [Implementation contract](IMPLEMENTATION_CONTRACT.md) for the optional adapters, and [Attribution](ATTRIBUTION.md) for original sources.
 
-Working docs and research stay local and ignored. Raw test outputs go to ignored `reports/` or CI artifacts; compact reference evidence stays beside each skill.
+Install and contribute directly from `main`; GitHub Releases and version tags are not required. Working docs and research stay local and ignored. Compact reference evidence stays beside each skill. Raw test outputs stay in ignored `reports/`, retained CI artifacts, or the separate `chore/test-evidence` audit branch. Public audit links use exact Git commit IDs so the recorded bytes can be checked without a release.

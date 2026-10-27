@@ -116,7 +116,7 @@ def compatibility_markdown(manifest):
         lines.append("All recorded checks passed on the listed backends.")
     evidence = manifest["evidence"]
     lines += ["", "## Evidence", "", "[Machine-readable summary](compatibility.json) records case counts, failure reasons, exact models, and hashes of the tested runtime, local configuration, examples, and fixtures.",
-              "", f"[Raw live test run]({evidence['url']}) is retained outside the current source tree. Historical runs remain available at an immutable commit; new runs should use a CI artifact or versioned release asset.",
+              "", f"[Raw live test run]({evidence['url']}) is retained outside the main source tree for optional audit. Receipts can live at an immutable Git commit or a retained CI artifact; GitHub Releases are not required. Using the skill and running offline checks do not download this receipt.",
               "", f"Receipt SHA-256: {evidence['sha256']}.",
               f"Fixture revision: {manifest['fixture_revision']}.",
               f"Runtime revision: {manifest['runtime_revision']}."]

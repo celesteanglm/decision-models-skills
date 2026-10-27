@@ -1,4 +1,3 @@
-"""Publish compact skill-local summaries from a retained live test run."""
 import argparse
 import hashlib
 import json
@@ -7,12 +6,13 @@ from pathlib import Path
 from decision_models.evaluation import source_hash
 from scripts.verified_catalog import (
     artifacts, backend_results, compatibility_markdown,
-    EVIDENCE_SCOPE, REFERENCE_HELPERS, runtime_revision, sha256,
+    EVIDENCE_SCOPE, LAYOUT_ORIGINS, REFERENCE_HELPERS, runtime_revision, sha256,
 )
 
 
 def build_manifest(repo, folder, receipt, receipt_hash, evidence_url):
     assert receipt["mode"] == "live" and receipt["repetitions"] == 3, "live evidence required"
+    assert receipt_hash not in LAYOUT_ORIGINS, "historical receipts require the recorded layout migration"
     fixtures = json.loads((folder / "fixtures/acceptance.json").read_text())
     fixture_revision = hashlib.sha256(json.dumps(fixtures, sort_keys=True).encode()).hexdigest()
     assert receipt["fixtures"][folder.name] == fixture_revision, "fixtures differ from evaluated cases"
@@ -44,7 +44,7 @@ def write_manifest(folder, manifest):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description="Record compatibility summaries from a retained live test run.")
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--ids", nargs="+", help="publish only specified qualifying folders")
@@ -52,7 +52,6 @@ def main():
     args = parser.parse_args()
     assert args.evidence_url.startswith("https://"), "HTTPS evidence URL required"
     receipt = json.loads(args.receipt.read_text())
-    # Check before writing metadata, which itself participates in source_hash.
     assert receipt["source_hash"] == source_hash(args.repo) or "evaluated_artifacts" in receipt, "receipt is not for this checkout"
     receipt_hash = sha256(args.receipt)
     folders = sorted(p.parent for p in (args.repo / "skills").glob("*/SKILL.md"))

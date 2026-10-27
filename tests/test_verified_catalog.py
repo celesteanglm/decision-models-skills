@@ -163,6 +163,24 @@ class VerifiedCatalogTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, "not referenced"):
                 verify_catalog(repo, [path])
 
+    def test_migration_audit_rejects_missing_helper_hashes(self):
+        for helpers in ({}, {"scripts/usecase_reference.py": sha256(REPO / "scripts/usecase_reference.py")}):
+            with self.subTest(helpers=helpers), tempfile.TemporaryDirectory() as root:
+                repo = copy_inputs(root)
+                manifest = json.loads((repo / "skills" / USE_CASE / "compatibility.json").read_text())
+                migration = manifest["migration"]
+                proof = {field: migration[field] for field in (
+                    "kind", "previous_runtime_revision", "runtime_revision",
+                    "payload_and_policy_cases", "archived_response_replays", "paid_requests")}
+                proof.update(identical=True, skill_count=26,
+                             decision_contracts={USE_CASE: migration["contract_sha256"]},
+                             reference_artifacts=helpers)
+                path = Path(root) / "migration.json"
+                path.write_text(json.dumps(proof))
+                change_manifest(repo, lambda m: m["migration"].update(evidence_sha256=sha256(path)))
+                with self.assertRaisesRegex(AssertionError, "incomplete migration helper set"):
+                    verify_catalog(repo, migration_receipts=[path])
+
     def test_publisher_refuses_synthetic_evidence(self):
         with self.assertRaisesRegex(AssertionError, "live evidence"):
             build_manifest(REPO, REPO / "skills" / USE_CASE,

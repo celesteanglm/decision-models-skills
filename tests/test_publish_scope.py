@@ -147,6 +147,34 @@ class PublishScopeTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, "no Working backend"):
                 build(repo, receipt)
 
+    def test_publisher_cannot_drop_the_migration_from_historical_results(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_repo(root)
+            folder = repo / "skills" / PUBLISHED
+            previous = json.loads((folder / "compatibility.json").read_text())
+            with self.assertRaisesRegex(AssertionError, "historical receipts require the recorded layout migration"):
+                build_manifest(repo, folder, receipt_for(repo), previous["evidence"]["sha256"], EVIDENCE_URL)
+
+    def test_invalid_batch_leaves_all_existing_summaries_untouched(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_repo(root)
+            receipt = receipt_for(repo, UNSELECTED)
+            invalid = receipt_for(repo, PUBLISHED, fail_clear=True)
+            for field in ("fixtures", "evaluated_artifacts", "summary"):
+                receipt[field].update(invalid[field])
+            receipt["rows"].extend(invalid["rows"])
+            path = Path(root) / "synthetic-receipt.json"
+            path.write_text(json.dumps(receipt))
+            folders = [repo / "skills" / skill for skill in (UNSELECTED, PUBLISHED)]
+            before = {p: p.read_bytes() for folder in folders
+                      for p in (folder / "compatibility.json", folder / "COMPATIBILITY.md")}
+            arguments = ["publish_compatibility.py", "--repo", str(repo),
+                         "--receipt", str(path), "--evidence-url", EVIDENCE_URL,
+                         "--ids", UNSELECTED, PUBLISHED]
+            with patch.object(sys, "argv", arguments), self.assertRaisesRegex(AssertionError, "no Working backend"):
+                publish_main()
+            self.assertEqual({p: p.read_bytes() for p in before}, before)
+
 
 if __name__ == "__main__":
     unittest.main()

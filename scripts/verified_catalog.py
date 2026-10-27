@@ -1,4 +1,3 @@
-"""Check skill-local compatibility summaries without downloading raw test runs."""
 import argparse
 from collections import Counter
 import hashlib
@@ -39,7 +38,6 @@ def artifacts(folder):
 
 
 def decision_contract(folder):
-    """Fields that affect requests, permission/evidence gates, or recommendations."""
     folder = Path(folder)
     value = {"fixtures": json.loads((folder / "fixtures/acceptance.json").read_text()),
              "examples": {p.name: json.loads(p.read_text()) for p in sorted((folder / "examples").glob("*.json"))}}
@@ -54,7 +52,6 @@ def badge(provider):
 
 
 def backend_results(receipt, item_id):
-    """Retain acceptance counts and failure reasons, without prompts or outputs."""
     result = {}
     for provider in PROVIDERS:
         recorded = receipt["summary"].get(provider + "/" + item_id, {})
@@ -146,86 +143,88 @@ def compatibility_markdown(manifest):
 
 
 def verify_catalog(repo, receipts=(), migration_receipts=()):
-    """Offline consistency checks; optionally audit against downloaded raw runs."""
     repo = Path(repo)
-    registry = {"skills": {}}
+    entries = {}
+    skill_root = repo / "skills"
+    readme = (repo / "README.md").read_text()
     revision = runtime_revision(repo)
     raw = {sha256(path): json.loads(Path(path).read_text()) for path in receipts}
     migrations = {sha256(path): json.loads(Path(path).read_text()) for path in migration_receipts}
     used_migrations = set()
-    for kind in registry:
-        folders = sorted(p.parent for p in (repo / kind).glob("*/SKILL.md"))
-        names = {p.name for p in folders}
-        assert set(SKILLS) <= names, "general skill folders differ"
-        assert names - set(SKILLS) == {p.parent.name for p in (repo / kind).glob("*/decision.json")}, "decision configuration folders differ"
-        assert {p.name for p in folders} == {p.parent.name for p in (repo / kind).glob("*/compatibility.json")}, "compatibility folders differ"
-        for folder in folders:
-            manifest = json.loads((folder / "compatibility.json").read_text())
-            assert manifest["schema_version"] == 1 and manifest["id"] == folder.name and manifest["kind"] == kind
-            assert manifest["mode"] == "live" and manifest["repetitions"] == 3, "synthetic evidence cannot qualify"
-            assert manifest["scope"] == EVIDENCE_SCOPE, "reference evidence cannot qualify instruction-only use"
-            assert manifest["runtime_revision"] == revision, "runtime changed since evaluation"
-            if manifest["evidence"]["sha256"] in LAYOUT_ORIGINS:
-                assert "migration" in manifest, "missing layout migration"
-            if "migration" in manifest:
-                migration = manifest["migration"]
-                assert migration["kind"] == "layout-and-naming-only" and migration["paid_requests"] == 0, "invalid layout migration"
-                assert migration["runtime_revision"] == revision, "migration runtime changed"
-                assert migration["contract_sha256"] == decision_contract(folder), "migrated decision contract changed"
-                assert migration["payload_and_policy_cases"] == 936 and migration["archived_response_replays"] == 2808, "incomplete migration verification"
-                assert migration["evidence_url"].startswith("https://") and re.fullmatch(r"[a-f0-9]{64}", migration["evidence_sha256"]), "invalid migration evidence"
-                assert re.fullmatch(r"[a-f0-9]{64}", migration["previous_runtime_revision"]), "missing historical runtime revision"
-                proof_hash = migration["evidence_sha256"]
-                used_migrations.add(proof_hash)
-                if proof_hash in migrations:
-                    proof = migrations[proof_hash]
-                    for field in ("kind", "previous_runtime_revision", "runtime_revision", "payload_and_policy_cases", "archived_response_replays", "paid_requests"):
-                        assert proof[field] == migration[field], "migration summary differs from raw evidence"
-                    assert proof["identical"] is True and proof["skill_count"] == len(folders), "incomplete migration evidence"
-                    assert proof["decision_contracts"][folder.name] == decision_contract(folder), "migration contract differs from raw evidence"
-                    for relative, digest in proof["reference_artifacts"].items():
-                        assert relative in REFERENCE_HELPERS and sha256(repo / relative) == digest, "migration helper changed"
-            if "reference_artifacts" in manifest:
-                assert set(manifest["reference_artifacts"]) == REFERENCE_HELPERS, "incomplete reference helper set"
-            for relative, digest in manifest.get("reference_artifacts", {}).items():
-                path = (repo / relative).resolve()
-                assert path.is_relative_to(repo.resolve()) and path.is_file() and sha256(path) == digest, "reference helper changed since evaluation"
-            assert manifest["artifacts"] == artifacts(folder), f"unverified artifacts: {folder.name}"
-            fixtures = json.loads((folder / "fixtures/acceptance.json").read_text())
-            assert len(fixtures) == 12 and Counter(c["category"] for c in fixtures) == {"clear": 8, "ambiguous": 2, "adversarial": 2}
-            assert len({c["id"] for c in fixtures}) == 12
-            assert manifest["fixture_revision"] == hashlib.sha256(json.dumps(fixtures, sort_keys=True).encode()).hexdigest()
-            evidence = manifest["evidence"]
-            assert evidence["url"].startswith("https://") and re.fullmatch(r"[a-f0-9]{64}", evidence["sha256"])
-            assert re.fullmatch(r"[a-f0-9]{64}", evidence["source_hash"]) and manifest["tested_at"]
-            assert set(manifest["backends"]) == set(PROVIDERS)
-            statuses = {p: qualification(manifest["backends"][p], fixtures) for p in PROVIDERS}
-            assert statuses == {p: manifest["backends"][p]["status"] for p in PROVIDERS}, "unsupported status"
-            working = [p for p in PROVIDERS if statuses[p] == "Working"]
-            assert working, f"{folder.name} has no Working backend"
-            if evidence["sha256"] in raw:
-                receipt = raw[evidence["sha256"]]
-                assert receipt["source_hash"] == evidence["source_hash"]
-                assert receipt["mode"] == "live" and receipt["repetitions"] == 3
-                assert receipt["fixtures"][folder.name] == manifest["fixture_revision"]
-                assert manifest["backends"] == backend_results(receipt, folder.name), "summary differs from raw evidence"
-            skill = (folder / "SKILL.md").read_text()
-            labels = re.findall(r"https://img\.shields\.io/badge/([^\s)]+)-Working-brightgreen", skill)
-            assert not labels, f"unsupported badge in model-agnostic instructions: {folder.name}"
-            assert "[compatibility evidence](COMPATIBILITY.md)" in skill
-            assert (folder / "COMPATIBILITY.md").read_text() == compatibility_markdown(manifest), f"stale compatibility page: {folder.name}"
-            assert f"]({kind}/{folder.name}/SKILL.md)" in (repo / "README.md").read_text(), f"skill missing from README: {folder.name}"
-            registry[kind][folder.name] = {"working_backends": working, "statuses": statuses, "manifest": manifest}
-        listed = re.findall(r"\]\(" + kind + r"/([^/]+)/SKILL\.md\)", (repo / "README.md").read_text())
-        assert set(listed) == set(registry[kind]) and len(listed) == len(set(listed)), "README catalog differs from installed folders"
-    expected_digests = {entry["manifest"]["evidence"]["sha256"] for entries in registry.values() for entry in entries.values()}
+    folders = sorted(p.parent for p in skill_root.glob("*/SKILL.md"))
+    names = {p.name for p in folders}
+    assert set(SKILLS) <= names, "general skill folders differ"
+    assert names - set(SKILLS) == {p.parent.name for p in skill_root.glob("*/decision.json")}, "decision configuration folders differ"
+    assert {p.name for p in folders} == {p.parent.name for p in skill_root.glob("*/compatibility.json")}, "compatibility folders differ"
+    for folder in folders:
+        manifest = json.loads((folder / "compatibility.json").read_text())
+        assert manifest["schema_version"] == 1 and manifest["id"] == folder.name and manifest["kind"] == "skills"
+        assert manifest["mode"] == "live" and manifest["repetitions"] == 3, "synthetic evidence cannot qualify"
+        assert manifest["scope"] == EVIDENCE_SCOPE, "reference evidence cannot qualify instruction-only use"
+        assert manifest["runtime_revision"] == revision, "runtime changed since evaluation"
+        if manifest["evidence"]["sha256"] in LAYOUT_ORIGINS:
+            assert "migration" in manifest, "missing layout migration"
+        if "migration" in manifest:
+            migration = manifest["migration"]
+            contract_revision = decision_contract(folder)
+            assert migration["kind"] == "layout-and-naming-only" and migration["paid_requests"] == 0, "invalid layout migration"
+            assert migration["runtime_revision"] == revision, "migration runtime changed"
+            assert migration["contract_sha256"] == contract_revision, "migrated decision contract changed"
+            assert migration["payload_and_policy_cases"] == 936 and migration["archived_response_replays"] == 2808, "incomplete migration verification"
+            assert migration["evidence_url"].startswith("https://") and re.fullmatch(r"[a-f0-9]{64}", migration["evidence_sha256"]), "invalid migration evidence"
+            assert re.fullmatch(r"[a-f0-9]{64}", migration["previous_runtime_revision"]), "missing historical runtime revision"
+            proof_hash = migration["evidence_sha256"]
+            used_migrations.add(proof_hash)
+            if proof_hash in migrations:
+                proof = migrations[proof_hash]
+                for field in ("kind", "previous_runtime_revision", "runtime_revision", "payload_and_policy_cases", "archived_response_replays", "paid_requests"):
+                    assert proof[field] == migration[field], "migration summary differs from raw evidence"
+                assert proof["identical"] is True and proof["skill_count"] == len(folders), "incomplete migration evidence"
+                assert proof["decision_contracts"][folder.name] == contract_revision, "migration contract differs from raw evidence"
+                assert set(proof["reference_artifacts"]) == REFERENCE_HELPERS, "incomplete migration helper set"
+                for relative, digest in proof["reference_artifacts"].items():
+                    assert relative in REFERENCE_HELPERS and sha256(repo / relative) == digest, "migration helper changed"
+        if "reference_artifacts" in manifest:
+            assert set(manifest["reference_artifacts"]) == REFERENCE_HELPERS, "incomplete reference helper set"
+        for relative, digest in manifest.get("reference_artifacts", {}).items():
+            path = (repo / relative).resolve()
+            assert path.is_relative_to(repo.resolve()) and path.is_file() and sha256(path) == digest, "reference helper changed since evaluation"
+        assert manifest["artifacts"] == artifacts(folder), f"unverified artifacts: {folder.name}"
+        fixtures = json.loads((folder / "fixtures/acceptance.json").read_text())
+        assert len(fixtures) == 12 and Counter(c["category"] for c in fixtures) == {"clear": 8, "ambiguous": 2, "adversarial": 2}
+        assert len({c["id"] for c in fixtures}) == 12
+        assert manifest["fixture_revision"] == hashlib.sha256(json.dumps(fixtures, sort_keys=True).encode()).hexdigest()
+        evidence = manifest["evidence"]
+        assert evidence["url"].startswith("https://") and re.fullmatch(r"[a-f0-9]{64}", evidence["sha256"])
+        assert re.fullmatch(r"[a-f0-9]{64}", evidence["source_hash"]) and manifest["tested_at"]
+        assert set(manifest["backends"]) == set(PROVIDERS)
+        statuses = {p: qualification(manifest["backends"][p], fixtures) for p in PROVIDERS}
+        assert statuses == {p: manifest["backends"][p]["status"] for p in PROVIDERS}, "unsupported status"
+        working = [p for p in PROVIDERS if statuses[p] == "Working"]
+        assert working, f"{folder.name} has no Working backend"
+        if evidence["sha256"] in raw:
+            receipt = raw[evidence["sha256"]]
+            assert receipt["source_hash"] == evidence["source_hash"]
+            assert receipt["mode"] == "live" and receipt["repetitions"] == 3
+            assert receipt["fixtures"][folder.name] == manifest["fixture_revision"]
+            assert manifest["backends"] == backend_results(receipt, folder.name), "summary differs from raw evidence"
+        skill = (folder / "SKILL.md").read_text()
+        labels = re.findall(r"https://img\.shields\.io/badge/([^\s)]+)-Working-brightgreen", skill)
+        assert not labels, f"unsupported badge in model-agnostic instructions: {folder.name}"
+        assert "[compatibility evidence](COMPATIBILITY.md)" in skill
+        assert (folder / "COMPATIBILITY.md").read_text() == compatibility_markdown(manifest), f"stale compatibility page: {folder.name}"
+        assert f"](skills/{folder.name}/SKILL.md)" in readme, f"skill missing from README: {folder.name}"
+        entries[folder.name] = {"working_backends": working, "statuses": statuses, "manifest": manifest}
+    listed = re.findall(r"\]\(skills/([^/]+)/SKILL\.md\)", readme)
+    assert set(listed) == set(entries) and len(listed) == len(set(listed)), "README catalog differs from installed folders"
+    expected_digests = {entry["manifest"]["evidence"]["sha256"] for entry in entries.values()}
     assert set(raw) <= expected_digests, "raw receipt not referenced by a published skill"
     assert set(migrations) <= used_migrations, "migration receipt not referenced by a published skill"
-    return registry
+    return {"skills": entries}
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description="Verify recorded backend results and optional audit receipts.")
     parser.add_argument("--receipt", action="append", default=[], help="optional downloaded raw receipt to audit (repeatable)")
     parser.add_argument("--migration-receipt", action="append", default=[], help="optional downloaded layout audit to verify (repeatable)")
     args = parser.parse_args()

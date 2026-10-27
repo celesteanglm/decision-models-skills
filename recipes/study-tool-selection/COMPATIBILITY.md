@@ -22,7 +22,7 @@ Working requires complete coverage, a majority pass on every clear case, all amb
 
 [Machine-readable summary](compatibility.json) records case counts, failure reasons, exact models, and hashes of the tested runtime, local configuration, examples, and fixtures.
 
-[Raw live test run](https://github.com/celesteanglm/decision-models-skills/releases/download/sage-usecases-2026-10-27/sage-published-live-20261027.json) is retained outside the current source tree. Historical runs remain available at an immutable commit; new runs should use a CI artifact or versioned release asset.
+[Raw live test run](https://github.com/celesteanglm/decision-models-skills/blob/e59385106358f04ad05ef3a8f42835f1decf56cd/sage-published-live-20261027.json) is retained outside the main source tree for optional audit. Receipts can live at an immutable Git commit or a retained CI artifact; GitHub Releases are not required. Using the skill and running offline checks do not download this receipt.
 
 Receipt SHA-256: 1e870cc4c0e1bfc75e94e103f856bde5935fdbb73bd1b20401d189a5a8c361ff.
 Fixture revision: 7acd42eaf2318a6d42b2eeea04ff531314ca1077e6da630ad9ff70dfc11e5eb7.

@@ -18,7 +18,7 @@
     "recipe.json": "78d350a3caa6e08667f051a699d242b11b04cd613c5767bd81a303d373ae90db"
   },
   "evidence": {
-    "url": "https://github.com/celesteanglm/decision-models-skills/releases/download/sage-usecases-2026-10-27/sage-published-live-20261027.json",
+    "url": "https://github.com/celesteanglm/decision-models-skills/blob/e59385106358f04ad05ef3a8f42835f1decf56cd/sage-published-live-20261027.json",
     "sha256": "1e870cc4c0e1bfc75e94e103f856bde5935fdbb73bd1b20401d189a5a8c361ff",
     "source_hash": "ec501ba58bbd7ea1cae983a287da96085c8f5704dcedea3461c9e25ec29d5cf5"
   },

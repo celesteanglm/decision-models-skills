@@ -49,13 +49,15 @@ For live reference checks, explicitly choose `--mode live`, configure the provid
 
 Each skill keeps COMPATIBILITY.md and compatibility.json beside its instructions. The existing receipts cover the optional Python implementation and exact native models, not the revised instruction-only workflow. Keep that scope explicit. Put provider Working badges on the compatibility page, not in the model-agnostic entrypoint.
 
-Raw runs belong in ignored `reports/`, CI artifacts, or versioned release assets. Preserve exact raw output at a retained evidence URL before publishing a compact summary:
+No GitHub Release or version tag is needed to install, test, contribute, or record compatibility. Raw runs belong in ignored `reports/`, retained CI artifacts, or a separate Git audit branch. Keep raw reports out of `main`. The `chore/test-evidence` branch retains the newer sanitized receipts; use an exact commit ID in public audit links rather than a moving branch URL. CI artifacts can expire, so retain a permanent copy before removing the only public evidence source.
+
+Preserve exact raw output at a retained evidence URL before recording a compact summary:
 
 ```sh
 python -m scripts.publish_compatibility \
   --kind recipes --receipt reports/new-live-run.json \
   --ids my-qualified-skill \
-  --evidence-url https://github.com/OWNER/REPO/releases/download/TAG/run.json
+  --evidence-url https://github.com/OWNER/REPO/blob/COMMIT/run.json
 python scripts/verify.py
 ```
 

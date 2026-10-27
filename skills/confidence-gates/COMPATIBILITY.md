@@ -24,7 +24,7 @@ All recorded checks passed on the listed backends.
 
 [Machine-readable summary](compatibility.json) records case counts, failure reasons, exact models, and hashes of the tested runtime, local configuration, examples, and fixtures.
 
-[Raw live test run](https://github.com/celesteanglm/decision-models-skills/blob/115b4881a7ea3f7194bc838cd3395d74e94c2c82/reports/community-core-regression.json) is retained outside the current source tree. Historical runs remain available at an immutable commit; new runs should use a CI artifact or versioned release asset.
+[Raw live test run](https://github.com/celesteanglm/decision-models-skills/blob/115b4881a7ea3f7194bc838cd3395d74e94c2c82/reports/community-core-regression.json) is retained outside the main source tree for optional audit. Receipts can live at an immutable Git commit or a retained CI artifact; GitHub Releases are not required. Using the skill and running offline checks do not download this receipt.
 
 Receipt SHA-256: 217f4374ee1a7ef7097129a726076206e379fe9815e17637d2c79df3a0015c59.
 Fixture revision: 33fc21e77a9431d5e9dd88a56d8b87044da9372a65528f77d51690f656f85ece.

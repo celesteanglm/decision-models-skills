@@ -296,10 +296,7 @@ def _with_synthetic_credential(key_env: str, operation):
 
 
 def _replay_one(repo: Path, row: dict[str, Any], raw: dict[str, Any], mode: str) -> dict[str, Any]:
-    source = str((repo / "src").resolve())
-    if source not in sys.path:
-        sys.path.insert(0, source)
-    from decision_models.contracts import DecisionError
+    """Replay within the worker that already verified its source import."""
     skill = row.get("skill") or row.get("recipe") or row.get("output", {}).get("skill") or row.get("output", {}).get("recipe")
     folder = repo / "skills" / skill
     if (folder / "decision.json").is_file():
@@ -345,7 +342,7 @@ def audit_receipts(repo: str | Path, golden: dict[str, Any], receipts: list[str 
     if {Path(value).name for value in receipts} != {Path(name).name for name in RECEIPTS}:
         raise ValueError("explicit receipt audit requires the complete pinned four-receipt set")
     rows_total, deterministic_total, details, replay_items = 0, 0, [], []
-    replay_hashes: list[str] = []
+    archived_hashes: list[str] = []
     for given in receipts:
         path = Path(given).resolve()
         if not path.is_file():
@@ -381,15 +378,7 @@ def audit_receipts(repo: str | Path, golden: dict[str, Any], receipts: list[str 
                 skipped += 1
                 skipped_counts["no_native_response"] += 1
                 continue
-            try:
-                replayed_output = _replay_one(repo, row, raw, f"receipt{len(details)}")
-            except Exception as exc:
-                raise ValueError(f"archived native response failed current-runtime replay for {skill}/{row.get('case_id')}: {exc}") from exc
-            archived_hash = digest(_normalized_result(output))
-            replayed_hash = digest(_normalized_result(replayed_output))
-            if archived_hash != replayed_hash:
-                raise ValueError(f"archived native response changed behavior for {skill}/{row.get('case_id')}/{row.get('provider')}")
-            replay_hashes.append(replayed_hash)
+            archived_hashes.append(digest(_normalized_result(output)))
             replay_items.append({"row": row, "raw": raw})
             if deterministic:
                 deterministic_replayed += 1
@@ -411,11 +400,15 @@ def audit_receipts(repo: str | Path, golden: dict[str, Any], receipts: list[str 
     baseline_root = Path(baseline_root).resolve()
     if runtime_revision(baseline_root) != golden.get("previous_runtime_revision"):
         raise ValueError("archived replay comparison requires the frozen previous runtime source")
+    if reference_artifacts(baseline_root) != golden.get("previous_reference_artifacts"):
+        raise ValueError("archived replay comparison requires the frozen previous helpers")
+    replay_hashes = _replay_worker(repo, replay_items)
     old_hashes = _replay_worker(baseline_root, replay_items)
-    if len(old_hashes) != len(replay_hashes):
+    if len(old_hashes) != len(archived_hashes) or len(replay_hashes) != len(archived_hashes):
         raise ValueError("previous-runtime replay worker returned incomplete coverage")
-    if old_hashes != replay_hashes:
-        mismatches = [i for i, (old, now) in enumerate(zip(old_hashes, replay_hashes)) if old != now]
+    if old_hashes != archived_hashes or replay_hashes != archived_hashes:
+        mismatches = [i for i, (old, now, archived) in enumerate(zip(old_hashes, replay_hashes, archived_hashes))
+                      if old != archived or now != archived]
         raise ValueError(f"archived native response differs between previous and current runtime at replay indices {mismatches[:8]}")
     # The worker compares both kinds of archived behavior, while only rows that
     # consumed a recorded native response count as archived response replays.
@@ -472,6 +465,9 @@ def main() -> int:
     if args.replay_worker:
         if args.replay_input is None:
             parser.error("--replay-worker requires --replay-input")
+        import decision_models
+        if not Path(decision_models.__file__).resolve().is_relative_to((args.repo / "src").resolve()):
+            raise RuntimeError("replay worker imported decision_models outside selected source tree")
         items = json.loads(args.replay_input.read_text(encoding="utf-8"))
         hashes = []
         for index, item in enumerate(items):

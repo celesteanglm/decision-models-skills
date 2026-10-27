@@ -26,7 +26,7 @@ class ProviderExampleTests(unittest.TestCase):
         shutil.copytree(SKILL, self.skill)
         self.env = {key: value for key, value in os.environ.items()
                     if not key.endswith("_API_KEY") and "TOKEN" not in key.upper()}
-        self.env["PYTHONPATH"] = str(REPO / "src")
+        self.env.pop("PYTHONPATH", None)
 
     def tearDown(self):
         self.temp.cleanup()

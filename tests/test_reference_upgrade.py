@@ -1,16 +1,22 @@
 """Offline compatibility proof for the frozen reference runtime."""
 import json
+import os
 from pathlib import Path
 import shutil
 import struct
 import tempfile
 import unittest
 import zlib
+from unittest.mock import patch
 
 from scripts.audit_reference_upgrade import (
     BASELINE_COMMIT,
     OLD_RUNTIME_REVISION,
     digest,
+    audit_receipts,
+    file_digest,
+    reference_artifacts,
+    runtime_revision,
     verify_demo_contracts,
 )
 
@@ -81,3 +87,35 @@ class ReferenceUpgradeTests(unittest.TestCase):
             image.write_bytes(content[:offset] + chunk + content[offset:])
             with self.assertRaisesRegex(ValueError, "contracts changed|artifacts changed"):
                 verify_demo_contracts(checkout, self.golden)
+
+    def test_native_replay_uses_selected_source_even_if_installed_runtime_is_cached(self):
+        from decision_models.providers.sage import Adapter
+        from decision_models.runtime import execute
+
+        cached_parser = Adapter.parse_response
+        case = json.loads((ROOT / 'skills/input-guardrails/fixtures/acceptance.json').read_text())[0]
+        raw = {'model': 'levanto-sage-v1.3', 'answers': {'compliant': {'type': 'noul', 'noul': 0.99}}}
+        with patch.dict(os.environ, {'SAGE_API_KEY': 'synthetic-test-only'}):
+            output = execute('input-guardrails', 'sage', case['input'], mode='live',
+                             model='levanto-sage-v1.3', transport=lambda *args: raw)
+        row = {'provider': 'sage', 'skill': 'input-guardrails', 'case_id': case['id'], 'output': output}
+        with tempfile.TemporaryDirectory(prefix='reference-replay-source-') as temporary:
+            root = Path(temporary)
+            checkout = root / 'changed-source'
+            for name in ('src', 'scripts', 'skills'):
+                shutil.copytree(ROOT / name, checkout / name)
+            parser = checkout / 'src/decision_models/providers/sage.py'
+            parser.write_text(parser.read_text() + '\n\ndef reject_selected_source(*args, **kwargs):\n'
+                              '    raise DecisionError("invalid_response", "SELECTED_SOURCE_MUST_FAIL")\n'
+                              '\nAdapter.parse_response = reject_selected_source\n')
+            receipts = []
+            fixture_golden = dict(self.golden, previous_runtime_revision=runtime_revision(ROOT),
+                                  previous_reference_artifacts=reference_artifacts(ROOT), receipt_sha256={})
+            for name in self.golden['receipt_sha256']:
+                path = root / name
+                path.write_text(json.dumps({'rows': [row]}))
+                receipts.append(path)
+                fixture_golden['receipt_sha256'][name] = file_digest(path)
+            with self.assertRaisesRegex(RuntimeError, 'SELECTED_SOURCE_MUST_FAIL'):
+                audit_receipts(checkout, fixture_golden, receipts, ROOT)
+        self.assertIs(Adapter.parse_response, cached_parser)

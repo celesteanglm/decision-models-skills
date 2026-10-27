@@ -25,3 +25,10 @@ Each recipe's implementation, instructions, and synthetic fixtures were authored
 ## Project license
 
 This repository is distributed under the MIT License. See [`LICENSE`](LICENSE).
+
+## Sage-inspired text skills
+
+- `study-tool-selection`: inspired by [Leap’s study-tool routing case study](https://levanto.ai/case-study/leap-study-tool-routing). Credit Leap, Alessandro Rutigliano, and the Levanto Team for the application pattern. The skill, bounded menu, and synthetic fixtures are independently authored. It does not reproduce Leap’s dataset, multi-tool implementation, or reported accuracy.
+- `research-enrichment-gate`: inspired by [Capacitr’s decision-gate case study](https://levanto.ai/case-study/capacitr-market-signal-decision-gates). Credit Capacitr, Utkarsh Bhimte, and the Levanto Team. This independently authored, finance-neutral skill recommends whether supplied research evidence needs refreshing; it executes no research or financial action and reproduces no claimed savings.
+
+The source accounts guiding this research were [Marco De Rossi](https://x.com/marco_derossi), [Levanto Labs](https://x.com/levantolabs), and [Big Iron Chris](https://x.com/bigironchris). Source popularity and customer-reported results do not establish this repository’s compatibility labels. Only independently evaluated recipes with at least one Working backend are included.

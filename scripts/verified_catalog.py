@@ -98,6 +98,8 @@ def compatibility_markdown(manifest):
         passed = sum(c["passes"] for c in backend["cases"].values())
         runs = sum(c["runs"] for c in backend["cases"].values())
         lines.append(f"| {NAMES[provider]} | {status} | {', '.join(backend['resolved_models']) or 'Not tested'} | {passed}/{runs} |")
+    if "levanto-sage-v1.3" in manifest["backends"]["sage"]["resolved_models"]:
+        lines += ["", "**Sage availability:** this v1.3 result is historical. On 2026-10-27 the live deployment advertised v1.4 and rejected v1.3. The recorded result does not qualify v1.4; use an explicitly evaluated version and configuration."]
     lines += ["", f"Tested: {manifest['tested_at']}. Twelve frozen cases (eight clear, two ambiguous, two adversarial), three repetitions per backend. Counts include deterministic permission/evidence checks; they are not all API calls.",
               "", "Working requires complete coverage, a majority pass on every clear case, all ambiguous/adversarial checks passing, no service errors or permission violations, offline verification, and live model outputs. Partial did not meet that gate; Blocked could not obtain live outputs; Not tested has no results. These synthetic cases do not establish production accuracy or calibrated thresholds.",
               "", "## Failures and unsupported backends", ""]
@@ -117,6 +119,8 @@ def compatibility_markdown(manifest):
               "", f"Receipt SHA-256: {evidence['sha256']}.",
               f"Fixture revision: {manifest['fixture_revision']}.",
               f"Runtime revision: {manifest['runtime_revision']}."]
+    if manifest.get("reference_artifacts"):
+        lines += ["", "## Recorded adapter configuration", "", "The additional reference-helper hashes in compatibility.json bind this result to the evaluated adapter settings. The new Sage checks explicitly selected v1.4 after the deployment rejected the historical v1.3 default. To reproduce an individual Sage case with the optional Python package, pass `--model levanto-sage-v1.4` to `python -m decision_models recipe`. The SKILL.md instructions require no Python package or vendor runtime."]
     return "\n".join(lines) + "\n"
 
 
@@ -140,6 +144,9 @@ def verify_catalog(repo, receipts=()):
             assert manifest["mode"] == "live" and manifest["repetitions"] == 3, "synthetic evidence cannot qualify"
             assert manifest["scope"] == EVIDENCE_SCOPE, "reference evidence cannot qualify instruction-only use"
             assert manifest["runtime_revision"] == revision, "runtime changed since evaluation"
+            for relative, digest in manifest.get("reference_artifacts", {}).items():
+                path = (repo / relative).resolve()
+                assert path.is_relative_to(repo.resolve()) and path.is_file() and sha256(path) == digest, "reference helper changed since evaluation"
             assert manifest["artifacts"] == artifacts(folder), f"unverified artifacts: {folder.name}"
             fixtures = json.loads((folder / "fixtures/acceptance.json").read_text())
             assert len(fixtures) == 12 and Counter(c["category"] for c in fixtures) == {"clear": 8, "ambiguous": 2, "adversarial": 2}

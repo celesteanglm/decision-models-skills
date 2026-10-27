@@ -1,0 +1,13 @@
+{
+  "decision": {
+    "kind": "choice",
+    "status": "answered",
+    "choice": "reuse_existing",
+    "probabilities": {
+      "reuse_existing": 0.97,
+      "refresh_research": 0.015,
+      "review": 0.015
+    },
+    "confidence": 0.95
+  }
+}

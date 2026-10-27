@@ -54,14 +54,25 @@ Raw runs belong in ignored `reports/`, CI artifacts, or versioned release assets
 ```sh
 python -m scripts.publish_compatibility \
   --kind recipes --receipt reports/new-live-run.json \
+  --ids my-qualified-skill \
   --evidence-url https://github.com/OWNER/REPO/releases/download/TAG/run.json
 python scripts/verify.py
 ```
 
-Use `--kind skills` for the core reference workflows. The publisher requires a live receipt for the current checkout and matching frozen fixtures. It recomputes recorded summaries and does not rewrite SKILL.md. A native-API receipt must never qualify instruction-only use. Each core/reference artifact change requires fresh evidence for its reference label.
+Use `--kind skills` for the core reference workflows. The publisher requires a live receipt for the current checkout, or a scoped receipt whose recorded runtime, helper code, local configuration, examples, and fixtures still match byte-for-byte. Use `--ids` to update only the qualifying folders; failed candidates stay outside the published catalog. It recomputes recorded summaries and does not rewrite SKILL.md. A native-API receipt must never qualify instruction-only use. Each core/reference artifact change requires fresh evidence for its reference label.
 
 Publishing metadata changes the aggregate source hash. Verify again before subsequent reference evaluations. `python scripts/verified_catalog.py` checks recorded summaries offline; repeat `--receipt /path/to/downloaded-run.json` to audit them against retained raw evidence and checksums. Offline consistency checks do not fetch remote evidence or invoke models.
 
 ## Local working material
 
 `docs/`, `research/`, and `reports/` remain ignored. Essential usage lives in README.md and skill folders; source credits remain in ATTRIBUTION.md and the individual instructions. The ranking and cost-audit scripts are optional local archive helpers, requiring their ignored source snapshots or historical receipts.
+
+For the newer text reference checks, first verify the advertised model at `/v1/models`. The deployment observed on 2026-10-27 accepted `levanto-sage-v1.4` and rejected the historical v1.3 default. Maintainers can reproduce the two new workflows with the evaluated adapter settings:
+
+```sh
+python -m scripts.evaluate_usecases --candidates recipes \
+  --ids study-tool-selection research-enrichment-gate \
+  --mode demo --output reports/sage-demo-new.json --historical-bound 0
+```
+
+For live mode, review `RATES` against current provider pricing, supply a reconciled cumulative `--historical-bound`, and reserve full coverage under the authorized total budget. The module is optional maintainer tooling; the skills themselves need no package or command. Never use a synthetic demo to qualify a backend.

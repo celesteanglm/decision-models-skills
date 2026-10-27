@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "kind": "reference-upgrade-audit",
+  "previous_runtime_revision": "90c3e703d2a656d7aed3087ef4a4f07b130f1c03de7de8af4d72265eaeb823bb",
+  "runtime_revision": "339b2fb5fda5b6a4ad73ab3c8e306109868a38e90fa9475088d690460cf772e9",
+  "previous_reference_artifacts": {
+    "scripts/usecase_reference.py": "358b4c8623376f31b800333b5c102507c2ea038d86fa0431bbe30fd08d954d1f",
+    "scripts/evaluate_usecases.py": "c7087d9bd7131c015a3453dc6e33d6fda6fcc4b980f4d384486fcc46774d5b29",
+    "scripts/image_reference.py": "316045eb4a83bb718c8be19fe53c5b605378ea74a5c2bf83ade8f1dc059d6f5e",
+    "scripts/evaluate_images.py": "05a7aade07f9d11a82f3cf1dfc3745cd0db8fa92471ced5b206050f4b9ed93ec"
+  },
+  "current_reference_artifacts": {
+    "scripts/usecase_reference.py": "358b4c8623376f31b800333b5c102507c2ea038d86fa0431bbe30fd08d954d1f",
+    "scripts/evaluate_usecases.py": "c7087d9bd7131c015a3453dc6e33d6fda6fcc4b980f4d384486fcc46774d5b29",
+    "scripts/image_reference.py": "3ab86f11d2c5e72fbf716653854d8032205764c62bc4025993261b21c271b667",
+    "scripts/evaluate_images.py": "05a7aade07f9d11a82f3cf1dfc3745cd0db8fa92471ced5b206050f4b9ed93ec"
+  },
+  "skill_count": 27,
+  "payload_and_policy_cases": 948,
+  "actual_archived_response_replays": 2598,
+  "deterministic_replays": 246,
+  "paid_requests": 0,
+  "identical": true,
+  "golden_sha256": "591c42766d67f012582015771b886f7217c7e5ce46129bc2f8b8aaf15514a640",
+  "decision_contracts_frozen": 948,
+  "reference_artifacts_frozen": 4,
+  "artifacts_frozen": 114,
+  "artifacts": {
+    "ad-funnel-classification": {
+      "decision.json": "6acc64acea0927063df53d2ac3c5fcbca2deba08adfc154ff196a314cad72681",
+      "examples/demo.json": "9183ea1cedc632e32c7f34bc35550761f2bd33933e06c60db8b7f2ba4531b673",
+      "examples/input.json": "1df751ff5f21de868d0a45cdd341acfe7c8622d6a00d232cc290f2be57e5fc0a",
+      "fixtures/acceptance.json": "4ba7d9a14fbf10a8965a62e9f386d0bb9a454da5974db61aff34c9b01e146d60"
+    },
+    "agent-workflow-routing": {
+      "decision.json": "77cbaafa630958c4fe44962fa4b46b283c751549c64e9b6d840a6a7890d22f72",
+      "examples/demo.json": "7e0887f4e17b7e754e2cfb8e5dc99f639e136419949069e6407b73f402b8f7ea",
+      "examples/input.json": "09b1a90192849c84e51c6759a8ed8c0050b92eac17f05dcaf775d530aba2ac12",
+      "fixtures/acceptance.json": "3b4cf9b9973ff9627b0fae65bf8f651d363efd1a818dd202215b3cf291c5bf68"
+    },
+    "brand-news-matching": {
+      "decision.json": "33cb063e6bc488c71bf0082b3d422339239009a4e6d61c38b01217bdc20423ef",
+      "examples/demo.json": "fe7817057ffd5d316a5bc7420bd9a8591df72e1962f3379279e2502732848ef8",
+      "examples/input.json": "f6b8988eef511da1caa641a4d3fbe61a121d626635b8ecbed55aaca11ea14fc8",
+      "fixtures/acceptance.json": "8eaade648087ab464d4ea2cf45436c97b2290d197a02f3b24898dd3606bc1367"
+    },
+    "browser-action-selection": {
+      "decision.json": "036cf945b17669f651a0739650417ed0478c20b770d3e53fba756e04c4161a12",
+      "examples/demo.json": "f485f7f2c8cbaedcdbfa190fbe59995d6cb98e5b1414a21c4a06f56e0bcf057d",
+      "examples/input.json": "41662d67c82d83a0c054d293b634c7b7c0aed31ccca64670505c43e45b6523de",
+      "fixtures/acceptance.json": "e982386996f2a74dbc2fdd1c9298dc6c0091d1269fdc0ab84d7bd9c67c188742"
+    },
+    "confidence-gates": {
+      "examples/demo.json": "574979b123b0453a957b3634e018e7ca43a5bcb0b1d52dcf45dd6df3561bafc9",
+      "examples/input.json": "c46215e66b21cc08f3ca01a23a44c65b9141232df9eefff784bea1aa2bd75dec",
+      "fixtures/acceptance.json": "ff70e61ab7f4e0c49c760ad8943a268556f9f861242d68732110e86585be2ce5"
+    },
+    "content-revision-gate": {
+      "decision.json": "b4d417c527436d41d28c56129857c7376fd7905ea95dd9cbae8e264f29f6f6c3",
+      "examples/demo.json": "28d4516ab1ad16991273dc5723872bc1ea4d24c4d30a3a3dad12fda02cc175a6",
+      "examples/input.json": "552b1f359c0d7959f206bf60b766fa7a9a91bfab31fdaa210f3e6c74dffda26b",
+      "fixtures/acceptance.json": "fc7e4c8c359cf3de937167195eac0eafddb03c4f5a6d5a396071f0c42bcb311b"
+    },
+    "draft-quality-triage": {
+      "decision.json": "06bbb06be36e41643ece188737533c145e732d45643e7c1e6278e3cfed2f6337",
+      "examples/demo.json": "b0b59ab4bff104b4360c6234d3e5fe6c135a39eb4d94e3f72f49530b0f8fff44",
+      "examples/input.json": "43cc1babfce7a9cf5acd356e5a495d25350bcdcd4496ad1cd90626e4f35929b8",
+      "fixtures/acceptance.json": "e93e1cbf82c58f24654e65be1753a97eb77f44068539db9608e7f24de322831d"
+    },
+    "email-queue-routing": {
+      "decision.json": "1242b9d4b38037b9c4166385ff6bf2197087804c6fd12a8a8f546b0ff55fd9df",
+      "examples/demo.json": "8fec00fa60327551fcac0fea57f3f50c21dd0e430a85ae2e360cbd60cccafe1f",
+      "examples/input.json": "09b41ca095d4fe70a9dacd9273520fb4d9f698da79927280e99d558059465861",
+      "fixtures/acceptance.json": "3222cb14885e122fc7d84fd21d182215ed82656ad7d092f8b250e99341040245"
+    },
+    "input-guardrails": {
+      "examples/demo.json": "b329338764581dad0d23e0f6508dac4748ba0a9b8cff5cd65a35de4fdaa39605",
+      "examples/input.json": "a1cc6b74c4e5d8db42a05969a4289549e026378d9a9a35b90dd9a85492c9e793",
+      "fixtures/acceptance.json": "bf38c07ee646ffccfd81c27d3e3601b669f6108d947d8805644d1c48a9d07515"
+    },
+    "invoice-file-triage": {
+      "decision.json": "d3a131db5f9329461eae7945c24d8275ba28dbd47b4bbc879224d42d76f387a5",
+      "examples/demo.json": "98379b239bf0f537f033dd06a8b384310275042179a7f75f51bddb4f229ec608",
+      "examples/input.json": "729abd8b7f7be92aae477c64fd9db08b77edf2ff91417401082c752ce4d8534e",
+      "fixtures/acceptance.json": "c46910ec7b14611cbeafcbf7da12ba93ebfd4ad5749b5ddcb5be42e7e98fdaeb"
+    },
+    "model-routing": {
+      "examples/demo.json": "379022f0bfdbcc8f6aac8c7cc21cbd11edf0faba17ffa46381fe6a6f15b74ecb",
+      "examples/input.json": "0ebb8711166991481adeeeac3b5bd0743414bec222ad87a3e13472ef66b8d024",
+      "fixtures/acceptance.json": "882591e480008db223e622d067233ac149ffb2072dc676ff648d675f1758dc5d"
+    },
+    "model-tier-routing": {
+      "decision.json": "2cb06e14eca7b6046d07e2796e3df4dba23eadbb54e17783be4614fc9f640a7b",
+      "examples/demo.json": "2b106c24fadbdec9a7a96156dea20d05fe2d866c2e19fe9c8bd6c093e40fb7e1",
+      "examples/input.json": "86cc924f3daf2512f1925c29aee21c25d0f32a7737bef97914acf12fc615204b",
+      "fixtures/acceptance.json": "524a0168a35c921c853c5d54fb5ef3bf998964bf0405ef6e6c4b154cf63d296b"
+    },
+    "outfit-option-selection": {
+      "decision.json": "8a291db0d81fec53fec2fffcfcda520aed3ebafbe01889ba4efc482594912a28",
+      "examples/demo.json": "33d9c0c169019fe7aba03bf43ce1933db8ce71d71f9d2ca66b4c15fe82dff249",
+      "examples/input.json": "09784668daeac8e7b5480c8f8e34cd71dcc9b02e871dbbc355ab58b467b723d6",
+      "fixtures/acceptance.json": "c4cf728ca0130c6cf5a55eeb9681ef6dc6c152fea5e0a786c0a9e732ddf2008e"
+    },
+    "output-evaluation": {
+      "examples/demo.json": "98b10ba359afe8d371a710c88ef3884abda1f69466200f2f75ae14b72d2c6595",
+      "examples/input.json": "9a5dff65cadbeacb97cc6677e8597ba75508945fa558a98e85f0f5ba98ace15e",
+      "fixtures/acceptance.json": "69448dc386d2392cbdcfcf619c85f9dcf932c55263e5844eb130cbe6943239fc"
+    },
+    "page-change-triage": {
+      "decision.json": "e34bd9e0045361939b96335ad44796ca8d80d00a42de566b94af44bf7ec3b8aa",
+      "examples/demo.json": "af8c0302f86f56b0380ff8ea9706943d871c5fd6b4b546675f93ae9ec3cdc97c",
+      "examples/input.json": "4e8f220d18581ca6f2231b3ed2227fdf9c7d266cdbbb6dafa490678f76171251",
+      "fixtures/acceptance.json": "c50f1406ef5d8cae4d148d586fa0a84c74f968ddcf532950a74ed15c3413af8f"
+    },
+    "reranking": {
+      "examples/demo.json": "c9b14a07e6d7ca3ba2895424c37b3bdabb6fce75c61592d79f75c8974063ae43",
+      "examples/input.json": "09b31d989355a9a8210bf8636a5ade942733797740d11728f66f163c4b032529",
+      "fixtures/acceptance.json": "44395bf7695d4f07d0260660c479fbfec71f2222db56c499b0b504afd258ee93"
+    },
+    "research-enrichment-gate": {
+      "decision.json": "78d350a3caa6e08667f051a699d242b11b04cd613c5767bd81a303d373ae90db",
+      "examples/demo.json": "97b85f2bfe4cc0ca1f75d2318d6af99921418d0bc57da2d8ebf84656f13dd166",
+      "examples/input.json": "a3083379e3e38a686adf4f112e4ec69bc2259659454d5bbe1dbb71b7542d904f",
+      "fixtures/acceptance.json": "65a26a2474c49c4bb9d39e9d8c5912f6484ea0f0a4f839151c8fa4fc8d32f578"
+    },
+    "research-source-filter": {
+      "decision.json": "91dbee510da5fe6f09301d02800da905865981a7c96c49fa01730838e6bd16fc",
+      "examples/demo.json": "81f7a8e4efdcc2729639e5a7a39f919b4a64a6f96e233c6bd99a0df48fbc9a7f",
+      "examples/input.json": "da87968e5008cfcc1cd6900939df33fe8bea7eb34e96fa97ba74f73b5eaeef59",
+      "fixtures/acceptance.json": "66e1163569d12d41cd55170de814048ab851ccf0eb2a79624bdec162c7ecc691"
+    },
+    "retrieved-instruction-screening": {
+      "decision.json": "92153af37801ed5716d39e7ad582e73ca4146722f8f75f1e3efb5c582e9fb748",
+      "examples/demo.json": "47e4215cacd29609fafd37c4e6f4f4e63978a0ea0cdb4e19dc96347b48bde4ab",
+      "examples/input.json": "0d1ccf8ff83746fda5b36823596ddb94a11814fa492dbfe5907527067c5e110d",
+      "fixtures/acceptance.json": "0118c81226cdbb7ddbbeae67e4cab69628f6ddd65b6c5f6cdd7d8631230644e2"
+    },
+    "screenshot-action-check": {
+      "examples/demo.json": "db529143d40c23993f46eff47618e494c5bc3ea112e40c704e3aedbab67b0a78",
+      "examples/input.json": "600732610f760c9b772d84033596a81a2040d2470bab21e7f2032d9cf27ebfa4",
+      "fixtures/acceptance.json": "42759ad4ad649d2b5f6e5d014fedef3505755601fc51ac140b0abf83be92c263",
+      "image.json": "1cf89a1849c892a95628ed7b9bd1419c9d02fa024750f21defa0a6dc202cf967",
+      "images/frame01.png": "58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69",
+      "images/frame02.png": "629794832b5586d2b82b729048fd69cdd724b9eacbf244537a9a7af100d8fc3a",
+      "images/frame03.png": "17cfe03a0289db2410ab48dd95acaf92f0f4c7024ffaa6bdc825d5e8609f8242",
+      "images/frame04.png": "602b89157793fe5820b4ab0348d4f5365ab9991a3e49688d3dfbb657d6bfb080",
+      "images/frame05.png": "767a181ebe629319395062f54dddda445213f3799e8d96977e8b0adc3abeb2e7",
+      "images/frame06.png": "659e5ddb1e24285bdd12b8664ee884ebe9e81092aa524dbbff55b9778bf0ab32",
+      "images/frame07.png": "cf47c28cdde2dc777bfb7135aa0520cf55d927c29530e61aa1114b8dcd17b569",
+      "images/frame08.png": "f789876087ea75082d7533643cefa306dce0a4ebe4073faf6cb02b3bd691e9a6",
+      "images/frame09.png": "f30a5ea7770dcb60aa3fa9997d31752c00f9544ee9e1cd929ecb59bcec91fe55",
+      "images/frame10.png": "7f81d208d808b8ba4888896259b14355da8ceba929e81fed331a62c676e6697d",
+      "images/frame11.png": "d234a0ae3a0e91b8a28671ce4d7a895a691ccd2b903bcc1b6acfd93566632291",
+      "images/frame12.png": "c467e7e69c933cca3bbec37cfe697a9db0c9d6b0fbdd2ae88dc4e481eab3f33d"
+    },
+    "secondhand-listing-fit": {
+      "decision.json": "3668b21a3080cdfeeaca9f6b7df3899392200fadd686f244707469dcb631b3c3",
+      "examples/demo.json": "38c57fc4c0a3bc0ac7a70eb626948969054221299e5fc73c19c49fb8f8f1f93e",
+      "examples/input.json": "b53c7854acf1cfa5f3d11c009b36dcbd7c5fe68ccdd6a164f004afef7f9eec56",
+      "fixtures/acceptance.json": "85db8be05b1b42561ef781c6ae75cd6d36bb6c106384a318a36899ef1e03c401"
+    },
+    "spoken-slide-selection": {
+      "decision.json": "437ea8340be0b1487a02b264bb41623923dd6dab7c447beb6107cc21b1c9ba02",
+      "examples/demo.json": "3497cb4481d46d203f7cda0c10670cc1e638e1935f49dbd37ad1ce3ebcabba09",
+      "examples/input.json": "38e9aeb6edf449b0326ca1eec917c6d8db54a62a46292d86bfeb2c2a310172d5",
+      "fixtures/acceptance.json": "3d60c51a0a047309b0f653f7651d8425757bfa3339c0bccaf3d306ea5c4e352a"
+    },
+    "spreadsheet-urgency": {
+      "decision.json": "6cb99c36b5ca40bf7dfebc10d5a9bf92bc2ce7241ca7009ea83234b0c5128eb6",
+      "examples/demo.json": "bca5e62041c35bd79336924dbf6b81e90afeb13578d60e3d2a372a494c42c826",
+      "examples/input.json": "b59d96cdd4505c56b32355ea72411b3bfdca87678a5ae59a7bd464a1c42ba004",
+      "fixtures/acceptance.json": "b7694ca34ca07b016f6d38843a5cf3378aad497b24a3d16a1c31314159f0b496"
+    },
+    "study-tool-selection": {
+      "decision.json": "a2fb4d78a20d4224ade8a48d2f49fd8d89bc27c8856412a22899ea15701d6efe",
+      "examples/demo.json": "b65b3a43ba83768170b45c1ba7ac4ca67e6974a560c8dc6c11b953066316ee3b",
+      "examples/input.json": "563a08580c453947d3646ac6fcc88fbf728e3c3566809e14e2eb3a20cc0a6714",
+      "fixtures/acceptance.json": "25334f3e69fec82ee34f79b6e967aaf38e73a9b25185a43695d48c8c9e6fea3e"
+    },
+    "suspicious-email-escalation": {
+      "decision.json": "c5783d7367fb0275c3b803ac4b244b324660fd3ac466e00f31d043f8db2d7a86",
+      "examples/demo.json": "5f3c5a3d0efc3a328566d9d5fe11bec569d3da95504efcbce69bb0460d8696b9",
+      "examples/input.json": "fd73d89ec134ac2d823f980fab634b9941bb3eaf7698473a234d481aceb169af",
+      "fixtures/acceptance.json": "e820404e14a1acbb22fdd2d1a577dd13f9c79230d8e903ea78d94c26944fbdbd"
+    },
+    "template-field-matching": {
+      "decision.json": "3ddff4ea31380103de612e48297ace02b98a5be96973b887470550e983a95192",
+      "examples/demo.json": "b06df23821858387c472bd2eda0690e7f9bf4f2e70311f5e13c553e4ba003129",
+      "examples/input.json": "7dbce2d1e655d0fbd44e5d26390cd2ae41ba8ebe97518a69d74181ec3fe445a3",
+      "fixtures/acceptance.json": "eaa398ee348be590a88eedb66b0f8feed18b24b24ccb05b3eb5cbd6d8f18e152"
+    },
+    "tool-call-gating": {
+      "examples/demo.json": "cabd05a3f183f67df025e68c8ccd94fd1814159ebe50c487757e1e0278cd6433",
+      "examples/input.json": "eadab8c6e49ee2c5e8399438c30b4ec57c023830f62a195189a777118bfa3ba7",
+      "fixtures/acceptance.json": "15c5cb3ba7b66e16f43fa9a72c97c10548c8f2f04ac316f2bed37c2a79f0b459"
+    }
+  },
+  "receipts": [
+    {
+      "path": "general-skills-regression.json",
+      "sha256": "217f4374ee1a7ef7097129a726076206e379fe9815e17637d2c79df3a0015c59",
+      "rows": 648,
+      "replayed": 585,
+      "deterministic_replays": 63,
+      "skipped": 0,
+      "skipped_by_reason": {
+        "error_or_no_output": 0,
+        "unpublished_skill": 0,
+        "no_native_response": 0
+      },
+      "receipt_identity_verified": true
+    },
+    {
+      "path": "community-use-cases.json",
+      "sha256": "d06ec4e5406bd0d41be45941bda0105e19088a8189aace936f32f68761793af1",
+      "rows": 3132,
+      "replayed": 1782,
+      "deterministic_replays": 162,
+      "skipped": 1188,
+      "skipped_by_reason": {
+        "error_or_no_output": 0,
+        "unpublished_skill": 1188,
+        "no_native_response": 0
+      },
+      "receipt_identity_verified": true
+    },
+    {
+      "path": "sage-published-live-20261027.json",
+      "sha256": "1e870cc4c0e1bfc75e94e103f856bde5935fdbb73bd1b20401d189a5a8c361ff",
+      "rows": 216,
+      "replayed": 198,
+      "deterministic_replays": 18,
+      "skipped": 0,
+      "skipped_by_reason": {
+        "error_or_no_output": 0,
+        "unpublished_skill": 0,
+        "no_native_response": 0
+      },
+      "receipt_identity_verified": true
+    },
+    {
+      "path": "sage-images-live-20261027-r3.json",
+      "sha256": "adacc280bda50bc089442168ca2960fdae9af05366effa463b8084c8ea8ab63f",
+      "rows": 36,
+      "replayed": 33,
+      "deterministic_replays": 3,
+      "skipped": 0,
+      "skipped_by_reason": {
+        "error_or_no_output": 0,
+        "unpublished_skill": 0,
+        "no_native_response": 0
+      },
+      "receipt_identity_verified": true
+    }
+  ]
+}

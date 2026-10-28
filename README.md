@@ -273,15 +273,45 @@ The inputs may be supplied naturally; the JSON examples illustrate information t
 
 ## Use an image skill
 
-Copy `skills/screenshot-action-check/` with its images, then give a vision-capable agent the image and the button to inspect:
+Install `skills/screenshot-action-check/` using the individual-skill setup above, or use the optional collection entry skill. This original synthetic checkout screenshot is a ready-to-attach PNG:
+
+![Synthetic checkout screenshot with a CONTINUE button](skills/screenshot-action-check/images/frame01.png)
+
+Attach [the sample image](skills/screenshot-action-check/images/frame01.png) to a vision-capable agent, or make it accessible as `example.png` in your project, then use this prompt:
 
 ```text
-Use /path/to/screenshot-action-check/SKILL.md.
-Inspect the attached screenshot. Is the CONTINUE button fully visible and unobstructed?
-Review if the target is ambiguous or the image is unclear. Do not click anything.
+Use the installed screenshot-action-check skill with your current model.
+I permit you to inspect this synthetic screenshot (attached, or example.png).
+Target: the CONTINUE button near the lower-right of the checkout panel.
+Is the entire button visible inside the image and unobstructed?
+Return visible, not_visible, or review, with a short reason.
+Use review if the target is ambiguous or the pixels are unclear.
+Do not click anything. Do not invent a probability or confidence score.
 ```
 
-The reference workflow qualifies on Sage v1.4 with PNG fixtures. JPEG and WebP handling has offline contract tests; those formats have no live qualification here. Jev/OpenRouter and Decisions API have no image qualification in this repository. Text-only agents must report that they cannot inspect the image.
+For this sample, the expected qualitative recommendation is `visible`: the full blue CONTINUE button is inside the image, with no overlay. That does not establish whether the button is enabled or functional.
+
+To delegate to a real Sage connection instead, replace the first line with the following explicit, single-call authorization. The tool must already be configured; naming Sage does not create a connection.
+
+```text
+Use the installed screenshot-action-check skill and my configured Sage tool.
+I approve Sage's server-selected model only if it is levanto-sage-v1.4 or
+levanto-sage-2. Send this synthetic screenshot and the CONTINUE visibility
+question to Sage, with a total cap of US$0.05 for one call.
+Wait for its actual result. Return the choice and native selected probability
+if supplied, and report the actual model ID. Do not transfer a Working label
+between models, substitute confidence, or estimate a score yourself.
+If the tool is unavailable or the call fails, explain the issue without
+switching providers or retrying an uncertain paid timeout.
+```
+
+With the proactive rule installed, you can also describe the repeating screenshot check naturally and let the agent offer the configured model first. Declining should make no external call. Approving applies only to the data, model, and budget you specify.
+
+The recorded 12-case reference qualification used Sage v1.4 with PNG fixtures. Live checks on 2026-10-28 returned both `levanto-sage-v1.4` and `levanto-sage-2` from the public endpoint. Its image request schema has no model selector. A pinned adapter correctly rejects a different resolved model. The example above explicitly permits those two versions and reports the actual one; a sample smoke check does not transfer the v1.4 Working label to Sage 2 or qualify other images. See the skill's compatibility page for the full recorded evaluation's scope.
+
+The [sanitized agent-to-API test receipt](https://github.com/celesteanglm/decision-models-skills/blob/7db7b4c4af8f8779aedef379dc643801f8c13b16/agent-image-e2e-20261028.json) records actual Codex CLI 0.152.1 sessions for both installation paths: discovery, a proactive offer, decline with no external call, and an approved Sage image result. The individual-skill check returned `visible` from Sage 2 with native selected probability `0.9996805881`; the entry-skill check returned `visible` from v1.4 with `1.0`. Earlier model-mismatch failures are retained. Claude Code's live flow remains unverified: its test request received a sign-in rejection before inference. These small checks establish the observed connection flow, not general image accuracy or calibrated confidence.
+
+JPEG and WebP handling has offline contract tests; those formats have no live qualification here. Jev/OpenRouter and Decisions API have no image qualification in this repository. Text-only agents must report that they cannot inspect the image.
 
 For optional Python reproduction, install the reference package from this checkout as described in [Contributing](CONTRIBUTING.md), then run from the repository root:
 
@@ -291,7 +321,27 @@ python scripts/image_reference.py --folder skills/screenshot-action-check \
   --mode demo --demo-answers skills/screenshot-action-check/examples/demo.json
 ```
 
-This demo is offline and uses hand-authored answers. For a real Sage call, set `SAGE_API_KEY`, select `--mode live`, and omit `--demo-answers`. Use an explicitly authorized test budget. The runner accepts PNG, JPEG, and WebP files under the skill folder, or under an explicit `--asset-root`; it rejects remote image URLs and paths that escape that folder.
+This demo is offline and uses hand-authored answers. The command-line helper remains pinned to the historical v1.4 model. To reproduce the allowlisted connection from this checkout, install the optional reference package as described in Contributing and set `SAGE_API_KEY` in the environment. The Python example below reserves a conservative upper bound before dispatch and settles reported usage afterward. Run it only with an approved US$0.10 limit. Use `historical_bound=0` only for a new test budget; otherwise supply the earlier conservative spend for that session.
+
+<!-- example: sage-image -->
+```python
+import json
+from pathlib import Path
+from examples.sage_image_model_selection import AllowedSageImageAdapter
+from scripts.evaluate_images import ImageBudget
+from scripts.image_reference import execute_image
+
+folder = Path("skills/screenshot-action-check")
+data = json.loads((folder / "examples/input.json").read_text())
+adapter = AllowedSageImageAdapter(["levanto-sage-v1.4", "levanto-sage-2"])
+budget = ImageBudget(limit=0.10, historical_bound=0)
+result = execute_image(folder, "sage", data, mode="live",
+                       adapter=adapter, model=adapter.default_model,
+                       before_attempt=budget.reserve, after_attempt=budget.record)
+print(result["response"]["model"], result["result"])
+```
+
+This makes one paid request; its conservative reservation can exceed the US$0.05 cap of the scoped agent example above. Missing usage or a timeout retains the allowance; do not automatically retry. The [example adapter](examples/sage_image_model_selection.py) checks the actual response model and rejects versions outside your explicit allowlist. It keeps actual model IDs, usage, and probabilities; it creates no new compatibility label. Use a one-item allowlist when you require an exact version. The runner accepts PNG, JPEG, and WebP files under the skill folder, or under an explicit `asset_root`; it rejects remote image URLs and paths that escape that folder. A configured agent tool supplies this connection for the natural-language prompt; installing the skill alone does not create it.
 
 ## What has been tested
 

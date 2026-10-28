@@ -14,6 +14,19 @@ ESCALATE_BELOW = {
 }
 
 
+def validate_policy(policy):
+    if not isinstance(policy, dict) or set(policy) != {"send", "escalate_below"}:
+        raise DecisionError("invalid_request", "confidence policy needs send and escalate_below")
+    try:
+        send = number(policy["send"], 0, 1, "send")
+        floor = number(policy["escalate_below"], 0, 1, "escalate_below")
+    except DecisionError as exc:
+        raise DecisionError("invalid_request", "confidence policy thresholds must be finite probabilities") from exc
+    if floor >= send:
+        raise DecisionError("invalid_request", "escalate_below must be below send")
+    return {"send": send, "escalate_below": floor}
+
+
 def _validate(data):
     draft = data.get("draft")
     evidence = data.get("evidence")
@@ -67,7 +80,8 @@ def decide(data, response):
     if not evidence:
         return {"action": "review", "reasons": ["no_evidence_supplied"]}
     provider = data.get("_provider", "jev-openrouter")
-    if provider not in SEND_THRESHOLDS:
+    policy = data.get("_policy")
+    if policy is None and provider not in SEND_THRESHOLDS:
         raise DecisionError("invalid_request", "unknown provider threshold profile")
     answers = response.get("answers", {}) if isinstance(response, dict) else {}
     if any(not isinstance(answers.get(name), dict) or answers[name].get("status") == "refusal"
@@ -76,8 +90,10 @@ def decide(data, response):
                 "reasons": ["judge_refusal_or_missing_answer"]}
     support = number(answers["evidence_support"].get("probability_true"), 0, 1, "evidence_support")
     rubric = number(answers["rubric_satisfied"].get("probability_true"), 0, 1, "rubric_satisfied")
-    send_threshold = SEND_THRESHOLDS[provider]
-    hard_floor = ESCALATE_BELOW[provider]
+    configured = validate_policy(policy) if policy is not None else {
+        "send": SEND_THRESHOLDS[provider], "escalate_below": ESCALATE_BELOW[provider]}
+    send_threshold = configured["send"]
+    hard_floor = configured["escalate_below"]
     metrics = {"evidence_support_probability": support, "rubric_satisfaction_probability": rubric}
     if risk == "high":
         action, reasons = "escalate", ["high_risk_requires_human_review"]

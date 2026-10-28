@@ -23,7 +23,7 @@ EVIDENCE_URL = "https://example.invalid/retained/synthetic-receipt.json"
 def copy_repo(root):
     repo = Path(root) / "repo"
     repo.mkdir()
-    for directory in ("src", "skills", "recipes", "scripts"):
+    for directory in ("src", "skills", "scripts"):
         shutil.copytree(REPO / directory, repo / directory)
     shutil.copy2(REPO / "README.md", repo / "README.md")
     return repo
@@ -35,7 +35,7 @@ def fixture_revision(folder):
 
 
 def receipt_for(repo, item_id=PUBLISHED, *, fail_clear=False):
-    folder = repo / "recipes" / item_id
+    folder = repo / "skills" / item_id
     fixtures = json.loads((folder / "fixtures/acceptance.json").read_text())
     revision = fixture_revision(folder)
     rows = []
@@ -72,7 +72,7 @@ def receipt_for(repo, item_id=PUBLISHED, *, fail_clear=False):
 
 
 def build(repo, receipt):
-    folder = repo / "recipes" / PUBLISHED
+    folder = repo / "skills" / PUBLISHED
     return build_manifest(repo, folder, receipt, "a" * 64, EVIDENCE_URL)
 
 
@@ -96,9 +96,9 @@ class PublishScopeTests(unittest.TestCase):
                     build(repo, receipt)
         mutations = {
             "helper": (HELPERS[0], "\n# helper drift\n", "reference helper changed"),
-            "configuration": (f"recipes/{PUBLISHED}/recipe.json", " ", "scoped artifacts changed"),
-            "fixtures": (f"recipes/{PUBLISHED}/fixtures/acceptance.json", None, "fixtures differ from evaluated cases"),
-            "runtime": ("src/decision_models/recipes.py", "\n# runtime drift\n", "reference runtime changed"),
+            "configuration": (f"skills/{PUBLISHED}/decision.json", " ", "scoped artifacts changed"),
+            "fixtures": (f"skills/{PUBLISHED}/fixtures/acceptance.json", None, "fixtures differ from evaluated cases"),
+            "runtime": ("src/decision_models/use_cases.py", "\n# runtime drift\n", "reference runtime changed"),
         }
         for name, (relative, suffix, message) in mutations.items():
             with self.subTest(file=name), tempfile.TemporaryDirectory() as root:
@@ -123,12 +123,12 @@ class PublishScopeTests(unittest.TestCase):
             before = {
                 relative: (repo / relative).read_bytes()
                 for relative in (
-                    f"recipes/{UNSELECTED}/compatibility.json",
-                    f"recipes/{UNSELECTED}/COMPATIBILITY.md",
+                    f"skills/{UNSELECTED}/compatibility.json",
+                    f"skills/{UNSELECTED}/COMPATIBILITY.md",
                 )
             }
             arguments = [
-                "publish_compatibility.py", "--repo", str(repo), "--kind", "recipes",
+                "publish_compatibility.py", "--repo", str(repo),
                 "--receipt", str(receipt_path), "--evidence-url", EVIDENCE_URL,
                 "--ids", PUBLISHED,
             ]
@@ -136,7 +136,7 @@ class PublishScopeTests(unittest.TestCase):
                 publish_main()
             for relative, original in before.items():
                 self.assertEqual((repo / relative).read_bytes(), original)
-            published = json.loads((repo / "recipes" / PUBLISHED / "compatibility.json").read_text())
+            published = json.loads((repo / "skills" / PUBLISHED / "compatibility.json").read_text())
             self.assertEqual(published["id"], PUBLISHED)
             self.assertEqual(set(published["reference_artifacts"]), set(HELPERS))
 
@@ -146,6 +146,34 @@ class PublishScopeTests(unittest.TestCase):
             receipt = receipt_for(repo, fail_clear=True)
             with self.assertRaisesRegex(AssertionError, "no Working backend"):
                 build(repo, receipt)
+
+    def test_publisher_cannot_drop_the_migration_from_historical_results(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_repo(root)
+            folder = repo / "skills" / PUBLISHED
+            previous = json.loads((folder / "compatibility.json").read_text())
+            with self.assertRaisesRegex(AssertionError, "historical receipts require the recorded layout migration"):
+                build_manifest(repo, folder, receipt_for(repo), previous["evidence"]["sha256"], EVIDENCE_URL)
+
+    def test_invalid_batch_leaves_all_existing_summaries_untouched(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_repo(root)
+            receipt = receipt_for(repo, UNSELECTED)
+            invalid = receipt_for(repo, PUBLISHED, fail_clear=True)
+            for field in ("fixtures", "evaluated_artifacts", "summary"):
+                receipt[field].update(invalid[field])
+            receipt["rows"].extend(invalid["rows"])
+            path = Path(root) / "synthetic-receipt.json"
+            path.write_text(json.dumps(receipt))
+            folders = [repo / "skills" / skill for skill in (UNSELECTED, PUBLISHED)]
+            before = {p: p.read_bytes() for folder in folders
+                      for p in (folder / "compatibility.json", folder / "COMPATIBILITY.md")}
+            arguments = ["publish_compatibility.py", "--repo", str(repo),
+                         "--receipt", str(path), "--evidence-url", EVIDENCE_URL,
+                         "--ids", UNSELECTED, PUBLISHED]
+            with patch.object(sys, "argv", arguments), self.assertRaisesRegex(AssertionError, "no Working backend"):
+                publish_main()
+            self.assertEqual({p: p.read_bytes() for p in before}, before)
 
 
 if __name__ == "__main__":

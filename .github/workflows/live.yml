@@ -4,13 +4,17 @@ on:
     inputs:
       suite:
         type: choice
-        options: [core, recipes]
-        default: core
+        options: [general, use-cases]
+        default: general
         required: true
       provider:
         type: choice
         options: [jev-openrouter, openai-decisions, sage]
         required: true
+      model:
+        description: Explicit model ID (required for Sage, e.g. levanto-sage-v1.4)
+        required: false
+        default: ''
       budget_usd:
         description: Total reserved allowance, at most US$5
         default: '1'
@@ -40,29 +44,37 @@ jobs:
           Path("reports/rates.json").write_text(json.dumps(rates) + "\n")
           PY
       - name: Evaluate frozen core fixtures
-        if: inputs.suite == 'core'
+        if: inputs.suite == 'general'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SAGE_API_KEY: ${{ secrets.SAGE_API_KEY }}
           TEST_PROVIDER: ${{ inputs.provider }}
           TEST_BUDGET: ${{ inputs.budget_usd }}
-        run: python -m decision_models evaluate --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-live.json
-      - name: Evaluate frozen community recipes
-        if: inputs.suite == 'recipes'
+          TEST_MODEL: ${{ inputs.model }}
+        run: |
+          model_args=()
+          if [ -n "$TEST_MODEL" ]; then model_args=(--model "$TEST_MODEL"); fi
+          python -m decision_models evaluate --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-live.json "${model_args[@]}"
+      - name: Evaluate frozen use cases
+        if: inputs.suite == 'use-cases'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SAGE_API_KEY: ${{ secrets.SAGE_API_KEY }}
           TEST_PROVIDER: ${{ inputs.provider }}
           TEST_BUDGET: ${{ inputs.budget_usd }}
-        run: python -m decision_models evaluate-recipes --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-recipes.json
+          TEST_MODEL: ${{ inputs.model }}
+        run: |
+          model_args=()
+          if [ -n "$TEST_MODEL" ]; then model_args=(--model "$TEST_MODEL"); fi
+          python -m decision_models evaluate-use-cases --repo . --mode live --providers "$TEST_PROVIDER" --budget "$TEST_BUDGET" --rates reports/rates.json --output reports/manual-use-cases.json "${model_args[@]}"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: sanitized-live-receipts
           path: |
             reports/manual-live.json
-            reports/manual-recipes.json
-            reports/manual-recipes.jsonl
-            reports/manual-recipes.md
+            reports/manual-use-cases.json
+            reports/manual-use-cases.jsonl
+            reports/manual-use-cases.md

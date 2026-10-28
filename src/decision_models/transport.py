@@ -7,8 +7,16 @@ import socket
 from .contracts import DecisionError
 
 
+def encode_payload(payload):
+    """Encode a finite, UTF-8 JSON payload or return a safe request error."""
+    try:
+        return json.dumps(payload, ensure_ascii=False, allow_nan=False).encode("utf-8")
+    except (TypeError, ValueError, UnicodeError) as exc:
+        raise DecisionError("invalid_request", "input must contain finite UTF-8 JSON values") from exc
+
+
 def http_transport(endpoint, payload, api_key, timeout=20):
-    request = urllib.request.Request(endpoint, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+    request = urllib.request.Request(endpoint, data=encode_payload(payload),
         headers={"Authorization": "Bearer " + api_key, "Content-Type": "application/json",
                  "Accept": "application/json", "User-Agent": "decision-models-skills/0.1.0"}, method="POST")
     # Refuse redirects so credentials never follow an unexpected host.

@@ -12,7 +12,7 @@ from scripts import evaluate_usecases as evaluator
 from scripts.evaluate_usecases import evaluate, payloads
 
 
-def synthetic_recipe():
+def synthetic_use_case():
     return {
         "schema_version": 1,
         "id": "synthetic-candidate",
@@ -94,8 +94,8 @@ class UsecaseEvaluationTests(unittest.TestCase):
         self.candidate = self.root / "candidate"
         self.candidate.mkdir()
         (self.candidate / "SKILL.md").write_text("# Synthetic\n", encoding="utf-8")
-        self.config = synthetic_recipe()
-        (self.candidate / "recipe.json").write_text(json.dumps(self.config), encoding="utf-8")
+        self.config = synthetic_use_case()
+        (self.candidate / "decision.json").write_text(json.dumps(self.config), encoding="utf-8")
         self.cases = [fixture()]
 
     def tearDown(self):

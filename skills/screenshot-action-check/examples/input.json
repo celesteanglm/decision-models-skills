@@ -1,0 +1,7 @@
+{
+  "state": {
+    "content": "Assess the button labeled CONTINUE near the lower-right of the checkout panel. Decide only whether the complete button is visible and unobstructed in the supplied screenshot.",
+    "image": "images/frame01.png"
+  },
+  "permission_granted": true
+}

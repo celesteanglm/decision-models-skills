@@ -6,25 +6,26 @@ import tempfile
 import unittest
 
 from scripts.publish_compatibility import build_manifest
+from decision_models.runtime import SKILLS
 from scripts.verified_catalog import (
     compatibility_markdown, PROVIDERS, qualification, sha256, verify_catalog,
 )
 
 REPO = Path(__file__).resolve().parents[1]
-RECIPE = "model-tier-routing"
+USE_CASE = "model-tier-routing"
 
 
 def copy_inputs(root):
     repo = Path(root) / "repo"
     repo.mkdir()
-    for directory in ("src", "skills", "recipes", "scripts"):
+    for directory in ("src", "skills", "scripts"):
         shutil.copytree(REPO / directory, repo / directory)
     shutil.copy2(REPO / "README.md", repo / "README.md")
     return repo
 
 
 def change_manifest(repo, edit):
-    folder = repo / "recipes" / RECIPE
+    folder = repo / "skills" / USE_CASE
     path = folder / "compatibility.json"
     manifest = json.loads(path.read_text())
     edit(manifest)
@@ -38,20 +39,30 @@ class VerifiedCatalogTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             repo = copy_inputs(root)
             registry = verify_catalog(repo)
-            self.assertEqual(len(registry["skills"]), 6)
-            self.assertEqual(len(registry["recipes"]), len(list((repo / "recipes").glob("*/recipe.json"))))
+            self.assertEqual(set(registry), {"skills"})
+            text_configs = list((repo / "skills").glob("*/decision.json"))
+            image_configs = list((repo / "skills").glob("*/image.json"))
+            self.assertEqual(len(registry["skills"]), len(SKILLS) + len(text_configs) + len(image_configs))
+            self.assertIn("screenshot-action-check", registry["skills"])
             self.assertFalse(any((repo / name).exists() for name in ("docs", "research", "reports")))
-            self.assertEqual(registry["recipes"][RECIPE]["working_backends"], ["sage"])
+            self.assertEqual(registry["skills"][USE_CASE]["working_backends"], ["sage"])
+
+    def test_rejects_corrupted_image_asset_after_copying_skill_catalog(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            image = repo / "skills" / "screenshot-action-check" / "images" / "frame01.png"
+            image.write_bytes(image.read_bytes() + b"corruption")
+            with self.assertRaisesRegex(AssertionError, "unverified artifacts: screenshot-action-check"):
+                verify_catalog(repo)
 
     def test_every_status_is_derived_from_recorded_acceptance_counts(self):
         registry = verify_catalog(REPO)
-        for kind, entries in registry.items():
-            for item_id, entry in entries.items():
-                fixtures = json.loads((REPO / kind / item_id / "fixtures/acceptance.json").read_text())
-                self.assertTrue(entry["working_backends"])
-                for provider in PROVIDERS:
-                    backend = entry["manifest"]["backends"][provider]
-                    self.assertEqual(backend["status"], qualification(backend, fixtures))
+        for item_id, entry in registry["skills"].items():
+            fixtures = json.loads((REPO / "skills" / item_id / "fixtures/acceptance.json").read_text())
+            self.assertTrue(entry["working_backends"])
+            for provider in PROVIDERS:
+                backend = entry["manifest"]["backends"][provider]
+                self.assertEqual(backend["status"], qualification(backend, fixtures))
 
     def test_rejects_promoting_partial_backend_without_passing_counts(self):
         with tempfile.TemporaryDirectory() as root:
@@ -63,7 +74,7 @@ class VerifiedCatalogTests(unittest.TestCase):
     def test_rejects_working_badge_for_partial_backend(self):
         with tempfile.TemporaryDirectory() as root:
             repo = copy_inputs(root)
-            skill = repo / "recipes" / RECIPE / "SKILL.md"
+            skill = repo / "skills" / USE_CASE / "SKILL.md"
             skill.write_text(skill.read_text() + "\n![Unsupported](https://img.shields.io/badge/Jev%20%2F%20OpenRouter-Working-brightgreen)\n")
             with self.assertRaisesRegex(AssertionError, "unsupported badge"):
                 verify_catalog(repo)
@@ -78,16 +89,16 @@ class VerifiedCatalogTests(unittest.TestCase):
     def test_rejects_stale_human_readable_results(self):
         with tempfile.TemporaryDirectory() as root:
             repo = copy_inputs(root)
-            page = repo / "recipes" / RECIPE / "COMPATIBILITY.md"
+            page = repo / "skills" / USE_CASE / "COMPATIBILITY.md"
             page.write_text(page.read_text().replace("Not qualified (Partial)", "Working"))
             with self.assertRaisesRegex(AssertionError, "stale compatibility"):
                 verify_catalog(repo)
 
     def test_rejects_configuration_example_and_fixture_drift(self):
-        for relative in ("recipe.json", "examples/input.json", "fixtures/acceptance.json"):
+        for relative in ("decision.json", "examples/input.json", "fixtures/acceptance.json"):
             with self.subTest(path=relative), tempfile.TemporaryDirectory() as root:
                 repo = copy_inputs(root)
-                path = repo / "recipes" / RECIPE / relative
+                path = repo / "skills" / USE_CASE / relative
                 path.write_text(path.read_text() + " \n")
                 with self.assertRaisesRegex(AssertionError, "unverified artifacts"):
                     verify_catalog(repo)
@@ -101,7 +112,7 @@ class VerifiedCatalogTests(unittest.TestCase):
                     verify_catalog(repo)
         with tempfile.TemporaryDirectory() as root:
             repo = copy_inputs(root)
-            path = repo / "src/decision_models/recipes.py"
+            path = repo / "src/decision_models/use_cases.py"
             path.write_text(path.read_text() + "\n")
             with self.assertRaisesRegex(AssertionError, "runtime changed"):
                 verify_catalog(repo)
@@ -110,13 +121,26 @@ class VerifiedCatalogTests(unittest.TestCase):
         for remove_folder in (False, True):
             with self.subTest(folder=remove_folder), tempfile.TemporaryDirectory() as root:
                 repo = copy_inputs(root)
-                folder = repo / "recipes" / RECIPE
+                folder = repo / "skills" / USE_CASE
                 if remove_folder:
                     shutil.rmtree(folder)
                 else:
                     (folder / "compatibility.json").unlink()
                 with self.assertRaises(AssertionError):
                     verify_catalog(repo)
+
+    def test_rejects_missing_layout_migration_for_historical_evidence(self):
+        with tempfile.TemporaryDirectory() as root:
+            repo = copy_inputs(root)
+            folder = repo / "skills" / USE_CASE
+            path = folder / "compatibility.json"
+            manifest = json.loads(path.read_text())
+            self.assertIn("migration", manifest)
+            manifest.pop("migration")
+            path.write_text(json.dumps(manifest))
+            (folder / "COMPATIBILITY.md").write_text(compatibility_markdown(manifest))
+            with self.assertRaisesRegex(AssertionError, "missing layout migration"):
+                verify_catalog(repo)
 
     def test_rejects_demo_evidence_and_negative_counts(self):
         for edit in (lambda m: m.update(mode="demo"),
@@ -130,11 +154,11 @@ class VerifiedCatalogTests(unittest.TestCase):
     def test_optional_raw_audit_rejects_summary_mismatch(self):
         with tempfile.TemporaryDirectory() as root:
             repo = copy_inputs(root)
-            manifest = json.loads((repo / "recipes" / RECIPE / "compatibility.json").read_text())
+            manifest = json.loads((repo / "skills" / USE_CASE / "compatibility.json").read_text())
             receipt = {
                 "mode": "live", "repetitions": 3, "rows": [], "summary": {},
                 "source_hash": manifest["evidence"]["source_hash"],
-                "fixtures": {RECIPE: manifest["fixture_revision"]},
+                "fixtures": {USE_CASE: manifest["fixture_revision"]},
             }
             path = Path(root) / "raw.json"
             path.write_text(json.dumps(receipt))
@@ -150,9 +174,30 @@ class VerifiedCatalogTests(unittest.TestCase):
             with self.assertRaisesRegex(AssertionError, "not referenced"):
                 verify_catalog(repo, [path])
 
+    def test_migration_audit_rejects_missing_helper_hashes(self):
+        for helpers in ({}, {"scripts/usecase_reference.py": sha256(REPO / "scripts/usecase_reference.py")}):
+            with self.subTest(helpers=helpers), tempfile.TemporaryDirectory() as root:
+                repo = copy_inputs(root)
+                manifest = json.loads((repo / "skills" / USE_CASE / "compatibility.json").read_text())
+                migration = manifest["migration"]
+                proof = {field: migration[field] for field in (
+                    "kind", "previous_runtime_revision", "runtime_revision",
+                    "payload_and_policy_cases", "archived_response_replays", "paid_requests")}
+                contracts = {p.parent.name: json.loads(p.read_text())["migration"]["contract_sha256"]
+                             for p in (repo / "skills").glob("*/compatibility.json")
+                             if "migration" in json.loads(p.read_text())}
+                proof.update(identical=True, skill_count=len(contracts),
+                             decision_contracts=contracts,
+                             reference_artifacts=helpers)
+                path = Path(root) / "migration.json"
+                path.write_text(json.dumps(proof))
+                change_manifest(repo, lambda m: m["migration"].update(evidence_sha256=sha256(path)))
+                with self.assertRaisesRegex(AssertionError, "incomplete migration helper set"):
+                    verify_catalog(repo, migration_receipts=[path])
+
     def test_publisher_refuses_synthetic_evidence(self):
         with self.assertRaisesRegex(AssertionError, "live evidence"):
-            build_manifest(REPO, REPO / "recipes" / RECIPE,
+            build_manifest(REPO, REPO / "skills" / USE_CASE,
                            {"mode": "demo", "repetitions": 3}, "a" * 64, "https://example.com/run")
 
 

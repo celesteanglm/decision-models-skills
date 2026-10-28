@@ -7,6 +7,7 @@ synthetic harness exercises the backend boundary, not a client's approval UI.
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -159,6 +160,17 @@ def client_environment(environ):
                      "CODEX_HOME", "SSL_CERT_FILE", "SSL_CERT_DIR"}}
 
 
+def client_budget(value):
+    """Parse a positive finite Claude invocation cap, distinct from API spend."""
+    try:
+        amount = float(value)
+    except (TypeError, ValueError) as exc:
+        raise argparse.ArgumentTypeError("client budget must be a positive finite USD amount") from exc
+    if not math.isfinite(amount) or amount <= 0:
+        raise argparse.ArgumentTypeError("client budget must be a positive finite USD amount")
+    return amount
+
+
 def run(args):
     project = args.directory.resolve() / (args.host + "-" + args.setup)
     if args.phase == "offer":
@@ -185,7 +197,7 @@ def run(args):
     if args.host == "claude":
         command = ["claude", "--print", "--verbose", "--output-format", "stream-json",
                    "--model", "sonnet", "--effort", "low", "--max-budget-usd",
-                   str({"offer": 0.13, "decline": 0.08, "approve": 0.06}[args.phase]),
+                   str(args.client_budget_usd),
                    "--setting-sources", "project", "--strict-mcp-config", "--mcp-config", str(config),
                    "--tools", "Read,Skill", "--allowedTools", "Read,Skill,mcp__decision_e2e__sage_image_check",
                    "--session-id" if args.phase == "offer" else "--resume", session, PROMPTS[args.phase]]
@@ -225,6 +237,7 @@ def run(args):
         usage = [row for row in rows if row.get("type") in {"result", "turn.completed"}]
         summary = {"host": args.host, "setup": args.setup, "phase": args.phase,
                    "exit_code": completed.returncode, "elapsed_seconds": round(time.monotonic() - started, 3),
+                   "client_budget_usd": args.client_budget_usd if args.host == "claude" else None,
                    "usage": usage, "source_hashes": {
                        path: hashlib.sha256((REPO / path).read_bytes()).hexdigest()
                        for path in ("README.md", "SKILL.md", "skills/screenshot-action-check/SKILL.md")}}
@@ -248,6 +261,8 @@ def main():
     parser.add_argument("--setup", choices=("individual", "collection"), required=True)
     parser.add_argument("--phase", choices=tuple(PROMPTS), required=True)
     parser.add_argument("--directory", type=Path, required=True)
+    parser.add_argument("--client-budget-usd", type=client_budget, default=0.75,
+                        help="Claude Code invocation cap (default: 0.75 USD); separate from Sage's 0.06 USD cap")
     return run(parser.parse_args())
 
 

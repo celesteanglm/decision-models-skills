@@ -1,5 +1,6 @@
 """Offline exercise of the real MCP boundary used by opt-in client tests."""
 import json
+import argparse
 import os
 from pathlib import Path
 import socket
@@ -8,11 +9,17 @@ import threading
 import unittest
 from unittest.mock import patch
 
-from scripts.agent_e2e import backend, client_environment, prepare
+from scripts.agent_e2e import backend, client_environment, client_budget, prepare
 from tests.test_sage_image_model_selection import raw_response
 
 
 class AgentE2EBoundaryTests(unittest.TestCase):
+    def test_client_cap_accepts_raised_budget_and_rejects_invalid_amounts(self):
+        self.assertEqual(client_budget("0.75"), 0.75)
+        for value in ("0", "-1", "nan", "inf", "not-money", None):
+            with self.subTest(value=value), self.assertRaises(argparse.ArgumentTypeError):
+                client_budget(value)
+
     def test_clients_receive_no_provider_credentials_or_unrelated_environment(self):
         env = client_environment({"PATH": "/bin", "HOME": "/tmp/home",
                                   "SAGE_API_KEY": "synthetic", "SAGE_KEY": "synthetic",

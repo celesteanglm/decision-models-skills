@@ -38,7 +38,7 @@ The complete [offline custom-provider example](examples/custom_provider/README.m
 
 ### Connect a provider once
 
-Your agent needs a configured model tool, or you can connect an adapter in your own application. An API key alone does not create that connection. Ask your coding agent to follow the [implementation contract](IMPLEMENTATION_CONTRACT.md) when connecting a new provider.
+Your agent needs a configured model tool, or you can connect an adapter in your own application. An API key alone does not create that connection. Ask your coding agent to follow the [adapter guide](CONTRIBUTING.md#add-a-model-adapter) when connecting a new provider.
 
 The optional Python tools use these environment variables:
 
@@ -75,7 +75,7 @@ For a new connection, give your coding agent this brief:
 
 ```text
 Connect this copied skill to [provider/model] in my project.
-Read its SKILL.md and the repository's IMPLEMENTATION_CONTRACT.md.
+Read its SKILL.md and the Add a model adapter section in CONTRIBUTING.md.
 Keep the decision question, labels, permission checks, and review rules unchanged.
 Use credentials from the environment and keep integration code outside the skill folder.
 Show the request/response mapping and run an offline example first.
@@ -199,7 +199,7 @@ The adapter and error-handling update also matched 948 frozen request and policy
 
 `src/decision_models/` contains optional Python code used to reproduce API contracts, numerical policies, and reference evaluation. It is maintainer tooling; agents using the Markdown skills do not install or import it. The package exposes no global console command.
 
-See [Contributing](CONTRIBUTING.md) for folder validation and optional Python checks, [Decision contract](DECISION_CONTRACT.md) for reference configuration, [Implementation contract](IMPLEMENTATION_CONTRACT.md) for the optional adapters, and [Attribution](ATTRIBUTION.md) for original sources.
+See [Contributing](CONTRIBUTING.md) for validation, model adapters, reference schemas, and compatibility evidence. Original sources are credited [below](#credits-and-license) and within each skill.
 
 ## Optional: connect a Python adapter
 
@@ -207,6 +207,26 @@ Start with the [runnable custom-provider example](examples/custom_provider/READM
 
 For your application, `execute_use_case` and the general `execute` function accept `adapter=MyAdapter()`. The image helper accepts the same argument with a vision-capable adapter. The adapter supplies `name`, `endpoint`, `key_env`, and `default_model`, plus `build_payload(state, questions, model)` and `parse_response(raw, questions)`. For images, the first argument is validated pixel content. General confidence gates and output evaluation require an explicit policy for a new provider so it does not inherit another model's numerical thresholds.
 
-`parse_response` returns the canonical response described in the [implementation contract](IMPLEMENTATION_CONTRACT.md), including the resolved model, answer map, native usage, and original raw response. Preserve native choice or score probability distributions and native confidence as separate fields. Do not invent either. Put API credentials in the environment variable named by `key_env`. See [Contributing](CONTRIBUTING.md) before changing the optional reference implementation. Every new backend needs its own tests before receiving a Working label.
+`parse_response` returns the canonical response described in the [adapter guide](CONTRIBUTING.md#add-a-model-adapter), including the resolved model, answer map, native usage, and original raw response. Preserve native choice or score probability distributions and native confidence as separate fields. Do not invent either. Put API credentials in the environment variable named by `key_env`. See [Contributing](CONTRIBUTING.md) before changing the optional reference implementation. Every new backend needs its own tests before receiving a Working label.
 
 Compact reference evidence stays beside each skill. Raw test outputs stay in ignored `reports/` or retained CI artifacts.
+
+## Credits and license
+
+This project uses the [MIT License](LICENSE). The implementation, instructions, and synthetic fixtures are independently authored. The sources below are credited for ideas and API references, not endorsement or reproduced performance. Each skill also carries its original source links so credits travel with copied folders. Preserve original notices if contributing adapted material.
+
+<details>
+<summary>Original workflows, community sources, and Sage examples</summary>
+
+- **Six-workflow inspiration:** Akshay Pachaar's [workflow post](https://x.com/akshay_pachaar/status/2107469584773300545) and [Jev article](https://x.com/i/article/2102087107410002345), plus [TypeSafe's official skills](https://github.com/typesafe-ai/skills).
+- **Community discovery:** [awesome-jev](https://github.com/yibie/awesome-jev), [hermes-jev-skills](https://github.com/kerpopule/hermes-jev-skills), [jev-agent-skill](https://github.com/yuyang2230/jev-agent-skill), and the [Jev AI Dev collection](https://jevai.dev/user-cases/). Their code, prose, and examples were not incorporated. AI Edge is credited for the original research, inbox, and content workflow article, and Miles Deutscher for sharing it. The relevant skills link the original posts.
+- **Evaluation ideas:** [jev-as-judge](https://github.com/patchy631/jev-as-judge). Review on 2026-10-08 found no visible license, so it is credited for ideas only. No code, prose, or test cases were copied or adapted.
+- **Study-tool routing:** [Leap's case study](https://levanto.ai/case-study/leap-study-tool-routing), by Leap, Alessandro Rutigliano, and the Levanto Team. The skill does not reproduce their dataset, multi-tool implementation, or reported accuracy.
+- **Research decision gates:** [Capacitr's case study](https://levanto.ai/case-study/capacitr-market-signal-decision-gates), by Capacitr, Utkarsh Bhimte, and the Levanto Team. The independently authored skill executes no research or financial action and reproduces no claimed savings.
+- **Image inspection:** [Levanto's image API documentation](https://docs.levanto.ai/decision-model/images) and [Austin Griffith's Sage Wisdom gallery](https://github.com/austintgriffith/sage-wisdom). Credit Levanto for the image interface and Austin Griffith for application examples. No Sage Wisdom code, prose, images, or performance claims were copied. Screenshot assets and their renderer are original.
+- **Research leads:** [Marco De Rossi](https://x.com/marco_derossi), [Levanto Labs](https://x.com/levantolabs), and [Big Iron Chris](https://x.com/bigironchris).
+- **Provider references:** [OpenRouter Decisions API](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request), [OpenAI Decisions API](https://developers.openai.com/api/docs/guides/decisions), and [Sage SystemOne](https://docs.levanto.ai/systemone).
+
+Source popularity and customer-reported results do not establish compatibility. Only independently evaluated skills with at least one Working backend enter the catalog. Earlier Partial image evaluations remain in the retained development history; their reused synthetic fixtures are not a held-out benchmark.
+
+</details>

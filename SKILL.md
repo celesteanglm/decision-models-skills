@@ -5,7 +5,9 @@ description: Route a bounded decision, screening, ranking, or evaluation task to
 
 # Route a task to a decision skill
 
-Use this entrypoint when the user wants a decision from this collection without choosing a skill. The collection must be accessible beside this file. It needs no Python package or separate command.
+This entrypoint is optional. Use an installed individual skill directly when it is already known; it needs neither this entrypoint nor the collection catalog. Use this entrypoint when the user wants a decision from this collection without choosing a skill. The collection must be accessible beside this file. It needs no Python package or separate command.
+
+If persistent host instructions ask for a proactive suggestion, select a candidate and read its instructions and compatibility evidence, then offer it under those instructions. A suggestion is not acceptance: wait before a new external call unless the same data, backend, scope, and budget were already explicitly authorized. Honor a decline for the task and any processing denial. When the user requests the assessment itself, follow the procedure below.
 
 ## Select and follow a skill
 

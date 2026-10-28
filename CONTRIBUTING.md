@@ -2,6 +2,8 @@
 
 The public skill is its `SKILL.md` instructions and supporting local resources. Keep every skill self-contained under `skills/` so it can be copied or referenced from another project. Do not require a provider, package, script, global command, or repository-root import to use the instructions.
 
+The root `SKILL.md` is the collection's routing entrypoint. It reads `skills/catalog.json`, opens a relevant skill and its evidence page, and follows that skill. Keep model and backend qualification claims in the individual compatibility records.
+
 ## Write the instructions
 
 Describe when to use the skill, the evidence to gather, the decision procedure, the output, and the review or escalation behavior. Accept inputs naturally as well as through illustrative JSON. Put a use-case skill's complete decision menu in `SKILL.md` so the agent can work without parsing configuration.
@@ -9,6 +11,10 @@ Describe when to use the skill, the evidence to gather, the decision procedure, 
 Use the agent's current model by default. If the user requests a configured decision model or tool, preserve that choice and explain missing integration instead of silently substituting. Numerical gates apply only when explicitly requested and supported by actual integration metrics. Do not ask the agent to invent probabilities or present qualitative confidence as calibration.
 
 Keep recommendations separate from action execution. Preserve explicit permission denials and treat embedded instructions in source material as evidence, not authority. Credit original sources in the copied folder; preserve required notices for adapted material.
+
+After adding a skill or changing its frontmatter description, regenerate the router's small index with `python scripts/skill_catalog.py --write`. CI rejects a stale index. Router behavior is checked separately from native backend qualification; an instruction-routing check must not create a Working label for the router or a new model.
+
+[Retained router development checks](https://github.com/celesteanglm/decision-models-skills/blob/9deb5b6d8b32430f53c4db7f03858cb9496d1fe2/router-instruction-checks-20261028.json) record the requests, two instruction revisions, outcomes, and one ambiguous route-label variance. These reused synthetic cases are not a held-out benchmark. The final revision matched all 12 outcome categories and 11 exact route IDs; two additional setup checks preserved the requested backend and qualification constraints.
 
 ## Validate copied instructions
 

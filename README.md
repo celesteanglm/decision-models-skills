@@ -1,18 +1,31 @@
 # Decision Models Skills
 
-Model-agnostic agent skills for bounded decisions, routing, and evaluation. Choose among six general skills and 21 use-case skills, install or reference the folder, and ask your agent to use it.
+Model-agnostic agent skills for bounded decisions, routing, and evaluation. Describe your task to the collection router. It selects and follows the matching skill from six general skills and 21 use-case skills.
 
 ## Start here
 
-The skills are portable instructions: the same self-contained folder can guide different agents and decision-model integrations. Start with the `SKILL.md`; a provider or package is optional.
+Give your agent access to this repository, then point it to the [routing entrypoint](SKILL.md):
 
-1. **Choose the task and check its evidence.** Browse the groups below and open the skill that matches your task. Read its `SKILL.md` and `COMPATIBILITY.md` to understand required inputs, review behavior, and exactly which backend and model were checked. A compatibility result applies to the recorded integration and artifacts; it does not guarantee the same result on every model.
-2. **Get or copy the complete folder.** Clone or download this repository, then copy the complete `skills/<skill-id>/` folder to a skill directory supported by your agent. Include examples, local assets, and other referenced files. If your agent can use a file directly, point it to `skills/<skill-id>/SKILL.md` instead.
-3. **Give the agent your own input and criteria.** Describe the task and the evidence to consider in plain language. State what a good result means and any constraints. The JSON example illustrates the fields; it is optional unless your integration requires JSON. Keep examples and expected fixture answers separate from real decision evidence.
-4. **Choose how to make the decision.** Let the agent use its current model for qualitative use, or request a decision-model tool that is already configured in your agent. Naming a model does not connect an API, provide credentials, or switch the model running your agent conversation. If the requested integration is not configured, ask the agent to identify what is missing instead of silently substituting another backend.
-5. **Try a harmless example and inspect the result.** Start with the skill's sample or another low-stakes input. Compare the answer with the skill's decision menu and review rules. For a backend, check `COMPATIBILITY.md` for its exact model, date, native metrics, and limitations; do not treat a result from one backend as proof for another. For a skill that requires an image, use an agent or backend that accepts and can inspect image inputs.
+```text
+Use /path/to/decision-models-skills/SKILL.md to handle this task.
+Choose the matching skill and follow it.
+Task: Which support queue should handle this email?
+Email: "I was charged twice for the same order. Can you help?"
+Return a recommendation. Do not send an email or take an external action.
+```
 
-Using `SKILL.md` with the agent's current model requires no Python installation, API key, package, separate CLI, or bundled executable. If you connect an API directly, keep its key in an environment variable, not in prompts or source files.
+The router loads `email-queue-routing` and returns its assessment, such as a `billing` recommendation. It asks a focused question for an ambiguous task, requests missing evidence, and explains when the request is outside this collection.
+
+1. **Describe the task.** Supply the text, image, or other evidence and any decision criteria. You do not need to choose a skill or format the request as JSON.
+2. **Name a model only if you want one.** The router uses the agent's current model by default. You can request an already configured decision-model tool. Naming a model does not connect an API or change your conversation model. Missing setup is reported without substituting another provider.
+3. **Let the router handle discovery.** It reads the catalog, loads the selected `SKILL.md`, checks relevant compatibility evidence, and performs the assessment. It does not stop at returning a file path.
+4. **Review the recommendation.** The response names the skill used and any missing evidence or backend qualification limits. Recommendations do not execute the proposed action.
+
+To install or copy the collection router, keep the root `SKILL.md` and the complete `skills/` directory together in a location your agent can read. You can also copy any individual `skills/<skill-id>/` folder and use it directly. The router requires access to the collection; a single copied skill remains self-contained.
+
+The router is an instruction entrypoint for your agent. It has no separate Jev, Sage, or Decisions API Working label. Existing compatibility labels apply to the selected skill's recorded native implementation, model, and inputs. They do not certify an arbitrary agent following the instructions.
+
+Using the router or an individual `SKILL.md` with the agent's current model requires no Python installation, API key, package, separate CLI, or bundled executable. If you connect an API directly, keep its key in an environment variable, not in prompts or source files.
 
 ### Try it with a configured model
 

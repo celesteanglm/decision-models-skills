@@ -9,7 +9,8 @@ from datetime import datetime, timezone
 
 from decision_models.evaluation import source_hash
 from verified_catalog import verify_catalog
-from verify_skills import verify_skills
+from verify_skills import verify_folder, verify_skills
+from skill_catalog import verify_catalog as verify_routing_catalog
 
 
 def main():
@@ -19,6 +20,8 @@ def main():
     marker.unlink(missing_ok=True)
     env = dict(os.environ)
     instructions = verify_skills(repo)
+    verify_folder(repo, expected_name="decision-models-skills")
+    verify_routing_catalog(repo)
     catalog = verify_catalog(repo)["skills"]
     for name in ("OPENROUTER_API_KEY", "OPENAI_API_KEY", "SAGE_API_KEY", "PYTHONPATH"):
         env.pop(name, None)
@@ -56,7 +59,8 @@ def main():
                                        "action": receipt["result"]["action"]})
     marker.write_text(json.dumps({"passed": True, "source_hash": source_hash(repo),
         "checked_at": datetime.now(timezone.utc).isoformat(), "python": sys.version.split()[0],
-        "checks": [f"{len(instructions)} self-contained instruction folders", "unittest suite",
+        "checks": ["collection routing entrypoint and synchronized catalog",
+                   f"{len(instructions)} self-contained instruction folders", "unittest suite",
                    f"{len(demonstrations)} credential-free reference-implementation demos from copied inputs"],
         "demos": demonstrations}, indent=2) + "\n")
     print(f"Offline verification passed: {marker}")

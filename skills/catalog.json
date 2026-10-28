@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "skills": [
+    {
+      "id": "ad-funnel-classification",
+      "description": "Classify ad copy by the customer-journey stage suggested by its text.",
+      "input_modality": "text",
+      "skill_path": "skills/ad-funnel-classification/SKILL.md",
+      "compatibility_path": "skills/ad-funnel-classification/COMPATIBILITY.md"
+    },
+    {
+      "id": "agent-workflow-routing",
+      "description": "Recommend a configured workflow from an incoming customer request.",
+      "input_modality": "text",
+      "skill_path": "skills/agent-workflow-routing/SKILL.md",
+      "compatibility_path": "skills/agent-workflow-routing/COMPATIBILITY.md"
+    },
+    {
+      "id": "brand-news-matching",
+      "description": "Classify whether a news item is relevant to a supplied brand brief.",
+      "input_modality": "text",
+      "skill_path": "skills/brand-news-matching/SKILL.md",
+      "compatibility_path": "skills/brand-news-matching/COMPATIBILITY.md"
+    },
+    {
+      "id": "browser-action-selection",
+      "description": "Choose a bounded browser step from the current page and task evidence.",
+      "input_modality": "text",
+      "skill_path": "skills/browser-action-selection/SKILL.md",
+      "compatibility_path": "skills/browser-action-selection/COMPATIBILITY.md"
+    },
+    {
+      "id": "confidence-gates",
+      "description": "Recommend whether an evidence-backed draft is ready, needs review, or should be escalated.",
+      "input_modality": "text",
+      "skill_path": "skills/confidence-gates/SKILL.md",
+      "compatibility_path": "skills/confidence-gates/COMPATIBILITY.md"
+    },
+    {
+      "id": "content-revision-gate",
+      "description": "Assess a draft\u2019s clarity and specificity and recommend whether it needs focused revision.",
+      "input_modality": "text",
+      "skill_path": "skills/content-revision-gate/SKILL.md",
+      "compatibility_path": "skills/content-revision-gate/COMPATIBILITY.md"
+    },
+    {
+      "id": "draft-quality-triage",
+      "description": "Classify a draft against its stated goal and available feedback.",
+      "input_modality": "text",
+      "skill_path": "skills/draft-quality-triage/SKILL.md",
+      "compatibility_path": "skills/draft-quality-triage/COMPATIBILITY.md"
+    },
+    {
+      "id": "email-queue-routing",
+      "description": "Recommend a handling queue for one email using its request and context.",
+      "input_modality": "text",
+      "skill_path": "skills/email-queue-routing/SKILL.md",
+      "compatibility_path": "skills/email-queue-routing/COMPATIBILITY.md"
+    },
+    {
+      "id": "input-guardrails",
+      "description": "Screen a user prompt against a supplied policy, applying exact configured hard blocks before a semantic compliance judgment.",
+      "input_modality": "text",
+      "skill_path": "skills/input-guardrails/SKILL.md",
+      "compatibility_path": "skills/input-guardrails/COMPATIBILITY.md"
+    },
+    {
+      "id": "invoice-file-triage",
+      "description": "Recommend whether a file appears to be an invoice and has enough metadata for a safe filing review.",
+      "input_modality": "text",
+      "skill_path": "skills/invoice-file-triage/SKILL.md",
+      "compatibility_path": "skills/invoice-file-triage/COMPATIBILITY.md"
+    },
+    {
+      "id": "model-routing",
+      "description": "Select an eligible model for a task, with a confidence-based escalation path.",
+      "input_modality": "text",
+      "skill_path": "skills/model-routing/SKILL.md",
+      "compatibility_path": "skills/model-routing/COMPATIBILITY.md"
+    },
+    {
+      "id": "model-tier-routing",
+      "description": "Choose among supplied model tiers using task complexity and explicit constraints.",
+      "input_modality": "text",
+      "skill_path": "skills/model-tier-routing/SKILL.md",
+      "compatibility_path": "skills/model-tier-routing/COMPATIBILITY.md"
+    },
+    {
+      "id": "outfit-option-selection",
+      "description": "Select a supplied outfit description using explicit weather and occasion constraints.",
+      "input_modality": "text",
+      "skill_path": "skills/outfit-option-selection/SKILL.md",
+      "compatibility_path": "skills/outfit-option-selection/COMPATIBILITY.md"
+    },
+    {
+      "id": "output-evaluation",
+      "description": "Evaluate an answer for grounding, relevance, action honesty, and usefulness.",
+      "input_modality": "text",
+      "skill_path": "skills/output-evaluation/SKILL.md",
+      "compatibility_path": "skills/output-evaluation/COMPATIBILITY.md"
+    },
+    {
+      "id": "page-change-triage",
+      "description": "Compare two supplied page excerpts for a change that matters to the stated monitoring goal.",
+      "input_modality": "text",
+      "skill_path": "skills/page-change-triage/SKILL.md",
+      "compatibility_path": "skills/page-change-triage/COMPATIBILITY.md"
+    },
+    {
+      "id": "reranking",
+      "description": "Score and stably reorder caller-supplied passages for a query.",
+      "input_modality": "text",
+      "skill_path": "skills/reranking/SKILL.md",
+      "compatibility_path": "skills/reranking/COMPATIBILITY.md"
+    },
+    {
+      "id": "research-enrichment-gate",
+      "description": "Recommend whether supplied research can be reused, needs refreshing, or requires review.",
+      "input_modality": "text",
+      "skill_path": "skills/research-enrichment-gate/SKILL.md",
+      "compatibility_path": "skills/research-enrichment-gate/COMPATIBILITY.md"
+    },
+    {
+      "id": "research-source-filter",
+      "description": "Assess whether a source excerpt is useful for a stated research brief before synthesis.",
+      "input_modality": "text",
+      "skill_path": "skills/research-source-filter/SKILL.md",
+      "compatibility_path": "skills/research-source-filter/COMPATIBILITY.md"
+    },
+    {
+      "id": "retrieved-instruction-screening",
+      "description": "Recommend whether retrieved material should be isolated before use as evidence.",
+      "input_modality": "text",
+      "skill_path": "skills/retrieved-instruction-screening/SKILL.md",
+      "compatibility_path": "skills/retrieved-instruction-screening/COMPATIBILITY.md"
+    },
+    {
+      "id": "screenshot-action-check",
+      "description": "Assess whether a specifically named interface button is fully visible and unobstructed in supplied screenshot pixels.",
+      "input_modality": "image",
+      "skill_path": "skills/screenshot-action-check/SKILL.md",
+      "compatibility_path": "skills/screenshot-action-check/COMPATIBILITY.md"
+    },
+    {
+      "id": "secondhand-listing-fit",
+      "description": "Compare a used-item listing with explicit purchase criteria and recommend whether it merits attention.",
+      "input_modality": "text",
+      "skill_path": "skills/secondhand-listing-fit/SKILL.md",
+      "compatibility_path": "skills/secondhand-listing-fit/COMPATIBILITY.md"
+    },
+    {
+      "id": "spoken-slide-selection",
+      "description": "Recommend which described slide best matches a short spoken passage.",
+      "input_modality": "text",
+      "skill_path": "skills/spoken-slide-selection/SKILL.md",
+      "compatibility_path": "skills/spoken-slide-selection/COMPATIBILITY.md"
+    },
+    {
+      "id": "spreadsheet-urgency",
+      "description": "Classify a row from its stated deadline, status, and impact.",
+      "input_modality": "text",
+      "skill_path": "skills/spreadsheet-urgency/SKILL.md",
+      "compatibility_path": "skills/spreadsheet-urgency/COMPATIBILITY.md"
+    },
+    {
+      "id": "study-tool-selection",
+      "description": "Recommend one study activity that fits a learner request and supplied material.",
+      "input_modality": "text",
+      "skill_path": "skills/study-tool-selection/SKILL.md",
+      "compatibility_path": "skills/study-tool-selection/COMPATIBILITY.md"
+    },
+    {
+      "id": "suspicious-email-escalation",
+      "description": "Classify email text for fraud or phishing indicators and identify when security review is warranted.",
+      "input_modality": "text",
+      "skill_path": "skills/suspicious-email-escalation/SKILL.md",
+      "compatibility_path": "skills/suspicious-email-escalation/COMPATIBILITY.md"
+    },
+    {
+      "id": "template-field-matching",
+      "description": "Recommend source fields that can populate requested template fields based on names and supplied definitions.",
+      "input_modality": "text",
+      "skill_path": "skills/template-field-matching/SKILL.md",
+      "compatibility_path": "skills/template-field-matching/COMPATIBILITY.md"
+    },
+    {
+      "id": "tool-call-gating",
+      "description": "Check explicit permission first, then recommend whether a proposed tool action should be approved, rejected, or clarified.",
+      "input_modality": "text",
+      "skill_path": "skills/tool-call-gating/SKILL.md",
+      "compatibility_path": "skills/tool-call-gating/COMPATIBILITY.md"
+    }
+  ]
+}

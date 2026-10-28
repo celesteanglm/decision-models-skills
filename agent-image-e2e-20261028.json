@@ -1,0 +1,1163 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-28T07:02:12.895651+00:00",
+  "scope": "Small real-client workflow smoke tests; not a model benchmark or new backend qualification.",
+  "clients": {
+    "codex": "0.152.1, existing ChatGPT sign-in",
+    "claude_code": "2.1.178, live request blocked by revoked OAuth sign-in"
+  },
+  "environment": "Temporary project skill installations and instruction files. Personal settings were not edited. Codex ignored user config but retained discoverable user skills.",
+  "artifact_hashes": {
+    "SKILL.md": "bf0aa64366b14ee1834713a1b7b723513bae21cc951c17a6e295ecd48145923b",
+    "skills/catalog.json": "b9cfc12116c221edb08a29b0c81ad30ce0996158a999486645cbd081b2d02dbd",
+    "skills/screenshot-action-check/SKILL.md": "5651b61bc78660396b95c67f45750bba17eab22c12bcb47c4365f761901e02c9",
+    "skills/screenshot-action-check/image.json": "1cf89a1849c892a95628ed7b9bd1419c9d02fa024750f21defa0a6dc202cf967",
+    "skills/screenshot-action-check/images/frame01.png": "58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69",
+    "examples/sage_image_model_selection.py": "02dd917ff38cedfb7d428c2b8f6e151c49d2034b7815638368d05823119b1cdb"
+  },
+  "input": {
+    "image": "skills/screenshot-action-check/images/frame01.png",
+    "question": "Is the CONTINUE button near the lower-right of the checkout panel fully visible and unobstructed?",
+    "image_permission": true,
+    "expected_choice_for_local_assertion_only": "visible",
+    "expected_label_sent_to_provider": false
+  },
+  "outcomes": {
+    "codex_individual": "Passed discovery, offer, decline without external call, then approved real Sage 2 check.",
+    "codex_optional_entry": "Passed offer and decline; explicit entrypoint routed to screenshot-action-check and approved allowlist call returned Sage v1.4.",
+    "claude_code": "Blocked: actual request returned HTTP 401, OAuth access token revoked. No Claude model tokens or provider calls were used.",
+    "model_selection": "Public /decide/batch schema has no model selector; four native calls returned both levanto-sage-v1.4 and levanto-sage-2. Two exact-version mismatches failed closed; explicit allowlist worked.",
+    "action_execution": "No recommended UI or business actions were executed; only model inference requests."
+  },
+  "phases": [
+    {
+      "host": "codex",
+      "setup": "individual",
+      "turn": "offer",
+      "exit_code": 0,
+      "elapsed_seconds": 15.233,
+      "messages": [
+        "I\u2019m using the screenshot-action-check skill because this is a bounded, repeatable visual QA decision. I\u2019ll inspect its requirements and the screenshot, and I won\u2019t click anything.",
+        "For this growing batch, I recommend `screenshot-action-check` with Sage `levanto-sage-v1.4` for consistent repeated classification. It sends only `example.png` pixels and the CONTINUE-button target text; the call is capped at US$0.05 and performs no clicks.\n\nMay I run this external model check?"
+      ],
+      "usage": [
+        {
+          "input_tokens": 42565,
+          "cached_input_tokens": 31104,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 389,
+          "reasoning_output_tokens": 105
+        }
+      ],
+      "mcp_calls": 0,
+      "instruction_reads": [
+        "/bin/zsh -lc \"sed -n '1,240p' <temporary-e2e-project>/codex-individual/.agents/skills/screenshot-action-check/SKILL.md && sed -n '1,240p' <temporary-e2e-project>/codex-individual/.agents/skills/screenshot-action-check/COMPATIBILITY.md && rg --files -g 'example.png' -g '\"'!node_modules'\"' .\""
+      ],
+      "tools_used": [
+        "agent_message",
+        "command_execution",
+        "error"
+      ],
+      "tool_results": []
+    },
+    {
+      "host": "codex",
+      "setup": "individual",
+      "turn": "decline",
+      "exit_code": 0,
+      "elapsed_seconds": 10.957,
+      "messages": [
+        "Understood. I\u2019ll apply the skill\u2019s visibility criteria locally to `example.png`; no external model call and no clicking.",
+        "Recommendation: `visible` \u2014 the lower-right CONTINUE button is fully within the panel and unobstructed."
+      ],
+      "usage": [
+        {
+          "input_tokens": 45856,
+          "cached_input_tokens": 45184,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 132,
+          "reasoning_output_tokens": 19
+        }
+      ],
+      "mcp_calls": 0,
+      "instruction_reads": [],
+      "tools_used": [
+        "agent_message"
+      ],
+      "tool_results": []
+    },
+    {
+      "host": "codex",
+      "setup": "individual",
+      "turn": "approve",
+      "exit_code": 0,
+      "elapsed_seconds": 13.492,
+      "messages": [
+        "Approval noted. I\u2019m using `screenshot-action-check` with the configured Sage `levanto-sage-v1.4` integration for one capped call, sending only `example.png` pixels and the CONTINUE visibility question. No clicking.",
+        "Sage call failed before returning a decision. No model result or native selected probability was supplied, and I did not retry or click anything."
+      ],
+      "usage": [
+        {
+          "input_tokens": 89082,
+          "cached_input_tokens": 82176,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 325,
+          "reasoning_output_tokens": 105
+        }
+      ],
+      "mcp_calls": 1,
+      "instruction_reads": [],
+      "tools_used": [
+        "agent_message",
+        "error",
+        "mcp_tool_call"
+      ],
+      "tool_results": [
+        {
+          "id": "item_2",
+          "type": "mcp_tool_call",
+          "server": "decision_e2e",
+          "tool": "sage_image_check",
+          "arguments": {
+            "image_path": "<temporary-e2e-project>/codex-individual/example.png",
+            "permission_granted": true,
+            "target": "Is the CONTINUE button near the lower-right of the checkout panel fully visible and unobstructed?"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Only the supplied example.png and named CONTINUE target are in scope."
+              }
+            ],
+            "structured_content": null
+          },
+          "error": null,
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "host": "codex",
+      "setup": "individual",
+      "turn": "retry",
+      "exit_code": 0,
+      "elapsed_seconds": 16.159,
+      "messages": [
+        "I\u2019ll retry the authorized check using the connector\u2019s updated exact schema. The rejected attempt sent nothing to Sage, so this remains the single permitted call; no clicking.",
+        "The authorized Sage call was made, but the connector rejected the response: \u201cSage response resolved an unexpected model.\u201d No visibility result or native probability was returned. No retry or click occurred."
+      ],
+      "usage": [
+        {
+          "input_tokens": 111441,
+          "cached_input_tokens": 104064,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 265,
+          "reasoning_output_tokens": 89
+        }
+      ],
+      "mcp_calls": 1,
+      "instruction_reads": [],
+      "tools_used": [
+        "agent_message",
+        "error",
+        "mcp_tool_call"
+      ],
+      "tool_results": [
+        {
+          "id": "item_2",
+          "type": "mcp_tool_call",
+          "server": "decision_e2e",
+          "tool": "sage_image_check",
+          "arguments": {
+            "image_path": "example.png",
+            "permission_granted": true,
+            "target": "CONTINUE"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Sage response resolved an unexpected model"
+              }
+            ],
+            "structured_content": null
+          },
+          "error": null,
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "host": "codex",
+      "setup": "individual",
+      "turn": "approve-current",
+      "exit_code": 0,
+      "elapsed_seconds": 20.128,
+      "messages": [
+        "I\u2019ll run this as a new, unqualified smoke check with `screenshot-action-check` and the updated Sage `levanto-sage-2` connector. Only `example.png` and target `CONTINUE` will be sent; no clicking and no v1.4 qualification claim.",
+        "Smoke-check result (`levanto-sage-2`): `visible`.\n\nNative selected probability: `0.9996805881` (99.968%). This is a new-model smoke check, not covered by the v1.4 qualification. No click occurred."
+      ],
+      "usage": [
+        {
+          "input_tokens": 116252,
+          "cached_input_tokens": 114176,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 259,
+          "reasoning_output_tokens": 51
+        }
+      ],
+      "mcp_calls": 1,
+      "instruction_reads": [],
+      "tools_used": [
+        "agent_message",
+        "mcp_tool_call"
+      ],
+      "tool_results": [
+        {
+          "id": "item_1",
+          "type": "mcp_tool_call",
+          "server": "decision_e2e",
+          "tool": "sage_image_check",
+          "arguments": {
+            "image_path": "example.png",
+            "permission_granted": true,
+            "target": "CONTINUE"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"skill\": \"screenshot-action-check\", \"provider\": \"sage\", \"mode\": \"live\", \"requested_model\": \"levanto-sage-2\", \"executed_action\": false, \"result\": {\"action\": \"recommend\", \"choice\": \"visible\", \"reasons\": [\"bounded_recommendation\"], \"selected_probability\": 0.9996805880548546, \"provider_confidence\": null}, \"source\": \"live\", \"response\": {\"model\": \"levanto-sage-2\", \"answers\": {\"decision\": {\"kind\": \"choice\", \"status\": \"answered\", \"native_result\": {\"chosen\": \"visible\", \"probability\": 0.9996805880548546, \"probabilities\": [{\"option\": \"visible\", \"probability\": 0.9996805880548546}, {\"option\": \"not_visible\", \"probability\": 0.00019797392985761142}, {\"option\": \"review\", \"probability\": 0.00012143801528770738}]}, \"meta\": {\"model\": \"levanto-sage-2\", \"compute_mode\": \"fanout\", \"usage\": null, \"reasoning\": {\"fired\": false, \"ran\": false, \"finished\": null, \"tokens\": null, \"margin\": -16.346, \"limited\": null}}, \"choice\": \"visible\", \"probability\": 0.9996805880548546, \"probabilities\": {\"visible\": 0.9996805880548546, \"not_visible\": 0.00019797392985761142, \"review\": 0.00012143801528770738}, \"confidence\": null}}, \"usage\": {\"billed_input_tokens\": 458, \"rendered_tokens\": 265, \"image_count\": 1, \"image_tokens\": 193, \"input_tokens\": 265, \"output_tokens\": 0}, \"raw_response\": {\"results\": [{\"answers\": [{\"ok\": true, \"result\": {\"id\": \"decision\", \"kind\": \"choice\", \"result\": {\"chosen\": \"visible\", \"probability\": 0.9996805880548546, \"probabilities\": [{\"option\": \"visible\", \"probability\": 0.9996805880548546}, {\"option\": \"not_visible\", \"probability\": 0.00019797392985761142}, {\"option\": \"review\", \"probability\": 0.00012143801528770738}]}, \"meta\": {\"model\": \"levanto-sage-2\", \"compute_mode\": \"fanout\", \"usage\": null, \"reasoning\": {\"fired\": false, \"ran\": false, \"finished\": null, \"tokens\": null, \"margin\": -16.346, \"limited\": null}}, \"grounding_meta\": null}, \"error\": null}]}], \"meta\": {\"model\": \"levanto-sage-2\", \"request_count\": 1, \"question_count\": 1, \"latency_ms\": 831.9, \"usage\": {\"billed_input_tokens\": 458, \"rendered_tokens\": 265, \"image_count\": 1, \"image_tokens\": 193, \"input_tokens\": 265, \"output_tokens\": 0}}}}, \"latency_ms\": 2956.719, \"attempts\": 1, \"image\": {\"sha256\": \"58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69\", \"mime\": \"image/png\", \"width\": 512, \"height\": 384}, \"provider_connection\": \"temporary-e2e-mcp\"}"
+              }
+            ],
+            "structured_content": null
+          },
+          "error": null,
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "host": "codex",
+      "setup": "collection",
+      "turn": "offer",
+      "exit_code": 0,
+      "elapsed_seconds": 18.173,
+      "messages": [
+        "I\u2019m using the `screenshot-action-check` decision skill because this is a bounded, repeatable visibility/obstruction check. I\u2019ll inspect its requirements and the configured compatibility details before assessing the screenshot.",
+        "May I use the configured Sage `levanto-sage-v1.4` check? It would send only `example.png` pixels and the CONTINUE-button target text, make no clicks, and costs at most US$0.05. It\u2019s qualified for this repeatable screenshot check (36/36 recorded tests)."
+      ],
+      "usage": [
+        {
+          "input_tokens": 41849,
+          "cached_input_tokens": 30720,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 436,
+          "reasoning_output_tokens": 192
+        }
+      ],
+      "mcp_calls": 0,
+      "instruction_reads": [
+        "/bin/zsh -lc \"sed -n '1,240p' .agents/skills/decision-models-skills/skills/screenshot-action-check/SKILL.md && sed -n '1,240p' .agents/skills/decision-models-skills/skills/screenshot-action-check/COMPATIBILITY.md\""
+      ],
+      "tools_used": [
+        "agent_message",
+        "command_execution",
+        "error"
+      ],
+      "tool_results": []
+    },
+    {
+      "host": "codex",
+      "setup": "collection",
+      "turn": "decline",
+      "exit_code": 0,
+      "elapsed_seconds": 14.288,
+      "messages": [
+        "Understood. I\u2019ll apply the skill locally with the current model only; no external call and no clicking.",
+        "`visible` \u2014 The lower-right CONTINUE button is fully within the screenshot and unobstructed. Do not click."
+      ],
+      "usage": [
+        {
+          "input_tokens": 67916,
+          "cached_input_tokens": 67072,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 211,
+          "reasoning_output_tokens": 28
+        }
+      ],
+      "mcp_calls": 0,
+      "instruction_reads": [],
+      "tools_used": [
+        "agent_message",
+        "command_execution"
+      ],
+      "tool_results": []
+    },
+    {
+      "host": "codex",
+      "setup": "collection",
+      "turn": "approve",
+      "exit_code": 0,
+      "elapsed_seconds": 36.895,
+      "messages": [
+        "I\u2019ll use `decision-models-skills` to route the request, then follow the selected screenshot workflow. Your approval covers one Sage `levanto-sage-2` call using only `example.png` and the CONTINUE visibility question, capped at US$0.05; no clicking. This run will be reported only as a new-model smoke check.",
+        "The entry skill routes this to `screenshot-action-check`. Its historical \u201cWorking\u201d evidence is limited to `levanto-sage-v1.4`, so I\u2019m treating the authorized `levanto-sage-2` invocation strictly as a smoke check and will apply the workflow\u2019s 0.80 native-probability gate.",
+        "`screenshot-action-check` smoke check failed: Sage resolved an unexpected model instead of authorized `levanto-sage-2`. No valid recommendation or native selected probability was returned. I did not retry or click anything."
+      ],
+      "usage": [
+        {
+          "input_tokens": 168070,
+          "cached_input_tokens": 131968,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 869,
+          "reasoning_output_tokens": 218
+        }
+      ],
+      "mcp_calls": 1,
+      "instruction_reads": [
+        "/bin/zsh -lc \"sed -n '1,260p' .agents/skills/decision-models-skills/SKILL.md && if [ -f .agents/skills/decision-models-skills/COMPATIBILITY.md ]; then sed -n '1,260p' .agents/skills/decision-models-skills/COMPATIBILITY.md; fi\"",
+        "/bin/zsh -lc \"rg -n -C 4 'screenshot-action-check' .agents/skills/decision-models-skills/skills/catalog.json && sed -n '1,260p' .agents/skills/decision-models-skills/skills/screenshot-action-check/SKILL.md && sed -n '1,320p' .agents/skills/decision-models-skills/skills/screenshot-action-check/COMPATIBILITY.md\""
+      ],
+      "tools_used": [
+        "agent_message",
+        "command_execution",
+        "error",
+        "mcp_tool_call"
+      ],
+      "tool_results": [
+        {
+          "id": "item_5",
+          "type": "mcp_tool_call",
+          "server": "decision_e2e",
+          "tool": "sage_image_check",
+          "arguments": {
+            "image_path": "example.png",
+            "permission_granted": true,
+            "target": "CONTINUE"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "Sage response resolved an unexpected model"
+              }
+            ],
+            "structured_content": null
+          },
+          "error": null,
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "host": "codex",
+      "setup": "collection",
+      "turn": "approve-allowlist",
+      "exit_code": 0,
+      "elapsed_seconds": 32.319,
+      "messages": [
+        "I\u2019ll route this through `decision-models-skills`, follow the selected screenshot workflow, and make one allowlisted Sage call. Only `example.png` and target `CONTINUE` will be sent; either `levanto-sage-v1.4` or `levanto-sage-2` is acceptable, capped at US$0.05. I\u2019ll report the returned model without transferring any compatibility label, and nothing will be clicked.",
+        "Routing selected `screenshot-action-check`. I\u2019m now making the single authorized allowlist call and will apply its native selected-probability threshold of 0.80 exactly as specified.",
+        "`screenshot-action-check` \u2014 `visible` (native probability: `1.0`).\n\nReturned model: `levanto-sage-v1.4`. Smoke-check result only; no compatibility label transferred and no click performed."
+      ],
+      "usage": [
+        {
+          "input_tokens": 158338,
+          "cached_input_tokens": 152064,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 661,
+          "reasoning_output_tokens": 132
+        }
+      ],
+      "mcp_calls": 1,
+      "instruction_reads": [
+        "/bin/zsh -lc \"sed -n '1,280p' .agents/skills/decision-models-skills/SKILL.md && rg -n -C 4 'screenshot-action-check' .agents/skills/decision-models-skills/skills/catalog.json && sed -n '1,300p' .agents/skills/decision-models-skills/skills/screenshot-action-check/SKILL.md && sed -n '1,360p' .agents/skills/decision-models-skills/skills/screenshot-action-check/COMPATIBILITY.md\""
+      ],
+      "tools_used": [
+        "agent_message",
+        "command_execution",
+        "mcp_tool_call"
+      ],
+      "tool_results": [
+        {
+          "id": "item_3",
+          "type": "mcp_tool_call",
+          "server": "decision_e2e",
+          "tool": "sage_image_check",
+          "arguments": {
+            "image_path": "example.png",
+            "permission_granted": true,
+            "target": "CONTINUE"
+          },
+          "result": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"skill\": \"screenshot-action-check\", \"provider\": \"sage\", \"mode\": \"live\", \"requested_model\": \"sage-server-selected\", \"executed_action\": false, \"result\": {\"action\": \"recommend\", \"choice\": \"visible\", \"reasons\": [\"bounded_recommendation\"], \"selected_probability\": 1.0, \"provider_confidence\": null}, \"source\": \"live\", \"response\": {\"model\": \"levanto-sage-v1.4\", \"answers\": {\"decision\": {\"kind\": \"choice\", \"status\": \"answered\", \"native_result\": {\"chosen\": \"visible\", \"probability\": 1.0, \"probabilities\": [{\"option\": \"visible\", \"probability\": 1.0}, {\"option\": \"not_visible\", \"probability\": 0.0}, {\"option\": \"review\", \"probability\": 0.0}]}, \"meta\": {\"model\": \"levanto-sage-v1.4\", \"compute_mode\": \"fanout\", \"usage\": null, \"reasoning\": {\"fired\": false, \"ran\": false, \"finished\": null, \"tokens\": null, \"margin\": -15.759, \"limited\": null}}, \"choice\": \"visible\", \"probability\": 1.0, \"probabilities\": {\"visible\": 1.0, \"not_visible\": 0.0, \"review\": 0.0}, \"confidence\": null}}, \"usage\": {\"billed_input_tokens\": 458, \"rendered_tokens\": 265, \"image_count\": 1, \"image_tokens\": 193, \"input_tokens\": 265, \"output_tokens\": 0}, \"raw_response\": {\"results\": [{\"answers\": [{\"ok\": true, \"result\": {\"id\": \"decision\", \"kind\": \"choice\", \"result\": {\"chosen\": \"visible\", \"probability\": 1.0, \"probabilities\": [{\"option\": \"visible\", \"probability\": 1.0}, {\"option\": \"not_visible\", \"probability\": 0.0}, {\"option\": \"review\", \"probability\": 0.0}]}, \"meta\": {\"model\": \"levanto-sage-v1.4\", \"compute_mode\": \"fanout\", \"usage\": null, \"reasoning\": {\"fired\": false, \"ran\": false, \"finished\": null, \"tokens\": null, \"margin\": -15.759, \"limited\": null}}, \"grounding_meta\": null}, \"error\": null}]}], \"meta\": {\"model\": \"levanto-sage-v1.4\", \"request_count\": 1, \"question_count\": 1, \"latency_ms\": 172.3, \"usage\": {\"billed_input_tokens\": 458, \"rendered_tokens\": 265, \"image_count\": 1, \"image_tokens\": 193, \"input_tokens\": 265, \"output_tokens\": 0}}}}, \"latency_ms\": 1907.487, \"attempts\": 1, \"image\": {\"sha256\": \"58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69\", \"mime\": \"image/png\", \"width\": 512, \"height\": 384}, \"provider_connection\": \"temporary-e2e-mcp\"}"
+              }
+            ],
+            "structured_content": null
+          },
+          "error": null,
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "host": "claude",
+      "setup": "individual",
+      "turn": "offer",
+      "exit_code": 1,
+      "elapsed_seconds": 6.038,
+      "messages": [
+        "Failed to authenticate. API Error: 401 OAuth access token has been revoked."
+      ],
+      "usage": [
+        {
+          "total_cost_usd": 0,
+          "usage": {
+            "input_tokens": 0,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "output_tokens": 0,
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 0,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "",
+            "iterations": [],
+            "speed": "standard"
+          },
+          "modelUsage": {},
+          "is_error": true,
+          "subtype": "success"
+        }
+      ]
+    }
+  ],
+  "provider_receipts": [
+    {
+      "event": "tool_call_attempt",
+      "arguments": {
+        "image_path": "<temporary-e2e-project>/codex-individual/example.png",
+        "permission_granted": true,
+        "target": "Is the CONTINUE button near the lower-right of the checkout panel fully visible and unobstructed?"
+      },
+      "project": "codex-individual",
+      "time": "2026-10-28T06:52:48.263997+00:00"
+    },
+    {
+      "event": "tool_call_attempt",
+      "arguments": {
+        "image_path": "example.png",
+        "permission_granted": true,
+        "target": "CONTINUE"
+      },
+      "project": "codex-individual",
+      "time": "2026-10-28T06:53:42.396987+00:00"
+    },
+    {
+      "event": "provider_dispatch",
+      "provider": "sage",
+      "reserved_usd": 0.05,
+      "question_ids": [
+        "decision"
+      ],
+      "project": "codex-individual",
+      "time": "2026-10-28T06:53:42.399779+00:00"
+    },
+    {
+      "event": "provider_response",
+      "provider": "sage",
+      "raw_response": {
+        "results": [
+          {
+            "answers": [
+              {
+                "ok": true,
+                "result": {
+                  "id": "decision",
+                  "kind": "choice",
+                  "result": {
+                    "chosen": "visible",
+                    "probability": 0.9996805880548546,
+                    "probabilities": [
+                      {
+                        "option": "visible",
+                        "probability": 0.9996805880548546
+                      },
+                      {
+                        "option": "not_visible",
+                        "probability": 0.00019797392985761142
+                      },
+                      {
+                        "option": "review",
+                        "probability": 0.00012143801528770738
+                      }
+                    ]
+                  },
+                  "meta": {
+                    "model": "levanto-sage-2",
+                    "compute_mode": "fanout",
+                    "usage": null,
+                    "reasoning": {
+                      "fired": false,
+                      "ran": false,
+                      "finished": null,
+                      "tokens": null,
+                      "margin": -16.346,
+                      "limited": null
+                    }
+                  },
+                  "grounding_meta": null
+                },
+                "error": null
+              }
+            ]
+          }
+        ],
+        "meta": {
+          "model": "levanto-sage-2",
+          "request_count": 1,
+          "question_count": 1,
+          "latency_ms": 183.4,
+          "usage": {
+            "billed_input_tokens": 458,
+            "rendered_tokens": 265,
+            "image_count": 1,
+            "image_tokens": 193,
+            "input_tokens": 265,
+            "output_tokens": 0
+          }
+        }
+      },
+      "project": "codex-individual",
+      "time": "2026-10-28T06:53:44.050103+00:00"
+    },
+    {
+      "event": "provider_error",
+      "code": "model_mismatch",
+      "message": "Sage response resolved an unexpected model",
+      "reserved_usd_held": 0.05,
+      "project": "codex-individual",
+      "time": "2026-10-28T06:53:44.050560+00:00"
+    },
+    {
+      "event": "tool_call_attempt",
+      "arguments": {
+        "image_path": "example.png",
+        "permission_granted": true,
+        "target": "CONTINUE"
+      },
+      "project": "codex-individual",
+      "time": "2026-10-28T06:55:01.309967+00:00"
+    },
+    {
+      "event": "provider_dispatch",
+      "provider": "sage",
+      "reserved_usd": 0.05,
+      "question_ids": [
+        "decision"
+      ],
+      "project": "codex-individual",
+      "time": "2026-10-28T06:55:01.314860+00:00"
+    },
+    {
+      "event": "provider_response",
+      "provider": "sage",
+      "raw_response": {
+        "results": [
+          {
+            "answers": [
+              {
+                "ok": true,
+                "result": {
+                  "id": "decision",
+                  "kind": "choice",
+                  "result": {
+                    "chosen": "visible",
+                    "probability": 0.9996805880548546,
+                    "probabilities": [
+                      {
+                        "option": "visible",
+                        "probability": 0.9996805880548546
+                      },
+                      {
+                        "option": "not_visible",
+                        "probability": 0.00019797392985761142
+                      },
+                      {
+                        "option": "review",
+                        "probability": 0.00012143801528770738
+                      }
+                    ]
+                  },
+                  "meta": {
+                    "model": "levanto-sage-2",
+                    "compute_mode": "fanout",
+                    "usage": null,
+                    "reasoning": {
+                      "fired": false,
+                      "ran": false,
+                      "finished": null,
+                      "tokens": null,
+                      "margin": -16.346,
+                      "limited": null
+                    }
+                  },
+                  "grounding_meta": null
+                },
+                "error": null
+              }
+            ]
+          }
+        ],
+        "meta": {
+          "model": "levanto-sage-2",
+          "request_count": 1,
+          "question_count": 1,
+          "latency_ms": 831.9,
+          "usage": {
+            "billed_input_tokens": 458,
+            "rendered_tokens": 265,
+            "image_count": 1,
+            "image_tokens": 193,
+            "input_tokens": 265,
+            "output_tokens": 0
+          }
+        }
+      },
+      "project": "codex-individual",
+      "time": "2026-10-28T06:55:04.270483+00:00"
+    },
+    {
+      "event": "assessment",
+      "result": {
+        "skill": "screenshot-action-check",
+        "provider": "sage",
+        "mode": "live",
+        "requested_model": "levanto-sage-2",
+        "executed_action": false,
+        "result": {
+          "action": "recommend",
+          "choice": "visible",
+          "reasons": [
+            "bounded_recommendation"
+          ],
+          "selected_probability": 0.9996805880548546,
+          "provider_confidence": null
+        },
+        "source": "live",
+        "response": {
+          "model": "levanto-sage-2",
+          "answers": {
+            "decision": {
+              "kind": "choice",
+              "status": "answered",
+              "native_result": {
+                "chosen": "visible",
+                "probability": 0.9996805880548546,
+                "probabilities": [
+                  {
+                    "option": "visible",
+                    "probability": 0.9996805880548546
+                  },
+                  {
+                    "option": "not_visible",
+                    "probability": 0.00019797392985761142
+                  },
+                  {
+                    "option": "review",
+                    "probability": 0.00012143801528770738
+                  }
+                ]
+              },
+              "meta": {
+                "model": "levanto-sage-2",
+                "compute_mode": "fanout",
+                "usage": null,
+                "reasoning": {
+                  "fired": false,
+                  "ran": false,
+                  "finished": null,
+                  "tokens": null,
+                  "margin": -16.346,
+                  "limited": null
+                }
+              },
+              "choice": "visible",
+              "probability": 0.9996805880548546,
+              "probabilities": {
+                "visible": 0.9996805880548546,
+                "not_visible": 0.00019797392985761142,
+                "review": 0.00012143801528770738
+              },
+              "confidence": null
+            }
+          },
+          "usage": {
+            "billed_input_tokens": 458,
+            "rendered_tokens": 265,
+            "image_count": 1,
+            "image_tokens": 193,
+            "input_tokens": 265,
+            "output_tokens": 0
+          },
+          "raw_response": {
+            "results": [
+              {
+                "answers": [
+                  {
+                    "ok": true,
+                    "result": {
+                      "id": "decision",
+                      "kind": "choice",
+                      "result": {
+                        "chosen": "visible",
+                        "probability": 0.9996805880548546,
+                        "probabilities": [
+                          {
+                            "option": "visible",
+                            "probability": 0.9996805880548546
+                          },
+                          {
+                            "option": "not_visible",
+                            "probability": 0.00019797392985761142
+                          },
+                          {
+                            "option": "review",
+                            "probability": 0.00012143801528770738
+                          }
+                        ]
+                      },
+                      "meta": {
+                        "model": "levanto-sage-2",
+                        "compute_mode": "fanout",
+                        "usage": null,
+                        "reasoning": {
+                          "fired": false,
+                          "ran": false,
+                          "finished": null,
+                          "tokens": null,
+                          "margin": -16.346,
+                          "limited": null
+                        }
+                      },
+                      "grounding_meta": null
+                    },
+                    "error": null
+                  }
+                ]
+              }
+            ],
+            "meta": {
+              "model": "levanto-sage-2",
+              "request_count": 1,
+              "question_count": 1,
+              "latency_ms": 831.9,
+              "usage": {
+                "billed_input_tokens": 458,
+                "rendered_tokens": 265,
+                "image_count": 1,
+                "image_tokens": 193,
+                "input_tokens": 265,
+                "output_tokens": 0
+              }
+            }
+          }
+        },
+        "latency_ms": 2956.719,
+        "attempts": 1,
+        "image": {
+          "sha256": "58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69",
+          "mime": "image/png",
+          "width": 512,
+          "height": 384
+        },
+        "provider_connection": "temporary-e2e-mcp"
+      },
+      "elapsed_ms": 2960.246,
+      "project": "codex-individual",
+      "time": "2026-10-28T06:55:04.271537+00:00"
+    },
+    {
+      "event": "tool_call_attempt",
+      "arguments": {
+        "image_path": "example.png",
+        "permission_granted": true,
+        "target": "CONTINUE"
+      },
+      "project": "codex-collection",
+      "time": "2026-10-28T06:56:15.331861+00:00"
+    },
+    {
+      "event": "provider_dispatch",
+      "provider": "sage",
+      "reserved_usd": 0.05,
+      "question_ids": [
+        "decision"
+      ],
+      "project": "codex-collection",
+      "time": "2026-10-28T06:56:15.335999+00:00"
+    },
+    {
+      "event": "provider_response",
+      "provider": "sage",
+      "raw_response": {
+        "results": [
+          {
+            "answers": [
+              {
+                "ok": true,
+                "result": {
+                  "id": "decision",
+                  "kind": "choice",
+                  "result": {
+                    "chosen": "visible",
+                    "probability": 1.0,
+                    "probabilities": [
+                      {
+                        "option": "visible",
+                        "probability": 1.0
+                      },
+                      {
+                        "option": "not_visible",
+                        "probability": 0.0
+                      },
+                      {
+                        "option": "review",
+                        "probability": 0.0
+                      }
+                    ]
+                  },
+                  "meta": {
+                    "model": "levanto-sage-v1.4",
+                    "compute_mode": "fanout",
+                    "usage": null,
+                    "reasoning": {
+                      "fired": false,
+                      "ran": false,
+                      "finished": null,
+                      "tokens": null,
+                      "margin": -15.759,
+                      "limited": null
+                    }
+                  },
+                  "grounding_meta": null
+                },
+                "error": null
+              }
+            ]
+          }
+        ],
+        "meta": {
+          "model": "levanto-sage-v1.4",
+          "request_count": 1,
+          "question_count": 1,
+          "latency_ms": 155.4,
+          "usage": {
+            "billed_input_tokens": 458,
+            "rendered_tokens": 265,
+            "image_count": 1,
+            "image_tokens": 193,
+            "input_tokens": 265,
+            "output_tokens": 0
+          }
+        }
+      },
+      "project": "codex-collection",
+      "time": "2026-10-28T06:56:17.067191+00:00"
+    },
+    {
+      "event": "provider_error",
+      "code": "model_mismatch",
+      "message": "Sage response resolved an unexpected model",
+      "reserved_usd_held": 0.05,
+      "project": "codex-collection",
+      "time": "2026-10-28T06:56:17.068054+00:00"
+    },
+    {
+      "event": "tool_call_attempt",
+      "arguments": {
+        "image_path": "example.png",
+        "permission_granted": true,
+        "target": "CONTINUE"
+      },
+      "project": "codex-collection",
+      "time": "2026-10-28T06:59:16.697769+00:00"
+    },
+    {
+      "event": "provider_dispatch",
+      "provider": "sage",
+      "reserved_usd": 0.05,
+      "question_ids": [
+        "decision"
+      ],
+      "project": "codex-collection",
+      "time": "2026-10-28T06:59:16.700292+00:00"
+    },
+    {
+      "event": "provider_response",
+      "provider": "sage",
+      "raw_response": {
+        "results": [
+          {
+            "answers": [
+              {
+                "ok": true,
+                "result": {
+                  "id": "decision",
+                  "kind": "choice",
+                  "result": {
+                    "chosen": "visible",
+                    "probability": 1.0,
+                    "probabilities": [
+                      {
+                        "option": "visible",
+                        "probability": 1.0
+                      },
+                      {
+                        "option": "not_visible",
+                        "probability": 0.0
+                      },
+                      {
+                        "option": "review",
+                        "probability": 0.0
+                      }
+                    ]
+                  },
+                  "meta": {
+                    "model": "levanto-sage-v1.4",
+                    "compute_mode": "fanout",
+                    "usage": null,
+                    "reasoning": {
+                      "fired": false,
+                      "ran": false,
+                      "finished": null,
+                      "tokens": null,
+                      "margin": -15.759,
+                      "limited": null
+                    }
+                  },
+                  "grounding_meta": null
+                },
+                "error": null
+              }
+            ]
+          }
+        ],
+        "meta": {
+          "model": "levanto-sage-v1.4",
+          "request_count": 1,
+          "question_count": 1,
+          "latency_ms": 172.3,
+          "usage": {
+            "billed_input_tokens": 458,
+            "rendered_tokens": 265,
+            "image_count": 1,
+            "image_tokens": 193,
+            "input_tokens": 265,
+            "output_tokens": 0
+          }
+        }
+      },
+      "project": "codex-collection",
+      "time": "2026-10-28T06:59:18.606398+00:00"
+    },
+    {
+      "event": "assessment",
+      "result": {
+        "skill": "screenshot-action-check",
+        "provider": "sage",
+        "mode": "live",
+        "requested_model": "sage-server-selected",
+        "executed_action": false,
+        "result": {
+          "action": "recommend",
+          "choice": "visible",
+          "reasons": [
+            "bounded_recommendation"
+          ],
+          "selected_probability": 1.0,
+          "provider_confidence": null
+        },
+        "source": "live",
+        "response": {
+          "model": "levanto-sage-v1.4",
+          "answers": {
+            "decision": {
+              "kind": "choice",
+              "status": "answered",
+              "native_result": {
+                "chosen": "visible",
+                "probability": 1.0,
+                "probabilities": [
+                  {
+                    "option": "visible",
+                    "probability": 1.0
+                  },
+                  {
+                    "option": "not_visible",
+                    "probability": 0.0
+                  },
+                  {
+                    "option": "review",
+                    "probability": 0.0
+                  }
+                ]
+              },
+              "meta": {
+                "model": "levanto-sage-v1.4",
+                "compute_mode": "fanout",
+                "usage": null,
+                "reasoning": {
+                  "fired": false,
+                  "ran": false,
+                  "finished": null,
+                  "tokens": null,
+                  "margin": -15.759,
+                  "limited": null
+                }
+              },
+              "choice": "visible",
+              "probability": 1.0,
+              "probabilities": {
+                "visible": 1.0,
+                "not_visible": 0.0,
+                "review": 0.0
+              },
+              "confidence": null
+            }
+          },
+          "usage": {
+            "billed_input_tokens": 458,
+            "rendered_tokens": 265,
+            "image_count": 1,
+            "image_tokens": 193,
+            "input_tokens": 265,
+            "output_tokens": 0
+          },
+          "raw_response": {
+            "results": [
+              {
+                "answers": [
+                  {
+                    "ok": true,
+                    "result": {
+                      "id": "decision",
+                      "kind": "choice",
+                      "result": {
+                        "chosen": "visible",
+                        "probability": 1.0,
+                        "probabilities": [
+                          {
+                            "option": "visible",
+                            "probability": 1.0
+                          },
+                          {
+                            "option": "not_visible",
+                            "probability": 0.0
+                          },
+                          {
+                            "option": "review",
+                            "probability": 0.0
+                          }
+                        ]
+                      },
+                      "meta": {
+                        "model": "levanto-sage-v1.4",
+                        "compute_mode": "fanout",
+                        "usage": null,
+                        "reasoning": {
+                          "fired": false,
+                          "ran": false,
+                          "finished": null,
+                          "tokens": null,
+                          "margin": -15.759,
+                          "limited": null
+                        }
+                      },
+                      "grounding_meta": null
+                    },
+                    "error": null
+                  }
+                ]
+              }
+            ],
+            "meta": {
+              "model": "levanto-sage-v1.4",
+              "request_count": 1,
+              "question_count": 1,
+              "latency_ms": 172.3,
+              "usage": {
+                "billed_input_tokens": 458,
+                "rendered_tokens": 265,
+                "image_count": 1,
+                "image_tokens": 193,
+                "input_tokens": 265,
+                "output_tokens": 0
+              }
+            }
+          }
+        },
+        "latency_ms": 1907.487,
+        "attempts": 1,
+        "image": {
+          "sha256": "58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69",
+          "mime": "image/png",
+          "width": 512,
+          "height": 384
+        },
+        "provider_connection": "temporary-e2e-mcp"
+      },
+      "elapsed_ms": 1908.468,
+      "project": "codex-collection",
+      "time": "2026-10-28T06:59:18.607723+00:00"
+    }
+  ],
+  "rates": {
+    "source": "https://docs.levanto.ai/pricing",
+    "checked_at": "2026-10-28",
+    "input_usd_per_million": 0.05,
+    "output_usd_per_million": 10,
+    "output_floor_per_answer": 1,
+    "reasoning": "off",
+    "grounding": false
+  },
+  "budget": {
+    "limit_usd": 5,
+    "historical_conservative_bound_usd": 0.414624036,
+    "native_attempts": 4,
+    "token_price_estimated_usd": 0.00013160000000000003,
+    "conservative_total_bound_usd": 0.414887236,
+    "unknown_charge_timeouts": 0,
+    "agent_client_billing": "Existing subscriptions; client token usage retained above. No separate per-run invoice amount available."
+  },
+  "offline": {
+    "310": [
+      "collection routing entrypoint and synchronized catalog",
+      "27 self-contained instruction folders",
+      "unittest suite",
+      "49 credential-free reference-implementation demos from copied inputs"
+    ],
+    "312": [
+      "collection routing entrypoint and synchronized catalog",
+      "27 self-contained instruction folders",
+      "unittest suite",
+      "49 credential-free reference-implementation demos from copied inputs"
+    ]
+  },
+  "limitations": [
+    "One original synthetic PNG, not general image accuracy.",
+    "Sage 2 has no 12-case x 3-run qualification from these smoke tests.",
+    "Claude discovery/consent/call flow remains unverified until sign-in is refreshed.",
+    "Initial launcher needed stdin closure; one tool argument rejection was fixed before dispatch. All model mismatches and actual calls are retained."
+  ]
+}

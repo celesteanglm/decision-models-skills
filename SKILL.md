@@ -7,7 +7,9 @@ description: Route a bounded decision, screening, ranking, or evaluation task to
 
 This entrypoint is optional. Use an installed individual skill directly when it is already known; it needs neither this entrypoint nor the collection catalog. Use this entrypoint when the user wants a decision from this collection without choosing a skill. The collection must be accessible beside this file. It needs no Python package or separate command.
 
-If persistent host instructions ask for a proactive suggestion, select a candidate and read its instructions and compatibility evidence, then offer it under those instructions. A suggestion is not acceptance: wait before a new external call unless the same data, backend, scope, and budget were already explicitly authorized. Honor a decline for the task and any processing denial. When the user requests the assessment itself, follow the procedure below.
+If persistent host instructions ask for a proactive suggestion, select a candidate and read its instructions and compatibility evidence, then offer it under those instructions. Stop the offer turn without invoking an external-model tool; wait for a separate approval unless the same data, backend, scope, and budget were already explicitly authorized. Permission to inspect an image or process text locally, tool availability, client tool permissions, and a configured cap are not acceptance of external delegation. Honor a decline for the task and any processing denial. Do not suggest bypassing a consent check. When the user requests the assessment itself, follow the procedure below.
+
+Declining external delegation does not discard the selected skill's scope or output rules. If local processing remains permitted, follow that skill with the current model; otherwise stop on the processing denial.
 
 ## Select and follow a skill
 

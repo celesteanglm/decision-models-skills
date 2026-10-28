@@ -96,7 +96,8 @@ consider whether an available decision skill and configured decision-model
 tool would help, especially for repeated work. Offer only when useful.
 Use an installed individual skill directly. The decision-models-skills entry
 skill is optional; use it to choose only if it is available and needed.
-Read the candidate SKILL.md and COMPATIBILITY.md before proposing it.
+Identify the installed skill by its SKILL.md name, not an API tool name.
+Read its SKILL.md and COMPATIBILITY.md before offering or assessing the task.
 Name the skill, configured backend/model, benefit, data to be sent, and an
 estimated cost or proposed spending cap. Disclose unknown cost or setup.
 Do not invent a connection, metric, cost, or Working label. Qualification
@@ -104,11 +105,18 @@ does not transfer to a different model or integration.
 Ask once per task or batch before a new external model call. Existing explicit
 authorization for the same data, backend, scope, and budget is sufficient;
 do not ask again for each item. Wait for an answer; silence is not consent.
+Permission to inspect an image or process text with the current model is not
+permission to send it to another model. Installed tools, API keys, tool
+permission settings, and a configured spending cap are not user acceptance.
+On an offer turn, describe the proposed check and stop without invoking the
+external-model tool. Wait for a separate approval unless prior scoped
+authorization already covers it. Do not suggest bypassing a consent check.
 After approval, follow the selected SKILL.md with the chosen configured tool.
 Wait for its actual response before reporting a model result. Report failures
 or missing evidence using the skill's review or error behavior; do not guess.
-If declined, do not offer again for that task; continue in the current model
-only where processing is permitted. An explicit processing denial stops it.
+If declined, do not offer again for that task. Follow the selected SKILL.md
+with the current model, preserving its output and scope limits, only where
+processing is permitted. An explicit processing denial stops it.
 If a matching skill is available but no external tool is configured, use the
 skill with the current model when appropriate. If no skill matches, continue
 normal work without forcing a route. Do not install or call an unconfigured
@@ -123,6 +131,8 @@ For example, with a configured backend the agent might ask: "These tickets fit t
 Start a fresh session and ask the agent which skill and instruction file it can see. Try a small, synthetic task and decline the first offer: it should make no external call and continue normally. Then approve a scoped test with your configured tool and budget. Credentials belong in the tool's secure configuration or environment, not in this rule or prompts. See [provider setup](#connect-a-provider-once).
 
 These are best-effort agent instructions, not a background monitor or guaranteed detection mechanism. No hook, scheduled task, or router is required. Without a configured external tool, you can still use any skill with the agent's current model.
+
+Require client approval for external-model calls, or enforce scoped consent in your application's tool handler. Instructions alone are not an approval boundary: live Claude Code tests sometimes attempted a model tool before the conversational offer, and the test backend blocked those attempts before sending data. Tool availability and a configured API key must not bypass that check. Keep provider credentials in the backend connection, outside prompts and agent-readable files.
 
 ### Try it with a configured model
 
@@ -309,7 +319,7 @@ With the proactive rule installed, you can also describe the repeating screensho
 
 The recorded 12-case reference qualification used Sage v1.4 with PNG fixtures. Live checks on 2026-10-28 returned both `levanto-sage-v1.4` and `levanto-sage-2` from the public endpoint. Its image request schema has no model selector. A pinned adapter correctly rejects a different resolved model. The example above explicitly permits those two versions and reports the actual one; a sample smoke check does not transfer the v1.4 Working label to Sage 2 or qualify other images. See the skill's compatibility page for the full recorded evaluation's scope.
 
-The [sanitized agent-to-API test receipt](https://github.com/celesteanglm/decision-models-skills/blob/7db7b4c4af8f8779aedef379dc643801f8c13b16/agent-image-e2e-20261028.json) records actual Codex CLI 0.152.1 sessions for both installation paths: discovery, a proactive offer, decline with no external call, and an approved Sage image result. The individual-skill check returned `visible` from Sage 2 with native selected probability `0.9996805881`; the entry-skill check returned `visible` from v1.4 with `1.0`. Earlier model-mismatch failures are retained. Claude Code's live flow remains unverified: its test request received a sign-in rejection before inference. These small checks establish the observed connection flow, not general image accuracy or calibrated confidence.
+The [agent-client workflow checks](#agent-client-workflow-checks) record real Codex and Claude Code calls for this image, including successful approved calls and observed suggestion/fallback limitations. They do not qualify new models or establish general image accuracy or calibrated confidence.
 
 JPEG and WebP handling has offline contract tests; those formats have no live qualification here. Jev/OpenRouter and Decisions API have no image qualification in this repository. Text-only agents must report that they cannot inspect the image.
 
@@ -354,6 +364,14 @@ Those historical receipts do not benchmark the revised instruction-only skills o
 The unified directory layout was checked offline against 936 frozen provider-request and demo-policy contracts, plus 2,808 replays of archived native responses. Each compatibility page links the migration audit. This preserves the recorded reference results across naming changes; it is not a new live evaluation.
 
 The adapter and error-handling update also matched 948 frozen request and policy checks, 2,598 archived native responses, and 246 deterministic outcomes against the earlier runtime. Each compatibility page links that comparison separately. New providers and model versions still need independent qualification.
+
+### Agent-client workflow checks
+
+The [Codex CLI 0.152.1 receipt](https://github.com/celesteanglm/decision-models-skills/blob/7db7b4c4af8f8779aedef379dc643801f8c13b16/agent-image-e2e-20261028.json) records both installation paths: discovery, a proactive offer, decline with no external call, and an approved Sage image result. The individual-skill check returned `visible` from Sage 2 with native selected probability `0.9996805881`; the entry-skill check returned `visible` from v1.4 with `1.0`. Earlier model-mismatch failures are retained.
+
+The [Claude Code 2.1.178 / Sonnet 4.6 receipt](https://github.com/celesteanglm/decision-models-skills/blob/14677b89c50bac7e22b29144078023c3165b21fd/agent-image-e2e-20261028-claude.json) records successful explicitly approved API calls for both installation paths, with the same native choices and probabilities. **The overall Claude instruction workflow is Partial:** offers were inconsistent across development runs, including three premature tool attempts in six reused offer cases. The backend approval guard blocked every unapproved attempt before provider dispatch. One local fallback returned a non-menu `PASS` and inferred safety beyond the skill's visibility-only scope. Validate the selected skill's output and review unsupported claims before using it downstream.
+
+The Claude harness allowed the MCP tool at the client level to test the separate backend gate; it did not test the normal per-tool UI approval flow. These are small checks on one reused synthetic PNG, not independent reliability samples, a new Working backend label, or certification of an arbitrary agent's output. Preserve the actual returned model and keep the reference implementation's qualification separate from the agent conversation.
 
 ## Maintain the reference implementation
 

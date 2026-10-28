@@ -1,0 +1,1147 @@
+{
+  "schema_version": 1,
+  "client_date": "2026-10-29",
+  "status": "Observed sample end-to-end pass",
+  "scope": "Fresh Claude collection installation, same synthetic checkout PNG, same session across offer, decline and explicit approval. Reused development fixture, not a held-out reliability or native compatibility qualification.",
+  "previous_receipts": [
+    "https://github.com/celesteanglm/decision-models-skills/blob/471c600ada2451f2fc7d871203d5f26346fb3690/agent-proactive-fallback-e2e-20261029.json",
+    "https://github.com/celesteanglm/decision-models-skills/blob/b3cc6b0f36ed41f16538dd0ad2ee9703de4128b5/agent-proactive-fallback-closure-20261029.json"
+  ],
+  "client": {
+    "version": "Claude Code 2.1.178",
+    "model": "claude-sonnet-4-6",
+    "effort": "low",
+    "same_session_all_phases": true,
+    "invocation_estimated_cost_cap_usd": 0.75,
+    "flag": "--max-budget-usd"
+  },
+  "connection": {
+    "endpoint": "https://sage.levanto.ai/decide/batch",
+    "allowed_models": [
+      "levanto-sage-v1.4",
+      "levanto-sage-2"
+    ],
+    "server_selects_model": true,
+    "per_call_cap_usd": 0.06,
+    "model_tool_arguments": {},
+    "consent_source": "trusted test controller phase, not model tool arguments",
+    "provider_credentials_in_client_environment": false,
+    "automatic_retries": false
+  },
+  "budget": {
+    "authorization": "User authorized a higher test allowance to finish this workflow.",
+    "cumulative_limit_usd": 10,
+    "prior_conservative_bound_usd": 4.829413636,
+    "preflight_conservative_bound_usd": 9.389413636,
+    "new_client_estimated_usd": 0.2105907,
+    "new_native_estimated_usd": 3.325e-05,
+    "conservative_cumulative_usd": 5.250661536,
+    "estimate_cushion": 2,
+    "notes": [
+      "Claude figures are CLI token-price estimates, not separate subscription invoices.",
+      "The client invocation cap is separate from the Sage API per-call cap and does not enforce the aggregate test budget.",
+      "Native estimates use the rates checked on 2026-10-29: input US$0.05/M, output US$10/M, at least one output token per answer; reasoning/search off.",
+      "Prior failed and budget-capped runs remain unchanged. No ambiguous paid timeout was retried."
+    ]
+  },
+  "source_artifacts": {
+    "scripts/agent_e2e.py": "eab5e76a55a33a830a75408416fd02d6306220330a43b60587ee67959117e130",
+    "tests/test_agent_e2e.py": "f9d4ab557be76e74157ff407833668af8d6d5891632afcebc9d94eaee5883959",
+    "scripts/check_agent_trace.py": "ec11a8d856020104bca4205f6ac98dcfb93c0b6a27e361c99bac5e1ef6baf70c",
+    "examples/scoped_consent.py": "86f8af73766e0a609e0361f895c186062e9f609cf0986197fea9152319dcc642"
+  },
+  "installed_artifacts": {
+    "proactive_rule_sha256": "3fd9b7246f5e5f6f1b4667c2cf5c91efd52e3f22b754dc72cdcfe0af3304a33b",
+    "collection_entry_sha256": "99399f06ffa82794b5d0a87c04200961079b80f89bcf9c44774873e90a3c9ea6",
+    "selected_skill_sha256": "0ec6685d8a1d2a538e37b1214cfe8a040168346bf13ed7fb8123aa5a5b8d539c",
+    "image_sha256": "58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69"
+  },
+  "phases": [
+    {
+      "phase": "offer",
+      "status": "passed",
+      "exit_code": 0,
+      "elapsed_seconds": 30.174,
+      "checks": [],
+      "external_attempts": 0,
+      "completed_external_tools": 0,
+      "provider_dispatches": 0,
+      "client_budget_usd": 0.75,
+      "client_estimated_usd": 0.1210077,
+      "client_usage": [
+        {
+          "type": "result",
+          "subtype": "success",
+          "is_error": false,
+          "api_error_status": null,
+          "duration_ms": 28615,
+          "duration_api_ms": 29596,
+          "ttft_ms": 7106,
+          "ttft_stream_ms": 1018,
+          "time_to_request_ms": 14,
+          "num_turns": 6,
+          "result": "The **screenshot-action-check** skill fits this task. A configured external backend is available.\n\n**Offer before assessing:**\n\nThe `screenshot-action-check` skill can assess the CONTINUE button visibility. May I send the fixed synthetic `example.png` and the CONTINUE visibility question to your configured **Sage** backend (`mcp__decision_e2e__sage_image_check`)? The server selects from an allowlist of **levanto-sage-v1.4 or levanto-sage-2** \u2014 no model is pinned. Cap: **US$0.06**, one request, no reasoning or search. No compatibility badge applies to this integration.\n\nPlease confirm before I proceed.",
+          "stop_reason": "end_turn",
+          "total_cost_usd": 0.1210077,
+          "usage": {
+            "input_tokens": 8,
+            "cache_creation_input_tokens": 14784,
+            "cache_read_input_tokens": 41019,
+            "output_tokens": 1289,
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 14784,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "iterations": [
+              {
+                "input_tokens": 1,
+                "output_tokens": 634,
+                "cache_read_input_tokens": 15179,
+                "cache_creation_input_tokens": 3332,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 3332
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "modelUsage": {
+            "claude-haiku-4-5-20251001": {
+              "inputTokens": 564,
+              "outputTokens": 15,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0,
+              "webSearchRequests": 0,
+              "costUSD": 0.000639,
+              "contextWindow": 200000,
+              "maxOutputTokens": 32000
+            },
+            "claude-sonnet-4-6": {
+              "inputTokens": 8,
+              "outputTokens": 1289,
+              "cacheReadInputTokens": 41019,
+              "cacheCreationInputTokens": 14784,
+              "webSearchRequests": 0,
+              "costUSD": 0.1203687,
+              "contextWindow": 200000,
+              "maxOutputTokens": 32000
+            }
+          },
+          "permission_denials": [],
+          "terminal_reason": "completed",
+          "fast_mode_state": "off"
+        }
+      ],
+      "final_response": "The **screenshot-action-check** skill fits this task. A configured external backend is available.\n\n**Offer before assessing:**\n\nThe `screenshot-action-check` skill can assess the CONTINUE button visibility. May I send the fixed synthetic `example.png` and the CONTINUE visibility question to your configured **Sage** backend (`mcp__decision_e2e__sage_image_check`)? The server selects from an allowlist of **levanto-sage-v1.4 or levanto-sage-2** \u2014 no model is pinned. Cap: **US$0.06**, one request, no reasoning or search. No compatibility badge applies to this integration.\n\nPlease confirm before I proceed.",
+      "tool_uses": [
+        {
+          "name": "Skill",
+          "input": {
+            "skill": "decision-models-skills",
+            "args": "screenshot-action-check"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "<temporary-project>/.claude/skills/decision-models-skills/skills/catalog.json"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "<temporary-project>/.claude/skills/decision-models-skills/skills/screenshot-action-check/SKILL.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "<temporary-project>/.claude/skills/decision-models-skills/skills/screenshot-action-check/COMPATIBILITY.md"
+          }
+        }
+      ],
+      "native_charges": [],
+      "provider_events": [
+        {
+          "event": "mcp_method",
+          "method": "initialize"
+        },
+        {
+          "event": "mcp_method",
+          "method": "tools/list"
+        }
+      ],
+      "raw_trace_sha256": "3974c71582843010ecef78c526ef2b54f84579cc05675eed16293322d9db0cb5"
+    },
+    {
+      "phase": "decline",
+      "status": "passed",
+      "exit_code": 0,
+      "elapsed_seconds": 8.394,
+      "checks": [],
+      "external_attempts": 0,
+      "completed_external_tools": 0,
+      "provider_dispatches": 0,
+      "client_budget_usd": 0.75,
+      "client_estimated_usd": 0.0681207,
+      "client_usage": [
+        {
+          "type": "result",
+          "subtype": "success",
+          "is_error": false,
+          "api_error_status": null,
+          "duration_ms": 7240,
+          "duration_api_ms": 7220,
+          "ttft_ms": 2739,
+          "ttft_stream_ms": 1991,
+          "time_to_request_ms": 14,
+          "num_turns": 2,
+          "result": "**Skill used:** `screenshot-action-check` (local assessment, current model)\n\n```json\n{\n  \"decision\": {\n    \"kind\": \"choice\",\n    \"status\": \"answered\",\n    \"choice\": \"visible\"\n  },\n  \"reason\": \"The CONTINUE button is fully inside the screenshot bounds in the lower-right area of the checkout panel. Its label text and complete button boundary are unobstructed with no overlays or clipping.\"\n}\n```",
+          "stop_reason": "end_turn",
+          "total_cost_usd": 0.0681207,
+          "usage": {
+            "input_tokens": 6,
+            "cache_creation_input_tokens": 9278,
+            "cache_read_input_tokens": 29599,
+            "output_tokens": 237,
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 9278,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "iterations": [
+              {
+                "input_tokens": 3,
+                "output_tokens": 111,
+                "cache_read_input_tokens": 19210,
+                "cache_creation_input_tokens": 457,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 457
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "modelUsage": {
+            "claude-sonnet-4-6": {
+              "inputTokens": 6,
+              "outputTokens": 237,
+              "cacheReadInputTokens": 29599,
+              "cacheCreationInputTokens": 9278,
+              "webSearchRequests": 0,
+              "costUSD": 0.0681207,
+              "contextWindow": 200000,
+              "maxOutputTokens": 32000
+            }
+          },
+          "permission_denials": [],
+          "terminal_reason": "completed",
+          "fast_mode_state": "off"
+        }
+      ],
+      "final_response": "**Skill used:** `screenshot-action-check` (local assessment, current model)\n\n```json\n{\n  \"decision\": {\n    \"kind\": \"choice\",\n    \"status\": \"answered\",\n    \"choice\": \"visible\"\n  },\n  \"reason\": \"The CONTINUE button is fully inside the screenshot bounds in the lower-right area of the checkout panel. Its label text and complete button boundary are unobstructed with no overlays or clipping.\"\n}\n```",
+      "tool_uses": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "<temporary-project>/example.png"
+          }
+        }
+      ],
+      "native_charges": [],
+      "provider_events": [
+        {
+          "event": "mcp_method",
+          "method": "initialize"
+        },
+        {
+          "event": "mcp_method",
+          "method": "tools/list"
+        }
+      ],
+      "raw_trace_sha256": "f9bcd9347f4d8b7494327a52e200ddb50e60f4d1e466e61d9731af67079720b3"
+    },
+    {
+      "phase": "approve",
+      "status": "passed",
+      "exit_code": 0,
+      "elapsed_seconds": 12.791,
+      "checks": [],
+      "external_attempts": 1,
+      "completed_external_tools": 1,
+      "provider_dispatches": 1,
+      "client_budget_usd": 0.75,
+      "client_estimated_usd": 0.021462299999999997,
+      "client_usage": [
+        {
+          "type": "result",
+          "subtype": "success",
+          "is_error": false,
+          "api_error_status": null,
+          "duration_ms": 11651,
+          "duration_api_ms": 7340,
+          "ttft_ms": 1576,
+          "ttft_stream_ms": 934,
+          "time_to_request_ms": 12,
+          "num_turns": 2,
+          "result": "**Sage result** (one call, no retry):\n\n- **Model selected by server:** `levanto-sage-v1.4`\n- **Native answer:** `visible` \u2014 probability `1.0`\n- **All option probabilities:** visible 1.0 / not_visible 0.0 / review 0.0\n- **Confidence field:** not supplied by this backend (`null`)\n- **Reasoning:** did not fire\n\n**Skill final decision** (probability gate: 1.0 \u2265 0.8 \u2192 substantive label stands):\n\n```json\n{\n  \"decision\": {\n    \"kind\": \"choice\",\n    \"status\": \"answered\",\n    \"choice\": \"visible\"\n  },\n  \"native_answer\": {\n    \"choice\": \"visible\",\n    \"probability\": 1.0\n  },\n  \"model\": \"levanto-sage-v1.4\",\n  \"reason\": \"Backend supplied no textual visual reason. Native selected-choice probability is 1.0, above the 0.8 gate.\"\n}\n```",
+          "stop_reason": "end_turn",
+          "total_cost_usd": 0.021462299999999997,
+          "usage": {
+            "input_tokens": 6,
+            "cache_creation_input_tokens": 706,
+            "cache_read_input_tokens": 39561,
+            "output_tokens": 356,
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 706,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "iterations": [
+              {
+                "input_tokens": 3,
+                "output_tokens": 254,
+                "cache_read_input_tokens": 19894,
+                "cache_creation_input_tokens": 479,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 479
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard"
+          },
+          "modelUsage": {
+            "claude-sonnet-4-6": {
+              "inputTokens": 6,
+              "outputTokens": 356,
+              "cacheReadInputTokens": 39561,
+              "cacheCreationInputTokens": 706,
+              "webSearchRequests": 0,
+              "costUSD": 0.021462299999999997,
+              "contextWindow": 200000,
+              "maxOutputTokens": 32000
+            }
+          },
+          "permission_denials": [],
+          "terminal_reason": "completed",
+          "fast_mode_state": "off"
+        }
+      ],
+      "final_response": "**Sage result** (one call, no retry):\n\n- **Model selected by server:** `levanto-sage-v1.4`\n- **Native answer:** `visible` \u2014 probability `1.0`\n- **All option probabilities:** visible 1.0 / not_visible 0.0 / review 0.0\n- **Confidence field:** not supplied by this backend (`null`)\n- **Reasoning:** did not fire\n\n**Skill final decision** (probability gate: 1.0 \u2265 0.8 \u2192 substantive label stands):\n\n```json\n{\n  \"decision\": {\n    \"kind\": \"choice\",\n    \"status\": \"answered\",\n    \"choice\": \"visible\"\n  },\n  \"native_answer\": {\n    \"choice\": \"visible\",\n    \"probability\": 1.0\n  },\n  \"model\": \"levanto-sage-v1.4\",\n  \"reason\": \"Backend supplied no textual visual reason. Native selected-choice probability is 1.0, above the 0.8 gate.\"\n}\n```",
+      "tool_uses": [
+        {
+          "name": "mcp__decision_e2e__sage_image_check",
+          "input": {}
+        }
+      ],
+      "native_charges": [
+        {
+          "kind": "token_price_estimate",
+          "usd": 3.325e-05,
+          "usage": {
+            "billed_input_tokens": 465,
+            "rendered_tokens": 272,
+            "image_count": 1,
+            "image_tokens": 193,
+            "input_tokens": 272,
+            "output_tokens": 0
+          }
+        }
+      ],
+      "provider_events": [
+        {
+          "event": "mcp_method",
+          "method": "initialize"
+        },
+        {
+          "event": "mcp_method",
+          "method": "tools/list"
+        },
+        {
+          "event": "mcp_method",
+          "method": "tools/call"
+        },
+        {
+          "event": "provider_dispatch",
+          "payload_sha256": "e361f890ea0bc6c2511ac595297bbee4a950dab054f31659afd2c7fe62414287",
+          "reserved_usd": 0.052748800000000005
+        },
+        {
+          "event": "provider_raw",
+          "response": {
+            "results": [
+              {
+                "answers": [
+                  {
+                    "ok": true,
+                    "result": {
+                      "id": "decision",
+                      "kind": "choice",
+                      "result": {
+                        "chosen": "visible",
+                        "probability": 1.0,
+                        "probabilities": [
+                          {
+                            "option": "visible",
+                            "probability": 1.0
+                          },
+                          {
+                            "option": "not_visible",
+                            "probability": 0.0
+                          },
+                          {
+                            "option": "review",
+                            "probability": 0.0
+                          }
+                        ]
+                      },
+                      "meta": {
+                        "model": "levanto-sage-v1.4",
+                        "compute_mode": "fanout",
+                        "usage": null,
+                        "reasoning": {
+                          "fired": false,
+                          "ran": false,
+                          "finished": null,
+                          "tokens": null,
+                          "margin": -15.672,
+                          "limited": null
+                        }
+                      },
+                      "grounding_meta": null
+                    },
+                    "error": null
+                  }
+                ]
+              }
+            ],
+            "meta": {
+              "model": "levanto-sage-v1.4",
+              "request_count": 1,
+              "question_count": 1,
+              "latency_ms": 3921.3,
+              "usage": {
+                "billed_input_tokens": 465,
+                "rendered_tokens": 272,
+                "image_count": 1,
+                "image_tokens": 193,
+                "input_tokens": 272,
+                "output_tokens": 0
+              }
+            }
+          }
+        },
+        {
+          "event": "provider_result",
+          "result": {
+            "skill": "screenshot-action-check",
+            "provider": "sage",
+            "mode": "live",
+            "requested_model": "sage-server-selected",
+            "executed_action": false,
+            "result": {
+              "action": "recommend",
+              "choice": "visible",
+              "reasons": [
+                "bounded_recommendation"
+              ],
+              "selected_probability": 1.0,
+              "provider_confidence": null
+            },
+            "source": "live",
+            "response": {
+              "model": "levanto-sage-v1.4",
+              "answers": {
+                "decision": {
+                  "kind": "choice",
+                  "status": "answered",
+                  "native_result": {
+                    "chosen": "visible",
+                    "probability": 1.0,
+                    "probabilities": [
+                      {
+                        "option": "visible",
+                        "probability": 1.0
+                      },
+                      {
+                        "option": "not_visible",
+                        "probability": 0.0
+                      },
+                      {
+                        "option": "review",
+                        "probability": 0.0
+                      }
+                    ]
+                  },
+                  "meta": {
+                    "model": "levanto-sage-v1.4",
+                    "compute_mode": "fanout",
+                    "usage": null,
+                    "reasoning": {
+                      "fired": false,
+                      "ran": false,
+                      "finished": null,
+                      "tokens": null,
+                      "margin": -15.672,
+                      "limited": null
+                    }
+                  },
+                  "choice": "visible",
+                  "probability": 1.0,
+                  "probabilities": {
+                    "visible": 1.0,
+                    "not_visible": 0.0,
+                    "review": 0.0
+                  },
+                  "confidence": null
+                }
+              },
+              "usage": {
+                "billed_input_tokens": 465,
+                "rendered_tokens": 272,
+                "image_count": 1,
+                "image_tokens": 193,
+                "input_tokens": 272,
+                "output_tokens": 0
+              },
+              "raw_response": {
+                "results": [
+                  {
+                    "answers": [
+                      {
+                        "ok": true,
+                        "result": {
+                          "id": "decision",
+                          "kind": "choice",
+                          "result": {
+                            "chosen": "visible",
+                            "probability": 1.0,
+                            "probabilities": [
+                              {
+                                "option": "visible",
+                                "probability": 1.0
+                              },
+                              {
+                                "option": "not_visible",
+                                "probability": 0.0
+                              },
+                              {
+                                "option": "review",
+                                "probability": 0.0
+                              }
+                            ]
+                          },
+                          "meta": {
+                            "model": "levanto-sage-v1.4",
+                            "compute_mode": "fanout",
+                            "usage": null,
+                            "reasoning": {
+                              "fired": false,
+                              "ran": false,
+                              "finished": null,
+                              "tokens": null,
+                              "margin": -15.672,
+                              "limited": null
+                            }
+                          },
+                          "grounding_meta": null
+                        },
+                        "error": null
+                      }
+                    ]
+                  }
+                ],
+                "meta": {
+                  "model": "levanto-sage-v1.4",
+                  "request_count": 1,
+                  "question_count": 1,
+                  "latency_ms": 3921.3,
+                  "usage": {
+                    "billed_input_tokens": 465,
+                    "rendered_tokens": 272,
+                    "image_count": 1,
+                    "image_tokens": 193,
+                    "input_tokens": 272,
+                    "output_tokens": 0
+                  }
+                }
+              }
+            },
+            "latency_ms": 4293.689,
+            "attempts": 1,
+            "image": {
+              "sha256": "58f691e8cda4302346be2d812536fdb53444965071966ed6e218287feb63ad69",
+              "mime": "image/png",
+              "width": 512,
+              "height": 384
+            }
+          }
+        }
+      ],
+      "raw_trace_sha256": "4abd3cbe9d2a3113e48bd71a58b9d0c550f410614106f3c17983dfd744956086"
+    }
+  ],
+  "limitations": [
+    "One successful repeated development flow is not general accuracy or reliability certification.",
+    "No new Working compatibility label is issued for the agent, connector, Sage 2, or optional router.",
+    "The normal human approval UI is not tested; this automated harness tests the separate application consent boundary.",
+    "The earlier failures remain historical evidence; this receipt completes the budget-blocked sample flow."
+  ],
+  "independent_reviews": {
+    "luna": {
+      "scope": "budget plumbing, credential isolation and immutable receipts",
+      "verdict": "No actionable findings"
+    },
+    "astra": {
+      "scope": "code and all three real r8 phases; native receipt and outgoing payload hash comparison",
+      "verdict": "No actionable findings",
+      "focused_offline_tests": 24,
+      "limitations": [
+        "Human approval UI not tested",
+        "Live low-probability image not tested",
+        "Not a broader backend qualification"
+      ]
+    }
+  },
+  "offline": {
+    "tests_each": 249,
+    "copied_demos_each": 49,
+    "python310": {
+      "passed": true,
+      "source_hash": "cf20c60c5e76ee8deec2eec8a46ae7cd6859e35960bc2d53769233f58f54e4fd",
+      "checked_at": "2026-10-28T17:48:53.191354+00:00",
+      "python": "3.10.13",
+      "checks": [
+        "collection routing entrypoint and synchronized catalog",
+        "27 self-contained instruction folders",
+        "unittest suite",
+        "49 credential-free reference-implementation demos from copied inputs"
+      ],
+      "demos": [
+        {
+          "skill": "ad-funnel-classification",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "agent-workflow-routing",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "agent-workflow-routing",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "agent-workflow-routing",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "brand-news-matching",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "browser-action-selection",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "browser-action-selection",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "confidence-gates",
+          "provider": "jev-openrouter",
+          "action": "send"
+        },
+        {
+          "skill": "confidence-gates",
+          "provider": "openai-decisions",
+          "action": "send"
+        },
+        {
+          "skill": "confidence-gates",
+          "provider": "sage",
+          "action": "send"
+        },
+        {
+          "skill": "content-revision-gate",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "draft-quality-triage",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "email-queue-routing",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "email-queue-routing",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "email-queue-routing",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "input-guardrails",
+          "provider": "jev-openrouter",
+          "action": "allow"
+        },
+        {
+          "skill": "input-guardrails",
+          "provider": "sage",
+          "action": "allow"
+        },
+        {
+          "skill": "invoice-file-triage",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "invoice-file-triage",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "model-routing",
+          "provider": "jev-openrouter",
+          "action": "route"
+        },
+        {
+          "skill": "model-routing",
+          "provider": "openai-decisions",
+          "action": "route"
+        },
+        {
+          "skill": "model-routing",
+          "provider": "sage",
+          "action": "route"
+        },
+        {
+          "skill": "model-tier-routing",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "outfit-option-selection",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "output-evaluation",
+          "provider": "jev-openrouter",
+          "action": "pass"
+        },
+        {
+          "skill": "output-evaluation",
+          "provider": "sage",
+          "action": "pass"
+        },
+        {
+          "skill": "page-change-triage",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "page-change-triage",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "reranking",
+          "provider": "jev-openrouter",
+          "action": "rank"
+        },
+        {
+          "skill": "reranking",
+          "provider": "openai-decisions",
+          "action": "rank"
+        },
+        {
+          "skill": "reranking",
+          "provider": "sage",
+          "action": "rank"
+        },
+        {
+          "skill": "research-enrichment-gate",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "research-enrichment-gate",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "research-source-filter",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "retrieved-instruction-screening",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "retrieved-instruction-screening",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "screenshot-action-check",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "secondhand-listing-fit",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "secondhand-listing-fit",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "secondhand-listing-fit",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "spoken-slide-selection",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "spreadsheet-urgency",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "study-tool-selection",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "study-tool-selection",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "suspicious-email-escalation",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "template-field-matching",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "tool-call-gating",
+          "provider": "jev-openrouter",
+          "action": "approve"
+        },
+        {
+          "skill": "tool-call-gating",
+          "provider": "openai-decisions",
+          "action": "approve"
+        },
+        {
+          "skill": "tool-call-gating",
+          "provider": "sage",
+          "action": "approve"
+        }
+      ]
+    },
+    "python312": {
+      "passed": true,
+      "source_hash": "cf20c60c5e76ee8deec2eec8a46ae7cd6859e35960bc2d53769233f58f54e4fd",
+      "checked_at": "2026-10-28T17:49:03.953804+00:00",
+      "python": "3.12.10",
+      "checks": [
+        "collection routing entrypoint and synchronized catalog",
+        "27 self-contained instruction folders",
+        "unittest suite",
+        "49 credential-free reference-implementation demos from copied inputs"
+      ],
+      "demos": [
+        {
+          "skill": "ad-funnel-classification",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "agent-workflow-routing",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "agent-workflow-routing",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "agent-workflow-routing",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "brand-news-matching",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "browser-action-selection",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "browser-action-selection",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "confidence-gates",
+          "provider": "jev-openrouter",
+          "action": "send"
+        },
+        {
+          "skill": "confidence-gates",
+          "provider": "openai-decisions",
+          "action": "send"
+        },
+        {
+          "skill": "confidence-gates",
+          "provider": "sage",
+          "action": "send"
+        },
+        {
+          "skill": "content-revision-gate",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "draft-quality-triage",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "email-queue-routing",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "email-queue-routing",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "email-queue-routing",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "input-guardrails",
+          "provider": "jev-openrouter",
+          "action": "allow"
+        },
+        {
+          "skill": "input-guardrails",
+          "provider": "sage",
+          "action": "allow"
+        },
+        {
+          "skill": "invoice-file-triage",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "invoice-file-triage",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "model-routing",
+          "provider": "jev-openrouter",
+          "action": "route"
+        },
+        {
+          "skill": "model-routing",
+          "provider": "openai-decisions",
+          "action": "route"
+        },
+        {
+          "skill": "model-routing",
+          "provider": "sage",
+          "action": "route"
+        },
+        {
+          "skill": "model-tier-routing",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "outfit-option-selection",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "output-evaluation",
+          "provider": "jev-openrouter",
+          "action": "pass"
+        },
+        {
+          "skill": "output-evaluation",
+          "provider": "sage",
+          "action": "pass"
+        },
+        {
+          "skill": "page-change-triage",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "page-change-triage",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "reranking",
+          "provider": "jev-openrouter",
+          "action": "rank"
+        },
+        {
+          "skill": "reranking",
+          "provider": "openai-decisions",
+          "action": "rank"
+        },
+        {
+          "skill": "reranking",
+          "provider": "sage",
+          "action": "rank"
+        },
+        {
+          "skill": "research-enrichment-gate",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "research-enrichment-gate",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "research-source-filter",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "retrieved-instruction-screening",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "retrieved-instruction-screening",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "screenshot-action-check",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "secondhand-listing-fit",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "secondhand-listing-fit",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "secondhand-listing-fit",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "spoken-slide-selection",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "spreadsheet-urgency",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "study-tool-selection",
+          "provider": "jev-openrouter",
+          "action": "recommend"
+        },
+        {
+          "skill": "study-tool-selection",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "suspicious-email-escalation",
+          "provider": "openai-decisions",
+          "action": "recommend"
+        },
+        {
+          "skill": "template-field-matching",
+          "provider": "sage",
+          "action": "recommend"
+        },
+        {
+          "skill": "tool-call-gating",
+          "provider": "jev-openrouter",
+          "action": "approve"
+        },
+        {
+          "skill": "tool-call-gating",
+          "provider": "openai-decisions",
+          "action": "approve"
+        },
+        {
+          "skill": "tool-call-gating",
+          "provider": "sage",
+          "action": "approve"
+        }
+      ]
+    }
+  }
+}

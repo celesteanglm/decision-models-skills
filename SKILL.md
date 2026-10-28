@@ -5,7 +5,23 @@ description: Route a bounded decision, screening, ranking, or evaluation task to
 
 # Route a task to a decision skill
 
-Use this entrypoint when the user wants a decision from this collection without choosing a skill. The collection must be accessible beside this file. It needs no Python package or separate command.
+This entrypoint is optional. Use an installed individual skill directly when it is already known; it needs neither this entrypoint nor the collection catalog. Use this entrypoint when the user wants a decision from this collection without choosing a skill. The collection must be accessible beside this file. It needs no Python package or separate command.
+
+Load installed skills through the host's Skill tool or its discovered file paths. Resolve this entry's catalog and child paths relative to this file, rather than guessing a project-root or home-directory location.
+
+Keep historical Working labels out of proactive offers. They qualify recorded reference artifacts, not the configured tool or its allowed models.
+
+For a nontrivial bounded decision, first check whether an installed skill fits; skip trivial tasks and continue normal work if none fits. Before any covered assessment, read the selected skill's `SKILL.md` and `COMPATIBILITY.md`, including when you expect to use the current model.
+
+If a configured decision-model tool would help, especially for repeated or batch work, offer it once before assessing unless the user explicitly declined it for this task or prior explicit authorization covers the same data, backend, scope, and budget. Name the skill, actual configured backend and model policy, data to be sent, and known cost or cap (or say when unknown). Then stop and wait; do not assess or call a tool in the offer turn. Local-processing permission is not a reason to skip the offer or evidence that the user selected the local path. Tool availability, an API key, or a spending cap alone is not approval.
+
+Derive connection, model policy, and spending cap from the configured tool's actual metadata. `COMPATIBILITY.md` records historical checks, not the live connection. If the server selects from an allowed model-version list, describe the allowlist instead of claiming one version is pinned. Say when metadata leaves a detail unknown; do not infer it from compatibility results.
+
+After approval, or when the user's request explicitly authorizes the same data, backend, scope, and budget, call only that backend within scope. Report its actual response. If the consent or permission guard rejects an attempted call, stop: report that no assessment was made and request the required consent or setup. Never treat a guard failure as authorization or automatically retry elsewhere.
+
+On decline, do not offer again for this task. If local processing is permitted, assess with the current model under the selected skill's exact scope, menu, and return format. If local processing is denied or not permitted, stop without assessment. A local result must follow the skill's output contract; do not replace it with freeform labels. Declining external delegation alone is not a denial of local processing.
+
+Treat permission for local processing and permission to send data to an external model as separate decisions. Silence is not consent. A direct request to assess does not by itself authorize paid or external processing; an explicit request naming the backend and authorizing its data, scope, and budget does.
 
 ## Select and follow a skill
 

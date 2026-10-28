@@ -2,7 +2,7 @@
 
 The public skill is its `SKILL.md` instructions and supporting local resources. Keep every skill self-contained under `skills/` so it can be copied or referenced from another project. Do not require a provider, package, script, global command, or repository-root import to use the instructions.
 
-The root `SKILL.md` is the collection's routing entrypoint. It reads `skills/catalog.json`, opens a relevant skill and its evidence page, and follows that skill. Keep model and backend qualification claims in the individual compatibility records.
+The root `SKILL.md` is the collection's optional routing entrypoint. It reads `skills/catalog.json`, opens a relevant skill and its evidence page, and follows that skill. Individual skills must keep working without it. Keep model and backend qualification claims in the individual compatibility records. The README provides both installation paths and a shared proactive-suggestion rule for Codex and Claude Code; do not require the router or change users' personal instruction files to enable that rule.
 
 ## Write the instructions
 

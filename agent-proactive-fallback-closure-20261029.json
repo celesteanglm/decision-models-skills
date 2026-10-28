@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "client_date": "2026-10-29",
+  "commit": "d2b33846e3465e399d784637321ed45ce2b9ef5d",
+  "pull_request": "https://github.com/celesteanglm/decision-models-skills/pull/8",
+  "detailed_receipt": "https://github.com/celesteanglm/decision-models-skills/blob/471c600ada2451f2fc7d871203d5f26346fb3690/agent-proactive-fallback-e2e-20261029.json",
+  "source_artifacts": {
+    "README.md": "ac55b0df3dd53bb6e0d2404a91f96ff6a2dc9880efa8b288070b5c81af9346e0",
+    "SKILL.md": "99399f06ffa82794b5d0a87c04200961079b80f89bcf9c44774873e90a3c9ea6",
+    "examples/scoped_consent.py": "86f8af73766e0a609e0361f895c186062e9f609cf0986197fea9152319dcc642",
+    "scripts/agent_e2e.py": "a2ff1773ea91c7322bc70cd8a562a0de349a06b7976de010a2f507996996b0c0",
+    "scripts/check_agent_trace.py": "ec11a8d856020104bca4205f6ac98dcfb93c0b6a27e361c99bac5e1ef6baf70c",
+    "skills/screenshot-action-check/SKILL.md": "0ec6685d8a1d2a538e37b1214cfe8a040168346bf13ed7fb8123aa5a5b8d539c",
+    "tests/test_agent_e2e.py": "bc4b468b612ead7090650e6768743013c3f0afd1ae3719c9b353b6f62b245241",
+    "tests/test_agent_trace.py": "fff0abfee7120918a2e5ad01e888fa1447f9f12225850d28a6bd181d00818aeb",
+    "tests/test_scoped_consent.py": "b297552284015f16943253d25347de1be3618f06e36b21cf17df0e94c0a433ee"
+  },
+  "source_note": "The final commit removes one trailing space in the runner after the detailed receipt snapshot; behavior is unchanged. Its README links the retained evidence. These hashes identify the final committed files.",
+  "offline": {
+    "tests_per_python": 248,
+    "copied_demos_per_python": 49,
+    "versions": [
+      "3.10.13",
+      "3.12.10"
+    ],
+    "clean_install": true,
+    "ci": "four successful jobs on this exact commit",
+    "ci_runs": [
+      "https://github.com/celesteanglm/decision-models-skills/actions/runs/40737660616",
+      "https://github.com/celesteanglm/decision-models-skills/actions/runs/40737668555"
+    ]
+  },
+  "independent_audit": {
+    "model": "GPT-6 Astra",
+    "focused_tests": 23,
+    "verdict": "No remaining actionable source findings in reviewed scope"
+  },
+  "live_verdict": {
+    "baseline_four_configurations": "Consent, local fallback and approved native result reporting observed passing",
+    "claude_collection": "Partial: earlier unsupported qualification claim; corrected final offer content but terminal client budget error",
+    "approval_ui": "Not tested",
+    "live_low_probability_case": "Not tested; threshold handling verified offline"
+  },
+  "conservative_cumulative_usd": 4.829413636,
+  "limit_usd": 5,
+  "further_paid_calls": false
+}
